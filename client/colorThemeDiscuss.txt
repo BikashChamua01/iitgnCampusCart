@@ -1,0 +1,27 @@
+| Name           | Hex Code  | Use                         |
+| -------------- | --------- | --------------------------- |
+| Cream          | `#fdf6ee` | Background                  |
+| Light Cream    | `#f8f1e9` | Cards, panels               |
+| Elegant Purple | `#6a0dad` | Primary color, buttons      |
+| Soft Purple    | `#b491c8` | Secondary elements, accents |
+| Text Dark      | `#2b2b2b` | Default text color          |
+
+
+:root {
+  --color-cream: #fdf6ee;
+  --color-light-cream: #f8f1e9;
+  --color-purple: #6a0dad;
+  --color-soft-purple: #b491c8;
+  --color-text-dark: #2b2b2b;
+}
+
+
+body {
+  background-color: var(--color-cream);
+  color: var(--color-text-dark);
+}
+
+.button {
+  background-color: var(--color-purple);
+  color: white;
+}

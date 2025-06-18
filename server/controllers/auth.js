@@ -1,12 +1,12 @@
 const USER = require("../models/user");
 const { StatusCodes } = require("http-status-codes");
 const mongoose = require("mongoose");
-
+const TEMPMAIL = require("../models/tempemail");
 const register = async (req, res) => {
   try {
     const { userName, email, password } = req.body;
 
-    // Validate required fields
+    // 1. Validate required fields
     if (!userName || !email || !password) {
       return res.status(StatusCodes.BAD_REQUEST).json({
         success: false,
@@ -14,7 +14,7 @@ const register = async (req, res) => {
       });
     }
 
-    // Check for existing user
+    // 2. Check if user already exists
     const existingUser = await USER.findOne({ email });
     if (existingUser) {
       return res.status(StatusCodes.CONFLICT).json({
@@ -23,14 +23,26 @@ const register = async (req, res) => {
       });
     }
 
-    // Create and save new user
+    // 3. Check if email was verified
+    const tempRecord = await TEMPMAIL.findOne({ email });
+    if (!tempRecord || !tempRecord.verified) {
+      return res.status(StatusCodes.UNAUTHORIZED).json({
+        success: false,
+        msg: "Email is not verified. Please verify your email before registering.",
+      });
+    }
+
+    // 4. Register the new user
     const newUser = new USER({ userName, email, password });
     await newUser.save();
 
-    // Generate JWT token
+    // 5. Remove the temp email record (optional cleanup)
+    await TEMPMAIL.deleteOne({ email });
+
+    // 6. Generate JWT token
     const token = newUser.createJWT();
 
-    // Respond with success
+    // 7. Respond with success
     return res.status(StatusCodes.CREATED).json({
       success: true,
       msg: "Registration successful",
