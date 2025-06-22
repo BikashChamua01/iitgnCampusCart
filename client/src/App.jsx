@@ -9,7 +9,6 @@ import About from "./pages/About";
 const App = () => {
   return (
     <div>
-      APP
       <BrowserRouter>
         <Navbar />
         <Routes>

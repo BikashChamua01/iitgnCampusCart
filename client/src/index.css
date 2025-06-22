@@ -3,6 +3,11 @@
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
+  --color-cream: #fdf6ee;
+  --color-light-cream: #f8f1e9;
+  --color-purple: #6a0dad;
+  --color-soft-purple: #b491c8;
+  --color-text-dark: #2b2b2b;
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);

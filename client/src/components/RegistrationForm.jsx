@@ -90,6 +90,7 @@ const RegistrationForm = () => {
     try {
       setLoading(true);
       const res = await axios.post("/api/v1/auth/register", formData);
+      console.log("hello");
       if (res.data.success) {
         alert("Registration successful!");
         setFormData({
@@ -103,7 +104,11 @@ const RegistrationForm = () => {
         alert("Registration failed.");
       }
     } catch (err) {
-      alert("Error during registration.", err);
+      if (err.response?.status === 409) {
+        alert(err.response.data?.msg || "User already exists.");
+      } else {
+        alert("Error during registration.");
+      }
     } finally {
       setLoading(false);
     }
