@@ -10,6 +10,7 @@ import LoginForm from "./pages/LoginForm.jsx";
 import { BrowserRouter, Route, Router, Routes } from "react-router-dom";
 import Products from "./pages/Products.jsx";
 import useScreenSize from "./hooks/useScreenSize.jsx";
+import Footer from "./components/Footer.jsx"
 
 
 
@@ -51,6 +52,7 @@ const App = () => {
           </main>
         </div>
       </div>
+      {["xs", "sm"].includes(screenSize) && <Footer />}
     </BrowserRouter>
   );
 };
