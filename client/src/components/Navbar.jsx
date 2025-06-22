@@ -10,7 +10,7 @@ const Navbar = ({sidebarToggle, setSidebarToggle}) => {
         {/* <span className="text-white font-semibold">E-commerce</span> */}
       </div>
       <div className="flex items-center gap-x-5">
-        <div className="relative md:w-65 rounded bg-amber-50">
+        <div className="relative md:w-65 rounded md:bg-amber-50 ">
           <span className="relative md:absolute inset-y-0 left-0  flex items-center pl-2">
             <button className=" p-1 focus:outline-none text-white md:text-black " >
             <FaSearch />
