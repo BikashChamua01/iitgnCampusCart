@@ -4,7 +4,7 @@ import "../index.css";
 
 const Navbar = ({sidebarToggle, setSidebarToggle}) => {
   return (
-    <nav className="bg-gray-800 px-4 py-3 flex justify-between ">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-gray-800 px-4 py-3 flex justify-between   ">
       <div className="flex items-center text-xl">
         <FaBars className="text-white me-4 cursor-pointer" onClick={()=>setSidebarToggle(!sidebarToggle)} />
         {/* <span className="text-white font-semibold">E-commerce</span> */}
