@@ -2,16 +2,26 @@
 import Navbar from "./components/Navbar.jsx";
 import Sidebar from "./components/Sidebar";
 import "./App.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import RegistrationForm from "./pages/RegistrationForm.jsx";
 import Home from "./pages/Home.jsx";
 import About from "./pages/About.jsx";
 import LoginForm from "./pages/LoginForm.jsx";
 import { BrowserRouter, Route, Router, Routes } from "react-router-dom";
 import Products from "./pages/Products.jsx";
+import useScreenSize from "./hooks/useScreenSize.jsx";
+
+
+
 
 const App = () => {
   const [sidebarToggle, setSidebarToggle] = useState(false);
+  const screenSize = useScreenSize();
+   useEffect(() => {
+    // Hide sidebar on small screens (xs, sm), show on larger ones
+    setSidebarToggle(screenSize === "xs" || screenSize === "sm");
+  }, [screenSize]);
+  
   return (
     // <div className="flex" >
     //   <Sidebar sidebarToggle={sidebarToggle} />
@@ -29,7 +39,7 @@ const App = () => {
             />
           </div>
 
-          <main className="flex-1 p-4 ml-64 ">
+          <main className={`flex-1 p-4 ${sidebarToggle?"":"ml-64"}`} >
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/home" element={<Home />} />
