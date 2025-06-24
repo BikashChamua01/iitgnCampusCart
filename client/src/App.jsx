@@ -40,7 +40,7 @@ const App = () => {
             />
           </div>
 
-          <main className={`flex-1 p-4 ${sidebarToggle?"":"ml-64"}`} >
+          <main className={`flex-1 p-4 ${sidebarToggle?"":"ml-64"} mt-14`} >
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/home" element={<Home />} />
