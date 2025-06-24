@@ -2,6 +2,7 @@ const USER = require("../models/user");
 const { StatusCodes } = require("http-status-codes");
 const mongoose = require("mongoose");
 const TEMPMAIL = require("../models/tempemail");
+
 const register = async (req, res) => {
   try {
     const { userName, email, password } = req.body;
@@ -95,7 +96,15 @@ const login = async (req, res) => {
     // 4. Create the JWT token
     const token = user.createJWT();
 
-    // 5. Send response
+    // 5. Set cookie in response
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: false, // true in production with HTTPS
+      sameSite: "None", // or "Lax" if frontend is same origin
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    });
+
+    // 6. Send response without sending token directly
     return res.status(StatusCodes.OK).json({
       success: true,
       msg: "Login successful",
@@ -104,7 +113,6 @@ const login = async (req, res) => {
         userName: user.userName,
         isAdmin: user.isAdmin,
       },
-      token,
     });
   } catch (error) {
     console.error("Login error:", error);
@@ -146,32 +154,41 @@ const editProfile = async (req, res) => {
     if (userName != null) user.userName = userName;
     if (email != null) user.email = email;
 
+    // 5. If password change is requested
     if (password != null) {
-      // a) Require current password
       if (!oldPassword) {
         return res.status(StatusCodes.BAD_REQUEST).json({
           success: false,
           msg: "Current password is required to change password",
         });
       }
+
       const isMatch = await bcrypt.compare(oldPassword, user.password);
       if (!isMatch) {
         return res
           .status(StatusCodes.UNAUTHORIZED)
           .json({ success: false, msg: "Current password is incorrect" });
       }
-      // b) Assign new plain‑text password; pre‑save hook will hash it
-      user.password = password;
+
+      user.password = password; // Will be hashed by pre-save hook
     }
 
-    // 5. Validate & save (runs your pre-save hook)
+    // 6. Validate and save user
     await user.validate();
     const updated = await user.save();
 
-    // 6. Optionally issue a fresh JWT
+    // 7. Create new JWT
     const token = updated.createJWT();
 
-    // 7. Return safe fields only
+    // 8. Set cookie
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: false, // true in production (HTTPS)
+      sameSite: "None", // "Lax" if frontend/backend same origin
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    });
+
+    // 9. Send updated user response
     return res.status(StatusCodes.OK).json({
       success: true,
       msg: "Profile updated successfully",
@@ -180,7 +197,6 @@ const editProfile = async (req, res) => {
         userName: updated.userName,
         email: updated.email,
       },
-      token,
     });
   } catch (err) {
     console.error("Error in editProfile:", err);

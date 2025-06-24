@@ -1,0 +1,213 @@
+// controllers/product.js
+const Product = require("../models/product");
+const { StatusCodes } = require("http-status-codes");
+const uploadToCloudinary = require("../utils/uploadHelper"); // the file where you put the above code
+
+const createProduct = async (req, res) => {
+  try {
+    const {
+      title,
+      description,
+      price,
+      originalPrice,
+      category,
+      condition,
+      location,
+    } = req.body;
+    const seller = req.user.userId;
+
+    if (!req.files || req.files.length === 0) {
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ success: false, msg: "At least one image is required." });
+    }
+    const uploadResults = await Promise.all(
+      req.files.map((file) => uploadToCloudinary(file.buffer))
+    );
+    const images = uploadResults.map(({ secure_url, public_id }) => ({
+      url: secure_url,
+      public_id,
+    }));
+
+    const product = new Product({
+      title,
+      description,
+      price: Number(price),
+      originalPrice: Number(originalPrice),
+      category,
+      condition,
+      location,
+      seller,
+      images,
+    });
+
+    await product.save();
+    return res.status(StatusCodes.CREATED).json({ success: true, product });
+  } catch (err) {
+    console.error("Create Product Error:", err);
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ success: false, msg: err.message });
+  }
+};
+
+const getAllProducts = async (req, res) => {
+  try {
+    const products = await Product.find()
+      .sort({ createdAt: -1 })
+      .populate("seller", "userName email"); // optional
+
+    return res.status(StatusCodes.OK).json({
+      success: true,
+      msg: "Successfully fetched all the products",
+      products,
+    });
+  } catch (error) {
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      success: false,
+      msg: "Failed to get the Products",
+    });
+  }
+};
+
+const getSingleProduct = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const product = await Product.findById(id);
+    if (!product) {
+      return res.status(StatusCodes.NOT_FOUND).json({
+        succcess: false,
+        msg: "Product not found",
+      });
+    }
+
+    return res.status(StatusCodes.OK).json({
+      succcess: true,
+      msg: "Product found",
+      product,
+    });
+  } catch (error) {
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      success: false,
+      msg: "failed to get the product",
+    });
+  }
+};
+
+const deleteProduct = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Check if product exists
+    const product = await Product.findById(id);
+    if (!product) {
+      return res.status(StatusCodes.NOT_FOUND).json({
+        success: false,
+        msg: "Product not found",
+      });
+    }
+    //If the current person is the selller or the admin then only he can do it
+    if (product.seller != req.user.userId && !req.user.isAdmin) {
+      return res.status(StatusCodes.UNAUTHORIZED).json({
+        succcess: false,
+        msg: "You are Not authorized to delete this product",
+      });
+    }
+    // Delete the product
+    await Product.findByIdAndDelete(id);
+
+    return res.status(StatusCodes.OK).json({
+      success: true,
+      msg: "Product deleted successfully",
+    });
+  } catch (error) {
+    console.error("Delete Product Error:", error.message);
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      success: false,
+      msg: "Failed to delete the product",
+    });
+  }
+};
+
+const editProduct = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const {
+      title,
+      description,
+      price,
+      originalPrice,
+      category,
+      condition,
+      existingImages = [], // array of image URLs to retain
+    } = req.body;
+
+    const findProduct = await Product.findById(id);
+    if (!findProduct) {
+      return res.status(StatusCodes.NOT_FOUND).json({
+        success: false,
+        msg: "Product not found",
+      });
+    }
+
+    if (findProduct.seller != req.user.userId && !req.user.isAdmin) {
+      return res.status(StatusCodes.UNAUTHORIZED).json({
+        succcess: false,
+        msg: "You are Not authorized to edit this product",
+      });
+    }
+
+    // Step 1: Validate total image count
+    const retainedImages = Array.isArray(existingImages)
+      ? existingImages
+      : [existingImages]; // handle single string sent by form-data
+
+    const newFiles = req.files || [];
+    const totalImagesCount = retainedImages.length + newFiles.length;
+
+    if (totalImagesCount > 5) {
+      return res.status(StatusCodes.BAD_REQUEST).json({
+        success: false,
+        msg: "You can only have a maximum of 5 images per product.",
+      });
+    }
+
+    // Step 2: Upload new images to Cloudinary
+    const uploadedImageUrls = [];
+    for (const file of newFiles) {
+      const uploaded = await uploadToCloudinary(file.buffer);
+      uploadedImageUrls.push(uploaded.secure_url);
+    }
+
+    // Step 3: Update fields
+    findProduct.title = title || findProduct.title;
+    findProduct.description = description || findProduct.description;
+    findProduct.price = price || findProduct.price;
+    findProduct.originalPrice = originalPrice || findProduct.originalPrice;
+    findProduct.category = category || findProduct.category;
+    findProduct.condition = condition || findProduct.condition;
+    findProduct.images = [...retainedImages, ...uploadedImageUrls];
+
+    await findProduct.save();
+
+    return res.status(StatusCodes.OK).json({
+      success: true,
+      msg: "Product updated successfully",
+      product: findProduct,
+    });
+  } catch (error) {
+    console.error("Error editing product:", error);
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      success: false,
+      msg: "Server error in editing the product",
+    });
+  }
+};
+
+module.exports = {
+  createProduct,
+  getAllProducts,
+  getSingleProduct,
+  deleteProduct,
+  editProduct,
+};

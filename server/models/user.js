@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const validator = require("validator");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const cookieParser = require("cookie-parser");
 require("dotenv").config();
 
 const userSchema = mongoose.Schema(
@@ -63,7 +64,7 @@ userSchema.pre("save", async function (next) {
 userSchema.methods.createJWT = function () {
   const token = jwt.sign(
     {
-      user_id: this._id,
+      userId: this._id,
       userName: this.userName,
       isAdmin: this.isAdmin,
     },
