@@ -60,14 +60,18 @@ const AddProduct = () => {
         onSubmit={handleSubmit}
         className="w-full max-w-5xl bg-white shadow-lg rounded-2xl p-6 flex flex-col md:flex-row gap-6 "
       >
+        
         {/* Left: Image Upload */}
         <div className="flex-1">
+            <h2 className="text-2xl font-bold text-blue-600 mb-2 block md:hidden">
+            Add New Product
+          </h2>
           <ImageUploader images={images} setImages={setImages} />
         </div>
 
         {/* Right: Product Info */}
         <div className="flex-1 flex flex-col gap-4">
-          <h2 className="text-2xl font-bold text-blue-600 mb-2">
+          <h2 className="text-2xl font-bold text-blue-600 mb-2 hidden md:block">
             Add New Product
           </h2>
 

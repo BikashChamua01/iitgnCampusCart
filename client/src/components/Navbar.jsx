@@ -29,12 +29,12 @@ const Navbar = ({sidebarToggle, setSidebarToggle}) => {
         <div className="relative" >
           <button className="text-white group">
             <FaUserCircle className="w-6 h-6 mt-1"/>
-            <div className="z-10 hidden absolute rounded-lg shadow w-32 group-focus:block top-full right-0 bg-white">
-              <ul className="py-2 text-sm text-gray-950">
-                <li>
-                  <a href="">Profile</a>
-                  <a href="">Setting</a>
-                  <a href="">Logout</a>
+            <div className="z-10 hidden absolute rounded-lg shadow  w-40 h-fit group-focus:block top-full right-0 bg-white ">
+              <ul className="py-4 text-sm text-gray-950 ">
+                <li className="flex flex-col justify-between ">
+                  <a className="py-2 mx-1 my-1 bg-gray-400 rounded-md" href="">Profile</a>
+                  <a className="py-2 mx-1 my-1 bg-gray-400 rounded-md" href="">Setting</a>
+                  <a className="py-2 mx-1 my-1 bg-gray-400 rounded-md" href="">Logout</a>
                 </li>
               </ul>
             </div>
