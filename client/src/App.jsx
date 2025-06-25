@@ -11,6 +11,7 @@ import { BrowserRouter, Route, Router, Routes } from "react-router-dom";
 import Products from "./pages/Products.jsx";
 import useScreenSize from "./hooks/useScreenSize.jsx";
 import Footer from "./components/Footer.jsx"
+import AddProduct from "./pages/AddProduct.jsx";
 
 
 
@@ -48,6 +49,7 @@ const App = () => {
               <Route path="/about" element={<About />} />
               <Route path="/register" element={<RegistrationForm />} />
               <Route path="/login" element={<LoginForm />} />
+              <Route path="/addproduct" element={<AddProduct />} />
             </Routes>
           </main>
         </div>
