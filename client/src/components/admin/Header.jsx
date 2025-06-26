@@ -1,6 +1,6 @@
 import { FaSearch, FaUserCircle, FaCartPlus } from "react-icons/fa";
 
-const ShopHeader = () => {
+const AdminHeader = () => {
   return (
     <nav
       className="fixed top-0 left-0 right-0 z-50 flex justify-between items-center px-4 py-3 shadow-md"
@@ -10,7 +10,7 @@ const ShopHeader = () => {
       }}
     >
       {/* Logo */}
-      <div className="text-xl font-semibold tracking-wide">CampusCart</div>
+      <div className="text-xl font-semibold tracking-wide">Admin Panel</div>
 
       {/* Right Section */}
       <div className="flex items-center gap-x-5">
@@ -31,15 +31,6 @@ const ShopHeader = () => {
               boxShadow: "0 1px 2px rgba(0,0,0,0.05)",
             }}
           />
-        </div>
-
-        {/* Sell Button */}
-        <div
-          className="flex items-center gap-1 cursor-pointer hover:text-white"
-          style={{ color: "#f4f4f4" }}
-        >
-          <FaCartPlus className="w-4 h-4" />
-          <span className="text-sm font-medium">Sell</span>
         </div>
 
         {/* User Dropdown */}
@@ -69,4 +60,4 @@ const ShopHeader = () => {
   );
 };
 
-export default ShopHeader;
+export default AdminHeader;

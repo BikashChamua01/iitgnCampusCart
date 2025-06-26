@@ -1,83 +1,123 @@
+// import the user pages
+import ShopLayout from "./components/shop/layout";
+import ShopHome from "./pages/shop/Home";
+import ShopProducts from "./pages/shop/Products";
 
-import Navbar from "./components/Navbar.jsx";
-import Sidebar from "./components/Sidebar";
-import "./App.css";
-import { useState, useEffect } from "react";
-import RegistrationForm from "./pages/RegistrationForm.jsx";
-import Home from "./pages/Home.jsx";
-import About from "./pages/About.jsx";
-import LoginForm from "./pages/LoginForm.jsx";
-import { BrowserRouter, Route, Router, Routes } from "react-router-dom";
-import Products from "./pages/Products.jsx";
-import useScreenSize from "./hooks/useScreenSize.jsx";
-import Footer from "./components/Footer.jsx"
+// import the admin pages
+import AdminLayout from "./components/admin/Layout";
+import AdminDashboard from "./pages/admin/Dashboard";
+import AdminProducts from "./pages/admin/Products";
+import AdminUsers from "./pages/admin/Users";
 
+// Import the common pages
+import About from "./pages/common/About";
+import Sell from "./pages/common/Sell";
+import UnauthPage from "./pages/common/Unauth-page";
 
+// Import the auth pages and layout
+import AuthLayout from "./components/auth/Layout";
+import RegistrationForm from "./pages/auth/RegistrationForm";
+import LoginForm from "./pages/auth/LoginForm";
+import { Toaster } from "sonner";
 
+// import checkauth
+import CheckAuth from "./components/common/CheckAuth";
+import { checkAuth } from "./store/auth-slice";
+
+// import the extra things
+import React, { useEffect } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 const App = () => {
-  const [sidebarToggle, setSidebarToggle] = useState(false);
-  const screenSize = useScreenSize();
-   useEffect(() => {
-    // Hide sidebar on small screens (xs, sm), show on larger ones
-    setSidebarToggle(screenSize === "xs" || screenSize === "sm");
-  }, [screenSize]);
+  const dispatch = useDispatch();
+  const { isAuthenticated, user, isLoading } = useSelector(
+    (state) => state.auth
+  );
+
+  useEffect(() => {
+    dispatch(checkAuth());
+  }, [dispatch]);
   
   return (
-    // <div className="flex" >
-    //   <Sidebar sidebarToggle={sidebarToggle} />
-    //   <Dashboard  sidebarToggle={sidebarToggle}
-    //   setSidebarToggle={setSidebarToggle}/>
-    // </div>
-    <BrowserRouter>
-      <div className="flex">
-        <Sidebar sidebarToggle={sidebarToggle} />
-        <div className="w-full">
-          <div className={`${sidebarToggle ? "" : "ml-64 "} `}>
-            <Navbar
-              sidebarToggle={sidebarToggle}
-              setSidebarToggle={setSidebarToggle}
-            />
-          </div>
+    <>
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          success: {
+            style: {
+              backgroundColor: "#6a0dad", // Purple
+              color: "#fff",
+            },
+          },
+          error: {
+            style: {
+              backgroundColor: "#ff6600", // Orange
+              color: "#fff",
+            },
+          },
+        }}
+      />
+      <BrowserRouter>
+        <Routes>
+          {/* Define default path */}
+          <Route
+            path="/"
+            element={
+              <CheckAuth isAuthenticated={isAuthenticated} user={user} />
+            }
+          />
 
-          <main className={`flex-1 p-4 ${sidebarToggle?"":"ml-64"} mt-14`} >
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/home" element={<Home />} />
-              <Route path="/products" element={<Products />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/register" element={<RegistrationForm />} />
-              <Route path="/login" element={<LoginForm />} />
-            </Routes>
-          </main>
-        </div>
-      </div>
-      {["xs", "sm"].includes(screenSize) && <Footer />}
-    </BrowserRouter>
+          {/* User pages */}
+          <Route
+            path="/shop"
+            element={
+              <CheckAuth isAuthenticated={isAuthenticated} user={user}>
+                <ShopLayout />
+              </CheckAuth>
+            }
+          >
+            <Route path="" element={<ShopHome />} />
+            <Route path="products" element={<ShopProducts />} />
+            <Route path="about" element={<About />} />
+          </Route>
+
+          {/* Admin pages */}
+          <Route
+            path="/admin"
+            element={
+              <CheckAuth isAuthenticated={isAuthenticated} user={user}>
+                <AdminLayout />
+              </CheckAuth>
+            }
+          >
+            <Route path="dashboard" element={<AdminDashboard />} />
+            <Route path="products" element={<AdminProducts />} />
+            <Route path="users" element={<AdminUsers />} />
+            <Route path="about" element={<About />} />
+          </Route>
+
+          {/* Auth Pages */}
+          <Route
+            path="/auth"
+            element={
+              <CheckAuth isAuthenticated={isAuthenticated} user={user}>
+                <AuthLayout />
+              </CheckAuth>
+            }
+          >
+            <Route path="register" element={<RegistrationForm />} />
+            <Route path="login" element={<LoginForm />} />
+          </Route>
+
+          {/* Extra pages */}
+          <Route path="/unauth-page" element={<UnauthPage />} />
+          <Route path="*" />
+        </Routes>
+      </BrowserRouter>
+    </>
   );
 };
-
-// import React from "react";
-// import { BrowserRouter, Route, Router, Routes } from "react-router-dom";
-// import RegistrationForm from "./components/RegistrationForm";
-// import Navbar from "./components/Navbar";
-// import Home from "./pages/Home";
-// import Products from "./pages/Products";
-// import About from "./pages/About";
-
-// const App = () => {
-//   return (
-//     <div>
-//       <BrowserRouter>
-//         <Navbar />
-//         <Routes>
-//           <Route path="/" element={<Home />} />
-//           <Route path="/about" element={<About />} />
-//           <Route path="/register" element={<RegistrationForm />} />
-//         </Routes>
-//       </BrowserRouter>
-//     </div>
-//   );
-// };
 
 export default App;

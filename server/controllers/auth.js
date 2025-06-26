@@ -66,7 +66,6 @@ const login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // 1. Check if both fields are provided
     if (!email || !password) {
       return res.status(StatusCodes.BAD_REQUEST).json({
         success: false,
@@ -74,7 +73,6 @@ const login = async (req, res) => {
       });
     }
 
-    // 2. Find the user and include the password field
     const user = await USER.findOne({ email }).select("+password");
 
     if (!user) {
@@ -84,7 +82,6 @@ const login = async (req, res) => {
       });
     }
 
-    // 3. Verify the password
     const isMatch = await user.verifyPassword(password);
     if (!isMatch) {
       return res.status(StatusCodes.UNAUTHORIZED).json({
@@ -93,18 +90,18 @@ const login = async (req, res) => {
       });
     }
 
-    // 4. Create the JWT token
     const token = user.createJWT();
 
-    // 5. Set cookie in response
+    const isLocalhost =
+      req.hostname === "localhost" || req.hostname === "127.0.0.1";
+
     res.cookie("token", token, {
       httpOnly: true,
-      secure: false, // true in production with HTTPS
-      sameSite: "None", // or "Lax" if frontend is same origin
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      secure: !isLocalhost,
+      sameSite: isLocalhost ? "Lax" : "None",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
-    // 6. Send response without sending token directly
     return res.status(StatusCodes.OK).json({
       success: true,
       msg: "Login successful",

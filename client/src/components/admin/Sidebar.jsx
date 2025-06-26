@@ -1,28 +1,28 @@
 import { Link, useLocation } from "react-router-dom";
 import {
-  FaHome,
+  FaTachometerAlt,
   FaProductHunt,
-  FaList,
+  FaUsers,
   FaInfoCircle,
   FaSignOutAlt,
 } from "react-icons/fa";
 import { logout } from "../../store/auth-slice";
 import { useDispatch } from "react-redux";
 
-const ShopSidebar = () => {
+const AdminSidebar = () => {
   const dispatch = useDispatch();
   const { pathname } = useLocation();
 
   const menuItems = [
-    { to: "/shop", label: "Home", icon: <FaHome /> },
-    { to: "/shop/products", label: "Products", icon: <FaProductHunt /> },
-    { to: "/shop/listings", label: "Listings", icon: <FaList /> },
-    { to: "/about", label: "About", icon: <FaInfoCircle /> },
+    { to: "/admin/dashboard", label: "Dashboard", icon: <FaTachometerAlt /> },
+    { to: "/admin/products", label: "Products", icon: <FaProductHunt /> },
+    { to: "/admin/users", label: "Users", icon: <FaUsers /> },
+    { to: "/admin/about", label: "About", icon: <FaInfoCircle /> },
   ];
 
   return (
     <aside
-      className="w-20 fixed left-0 top-12 hidden lg:flex flex-col justify-between items-center shadow-md"
+      className="w-20 fixed left-0 top-13 hidden lg:flex flex-col justify-between items-center shadow-md"
       style={{
         backgroundColor: "#6a0dad", // Deep purple
         color: "#f4f4f4", // Light text
@@ -67,4 +67,4 @@ const ShopSidebar = () => {
   );
 };
 
-export default ShopSidebar;
+export default AdminSidebar;
