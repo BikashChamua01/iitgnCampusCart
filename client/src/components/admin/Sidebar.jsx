@@ -8,6 +8,7 @@ import {
 } from "react-icons/fa";
 import { logout } from "../../store/auth-slice";
 import { useDispatch } from "react-redux";
+import { toast } from "sonner";
 
 const AdminSidebar = () => {
   const dispatch = useDispatch();
@@ -57,7 +58,7 @@ const AdminSidebar = () => {
         <div
           className="flex flex-col items-center text-sm px-2 py-2 w-full text-center transition-all duration-200 hover:bg-[#b491c8] hover:text-white"
           style={{ color: "#f4f4f4" }}
-          onClick={() => dispatch(logout())}
+          onClick={() => dispatch(logout()).then(()=>toast.success("Logged-Out"))}
         >
           <FaSignOutAlt className="text-lg" />
           <span className="mt-1 text-xs">Logout</span>
