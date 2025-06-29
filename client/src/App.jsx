@@ -13,7 +13,6 @@ import AdminUsers from "./pages/admin/Users";
 import About from "./pages/common/About";
 import Sell from "./pages/common/Sell";
 import UnauthPage from "./pages/common/Unauth-page";
-import Loader from "./components/common/Loader";
 
 // Import the auth pages and layout
 import AuthLayout from "./components/auth/Layout";
@@ -40,12 +39,26 @@ const App = () => {
   useEffect(() => {
     dispatch(checkAuth());
   }, [dispatch]);
-
-  if (isLoading) return <Loader />;
-
+  
   return (
     <>
-      <Toaster position="bottom-right" richColors />
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          success: {
+            style: {
+              backgroundColor: "#6a0dad", // Purple
+              color: "#fff",
+            },
+          },
+          error: {
+            style: {
+              backgroundColor: "#ff6600", // Orange
+              color: "#fff",
+            },
+          },
+        }}
+      />
       <BrowserRouter>
         <Routes>
           {/* Define default path */}
