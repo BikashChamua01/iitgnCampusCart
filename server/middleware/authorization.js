@@ -55,7 +55,7 @@ require("dotenv").config();
 //   });
 // };
 
-const verifyToken = async (req, res, next) => {
+const checkAuth = async (req, res, next) => {
   try {
     const token = req.cookies.token;
     if (!token) {
@@ -76,7 +76,7 @@ const verifyToken = async (req, res, next) => {
   }
 };
 
-const verifyTokenAndAdmin = (req, res, next) => {
+const checkAuthAndAdmin = (req, res, next) => {
   if (!req.user || !req.user.isAdmin) {
     return res.status(StatusCodes.UNAUTHORIZED).json({
       success: false,
@@ -87,6 +87,6 @@ const verifyTokenAndAdmin = (req, res, next) => {
 };
 
 module.exports = {
-  verifyToken,
-  verifyTokenAndAdmin,
+  checkAuth,
+  checkAuthAndAdmin,
 };

@@ -10,10 +10,12 @@ const PORT = process.env.PORT || 5000;
 // Built in middlewares
 app.use(cookieParser());
 app.use(express.json());
+
 app.use(
   cors({
-    origin: "http://localhost:5173",
-    methods: ["GET", "POST", "DELETE", "PUT"],
+    origin: "http://localhost:5173", // ✅ Vite dev server
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // ✅ Add OPTIONS (needed for preflight)
+    credentials: true, // ✅ Required for cookies to be sent
     allowedHeaders: [
       "Content-Type",
       "Authorization",
@@ -21,7 +23,6 @@ app.use(
       "Expires",
       "Pragma",
     ],
-    credentials: true, //Required for the cookie
   })
 );
 

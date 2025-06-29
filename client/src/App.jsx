@@ -11,19 +11,22 @@ import { BrowserRouter, Route, Router, Routes } from "react-router-dom";
 import Products from "./pages/Products.jsx";
 import useScreenSize from "./hooks/useScreenSize.jsx";
 import Footer from "./components/Footer.jsx"
-import AddProduct from "./pages/AddProduct.jsx";
 
 
 
 
 const App = () => {
-  const [sidebarToggle, setSidebarToggle] = useState(false);
-  const screenSize = useScreenSize();
-   useEffect(() => {
-    // Hide sidebar on small screens (xs, sm), show on larger ones
-    setSidebarToggle(screenSize === "xs" || screenSize === "sm");
-  }, [screenSize]);
-  
+  const dispatch = useDispatch();
+  const { isAuthenticated, user, isLoading } = useSelector(
+    (state) => state.auth
+  );
+
+  useEffect(() => {
+    dispatch(checkAuth());
+  }, [dispatch]);
+
+  if (isLoading) return <Loader />;
+
   return (
     // <div className="flex" >
     //   <Sidebar sidebarToggle={sidebarToggle} />
@@ -49,7 +52,6 @@ const App = () => {
               <Route path="/about" element={<About />} />
               <Route path="/register" element={<RegistrationForm />} />
               <Route path="/login" element={<LoginForm />} />
-              <Route path="/addproduct" element={<AddProduct />} />
             </Routes>
           </main>
         </div>

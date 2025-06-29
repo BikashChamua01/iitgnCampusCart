@@ -25,3 +25,26 @@ body {
   background-color: var(--color-purple);
   color: white;
 }
+
+<BrowserRouter>
+  <Routes>
+    {/* Public/Common Routes */}
+    <Route path="/" element={<Home />} />
+    <Route path="/products" element={<Products />} />
+    <Route path="/about" element={<About />} />
+
+    {/* Auth Routes */}
+    <Route path="/login" element={<Login />} />
+    <Route path="/register" element={<Register />} />
+
+    {/* User-only Routes (optional) */}
+    <Route path="/my-orders" element={<MyOrders />} />
+    <Route path="/profile" element={<Profile />} />
+
+    {/* Admin-only Routes */}
+    <Route path="/admin/dashboard" element={<AdminDashboard />} />
+    <Route path="/admin/users" element={<ManageUsers />} />
+    <Route path="/admin/products" element={<ManageProducts />} />
+  </Routes>
+</BrowserRouter>
+

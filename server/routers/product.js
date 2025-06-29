@@ -12,20 +12,17 @@ const {
   editProduct,
 } = require("../controllers/product");
 
-const {
-  verifyToken,
-  verifyTokenAndAdmin,
-} = require("../middleware/authorization");
+const { checkAuth, checkAuthAndAdmin } = require("../middleware/authorization");
 
 router.get("/", getAllProducts);
 router.post(
   "/createProduct",
-  verifyToken,
+  checkAuth,
   upload.array("images", 5),
   createProduct
 );
-router.delete("/:id", verifyToken, deleteProduct);
-router.patch("/:id", verifyToken, upload.array("images", 5), editProduct);
+router.delete("/:id", checkAuth, deleteProduct);
+router.patch("/:id", checkAuth, upload.array("images", 5), editProduct);
 router.get("/:id", getSingleProduct);
 
 module.exports = router;
