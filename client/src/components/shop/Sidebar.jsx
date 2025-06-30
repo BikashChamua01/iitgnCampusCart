@@ -18,7 +18,7 @@ const ShopSidebar = () => {
     { to: "/shop", label: "Home", icon: <FaHome /> },
     { to: "/shop/products", label: "Products", icon: <FaProductHunt /> },
     { to: "/shop/listings", label: "Listings", icon: <FaList /> },
-    { to: "/about", label: "About", icon: <FaInfoCircle /> },
+    { to: "/shop/about", label: "About", icon: <FaInfoCircle /> },
   ];
 
   return (
