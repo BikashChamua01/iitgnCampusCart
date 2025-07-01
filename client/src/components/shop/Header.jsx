@@ -1,6 +1,8 @@
 import { FaSearch, FaUserCircle, FaCartPlus } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const ShopHeader = () => {
+  const navigate = useNavigate();
   return (
     <nav
       className="fixed top-0 left-0 right-0 z-50 flex justify-between items-center px-4 py-3 shadow-md"
@@ -39,7 +41,12 @@ const ShopHeader = () => {
           style={{ color: "#f4f4f4" }}
         >
           <FaCartPlus className="w-4 h-4" />
-          <span className="text-sm font-medium">Sell</span>
+          <span
+            className="text-sm font-medium"
+            onClick={() => navigate("/shop/sell")}
+          >
+            Sell
+          </span>
         </div>
 
         {/* User Dropdown */}
