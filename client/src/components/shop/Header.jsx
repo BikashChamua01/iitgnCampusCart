@@ -39,11 +39,12 @@ const ShopHeader = () => {
         <div
           className="flex items-center gap-1 cursor-pointer hover:text-white"
           style={{ color: "#f4f4f4" }}
+          onClick={() => navigate("/shop/sell")}
         >
           <FaCartPlus className="w-4 h-4" />
           <span
             className="text-sm font-medium"
-            onClick={() => navigate("/shop/sell")}
+            // onClick={() => navigate("/shop/sell")}
           >
             Sell
           </span>
