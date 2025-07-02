@@ -4,7 +4,8 @@ const { StatusCodes } = require("http-status-codes");
 const uploadToCloudinary = require("../utils/uploadHelper"); // the file where you put the above code
 
 const createProduct = async (req, res) => {
-  try {
+  try {          
+    console.log(req.body, "In the server side ,create product")                                                                                                                    
     const {
       title,
       description,
