@@ -96,7 +96,7 @@ const Sell = () => {
             <button
               type="submit"
               disabled={loading}
-              className="mt-6 bg-[#6a0dad] text-white font-semibold py-2 px-4 rounded-lg transition duration-300 disabled:opacity-60 border-2 border-transparent hover:bg-white hover:text-[#6a0dad] hover:border-[#b27dd8]"
+              className="mt-6 bg-[#6a0dad] text-white font-semibold py-2 px-4 rounded-lg transition duration-300 disabled:opacity-60 border-2 border-transparent hover:bg-white hover:text-[#6a0dad] hover:border-[#b27dd8] cursor-pointer"
               onClick={(event)=>{
                 handleSubmit(event);
               }}

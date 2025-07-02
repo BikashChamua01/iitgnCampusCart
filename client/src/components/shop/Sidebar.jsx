@@ -23,7 +23,7 @@ const ShopSidebar = () => {
 
   return (
     <aside
-      className="w-20 fixed left-0 top-12 hidden lg:flex flex-col justify-between items-center shadow-md"
+      className="w-20 hidden fixed left-0 top-12  md:flex flex-col justify-between items-center "
       style={{
         backgroundColor: "#6a0dad", // Deep purple
         color: "#f4f4f4", // Light text
