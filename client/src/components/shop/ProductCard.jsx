@@ -20,7 +20,7 @@ const ProductCard = ({ product }) => {
       <img
         src={imageUrl}
         alt={title}
-        className="w-full h-48 object-cover"
+        className="w-full p-1 h-48 object-cover"
       />
 
       <div className="p-4 flex flex-col gap-2">
