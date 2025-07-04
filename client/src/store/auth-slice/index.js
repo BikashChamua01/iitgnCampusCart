@@ -112,7 +112,7 @@ const authSlice = createSlice({
         state.isAuthenticated = false;
         state.user = null;
       })
-      .addCase(logout.rejected, (state) => {
+      .addCase(logout.fulfilled, (state) => {
         state.isLoading = false;
         state.isAuthenticated = false;
         state.user = null;

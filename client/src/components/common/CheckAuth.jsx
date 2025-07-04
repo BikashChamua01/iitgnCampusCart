@@ -6,7 +6,13 @@ const CheckAuth = ({ isAuthenticated, user, children }) => {
   const location = useLocation();
 
   // Related to authentication
+  if (!isAuthenticated && location.pathname === "/") {
+    console.log("!auth + /");
+    return <Navigate to="/auth/login" />;
+  }
+
   if (!isAuthenticated && !location.pathname.includes("/auth")) {
+    console.log("!auth + /auth");
     return <Navigate to="/auth/login" />;
   }
 
@@ -17,6 +23,7 @@ const CheckAuth = ({ isAuthenticated, user, children }) => {
 
   //   if authenticated and try to login or register again
   if (isAuthenticated && location.pathname.includes("/auth")) {
+    console.log("isauth + /auth");
     if (user?.isAdmin) return <Navigate to="/admin/dashboard" />;
     else return <Navigate to="/shop" />;
   }

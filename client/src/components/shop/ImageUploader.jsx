@@ -15,9 +15,11 @@ const ImageUploader = ({ images, setImages }) => {
   };
 
   const handleRemove = (index) => {
+      document.getElementById("uploadInput").onclick = false;
     const updated = images.filter((_, i) => i !== index);
     setImages(updated);
   };
+  
 
   return (
     <div

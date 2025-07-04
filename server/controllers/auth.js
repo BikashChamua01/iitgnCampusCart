@@ -2,6 +2,7 @@ const USER = require("../models/user");
 const { StatusCodes } = require("http-status-codes");
 const mongoose = require("mongoose");
 const TEMPMAIL = require("../models/tempemail");
+const user = require("../models/user");
 
 const register = async (req, res) => {
   try {
@@ -203,4 +204,24 @@ const editProfile = async (req, res) => {
   }
 };
 
-module.exports = { register, login, editProfile };
+const logout = async(req, res)=>
+{
+  try{
+    const token = user.token;
+    const isLocalhost =
+      req.hostname === "localhost" || req.hostname === "127.0.0.1";
+    res.clearCookie("token",token, {
+      httpOnly: true,
+      secure: !isLocalhost,
+      sameSite: isLocalhost ? "Lax" : "None",
+    }).json({
+      success : true,
+      msg : "Log out successfully"
+    })
+
+  }catch(error)
+  {
+    console.log(error)
+  }
+}
+module.exports = { register, login, editProfile,logout };

@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const { register, login, editProfile } = require("../controllers/auth");
+const { register, login, editProfile, logout } = require("../controllers/auth");
 const {
   sendVerificationCode,
   verifyCode,
@@ -22,5 +22,6 @@ router.get("/check-auth", checkAuth, (req, res) => {
     user,
   });
 });
+router.post("/logout", logout)
 
 module.exports = router;
