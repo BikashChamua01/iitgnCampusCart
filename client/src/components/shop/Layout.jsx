@@ -10,15 +10,15 @@ const ShopLayout = () => {
   return (
     <div className="min-h-screen flex flex-col bg-amber-50">
       <ShopHeader />
-      <div className="flex flex-1 pt-14">
+      <div className="flex  flex-1 pt-13">
         {screenSize === "md" || screenSize === "lg" || screenSize === "xl" || screenSize === "2xl" ? (
           <ShopSidebar />
         ) : null}
         <main
-          className={`flex-1 p-4 transition-all duration-300 ${
+          className={`flex-1  transition-all duration-300  ${
            screenSize === "md" ||  screenSize === "lg" || screenSize === "xl" || screenSize === "2xl"
               ? "ml-20"
-              : ""
+              : "ml-0"
           }`}
         >
           <Outlet />

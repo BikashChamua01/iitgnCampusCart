@@ -28,7 +28,7 @@ const ShopProducts = () => {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-100 to-cream-100 py-10 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-100 to-cream-100 py-10 px-4 w-full">
       <div className="max-w-7xl mx-auto">
         <h1 className="text-3xl font-bold text-[#6a0dad] text-center mb-10">
           Explore All Products
