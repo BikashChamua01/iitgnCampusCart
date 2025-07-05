@@ -2,10 +2,12 @@
 const Product = require("../models/product");
 const { StatusCodes } = require("http-status-codes");
 const uploadToCloudinary = require("../utils/uploadHelper"); // the file where you put the above code
+const mongoose = require("mongoose");
+const User = require("../models/user");
 
 const createProduct = async (req, res) => {
-  try {          
-    console.log(req.body, "In the server side ,create product")                                                                                                                    
+  try {
+    console.log(req.body, "In the server side ,create product");
     const {
       title,
       description,
@@ -205,10 +207,72 @@ const editProduct = async (req, res) => {
   }
 };
 
+const myListings = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const loggedInId = req.user.userId;
+    const isAdmin = req.user.isAdmin;
+
+    // 1️⃣ Validate userId param
+    if (!userId || !mongoose.isValidObjectId(userId)) {
+      return res.status(StatusCodes.BAD_REQUEST).json({
+        success: false,
+        msg: "Invalid or missing userId parameter",
+      });
+    }
+
+    // 2️⃣ Check target user exists
+    const targetUser = await User.findById(userId).select("userName email");
+    if (!targetUser) {
+      return res.status(StatusCodes.NOT_FOUND).json({
+        success: false,
+        msg: `No user found with ID ${userId}`,
+      });
+    }
+
+    // 3️⃣ Authorization: only the user themself or an admin can view
+    if (userId !== loggedInId && !isAdmin) {
+      return res.status(StatusCodes.FORBIDDEN).json({
+        success: false,
+        msg: "You are not authorized to view this user's listings",
+      });
+    }
+
+    // 4️⃣ Fetch their products (sorted newest first)
+    const products = await Product.find({ seller: userId })
+      .sort({ createdAt: -1 })
+      .populate("seller", "userName email");
+
+    // 5️⃣ Handle empty result set
+    if (!products.length) {
+      return res.status(StatusCodes.OK).json({
+        success: true,
+        msg: `No products found for user ${targetUser.userName}`,
+        products: [],
+      });
+    }
+
+    // 6️⃣ Success
+    return res.status(StatusCodes.OK).json({
+      success: true,
+      msg: `Fetched ${products.length} products for user ${targetUser.userName}`,
+      products,
+    });
+  } catch (error) {
+    console.error("Error in myListings:", error);
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      success: false,
+      msg: "Server encountered an error while fetching listings",
+    });
+  }
+};
+
+
 module.exports = {
   createProduct,
   getAllProducts,
   getSingleProduct,
   deleteProduct,
   editProduct,
+  myListings,
 };

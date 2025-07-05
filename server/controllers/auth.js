@@ -1,13 +1,11 @@
-const USER = require("../models/user");
 const { StatusCodes } = require("http-status-codes");
 const mongoose = require("mongoose");
-const TEMPMAIL = require("../models/tempemail");
-const user = require("../models/user");
+const Tempmail = require("../models/tempemail");
+const User = require("../models/user");
 
 const register = async (req, res) => {
   try {
     const { userName, email, password } = req.body;
-
     // 1. Validate required fields
     if (!userName || !email || !password) {
       return res.status(StatusCodes.BAD_REQUEST).json({
@@ -15,9 +13,8 @@ const register = async (req, res) => {
         msg: "All fields are required",
       });
     }
-
     // 2. Check if user already exists
-    const existingUser = await USER.findOne({ email });
+    const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(StatusCodes.CONFLICT).json({
         success: false,
@@ -26,7 +23,7 @@ const register = async (req, res) => {
     }
 
     // 3. Check if email was verified
-    const tempRecord = await TEMPMAIL.findOne({ email });
+    const tempRecord = await Tempmail.findOne({ email });
     if (!tempRecord || !tempRecord.verified) {
       return res.status(StatusCodes.UNAUTHORIZED).json({
         success: false,
@@ -35,11 +32,11 @@ const register = async (req, res) => {
     }
 
     // 4. Register the new user
-    const newUser = new USER({ userName, email, password });
+    const newUser = new User({ userName, email, password });
     await newUser.save();
 
     // 5. Remove the temp email record (optional cleanup)
-    await TEMPMAIL.deleteOne({ email });
+    await Tempmail.deleteOne({ email });
 
     // 6. Generate JWT token
     const token = newUser.createJWT();
@@ -56,6 +53,16 @@ const register = async (req, res) => {
     });
   } catch (error) {
     console.error(error);
+
+    // Extract Mongoose validation error message
+    if (error.name === "ValidationError") {
+      const errors = Object.values(error.errors).map((e) => e.message);
+      return res.status(StatusCodes.BAD_REQUEST).json({
+        success: false,
+        msg: errors.join(". "),
+      });
+    }
+
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
       success: false,
       msg: "Registration failed",
@@ -74,7 +81,7 @@ const login = async (req, res) => {
       });
     }
 
-    const user = await USER.findOne({ email }).select("+password");
+    const user = await User.findOne({ email }).select("+password");
 
     if (!user) {
       return res.status(StatusCodes.NOT_FOUND).json({
@@ -141,7 +148,7 @@ const editProfile = async (req, res) => {
     }
 
     // 3. Fetch existing user document
-    const user = await USER.findById(id);
+    const user = await User.findById(id);
     if (!user) {
       return res
         .status(StatusCodes.NOT_FOUND)
@@ -204,24 +211,11 @@ const editProfile = async (req, res) => {
   }
 };
 
-const logout = async(req, res)=>
-{
-  try{
-    const token = user.token;
-    const isLocalhost =
-      req.hostname === "localhost" || req.hostname === "127.0.0.1";
-    res.clearCookie("token",token, {
-      httpOnly: true,
-      secure: !isLocalhost,
-      sameSite: isLocalhost ? "Lax" : "None",
-    }).json({
-      success : true,
-      msg : "Log out successfully"
-    })
+const logout = (req, res) => {
+  res.clearCookie("token").json({
+    success: true,
+    msg: "Logged out successfully!",
+  });
+};
 
-  }catch(error)
-  {
-    console.log(error)
-  }
-}
-module.exports = { register, login, editProfile,logout };
+module.exports = { register, login, editProfile, logout };

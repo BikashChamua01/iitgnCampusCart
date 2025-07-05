@@ -7,4 +7,4 @@ const tempEmailSchema = new mongoose.Schema({
   verified: { type: Boolean, default: false },
 });
 
-module.exports = mongoose.model("TEMPEMAIL", tempEmailSchema);
+module.exports = mongoose.model("Tempmail", tempEmailSchema);
