@@ -8,15 +8,17 @@ const ShopLayout = () => {
   const screenSize = useScreenSize();
 
   return (
-    <div className="min-h-screen flex flex-col bg-amber-50">
+    <div className="min-h-screen flex flex-col bg-white">
       <ShopHeader />
       <div className="flex  flex-1 pt-13">
-        {screenSize === "md" || screenSize === "lg" || screenSize === "xl" || screenSize === "2xl" ? (
+        {screenSize === "lg" || screenSize === "xl" || screenSize === "2xl" ? (
           <ShopSidebar />
         ) : null}
         <main
-          className={`flex-1  transition-all duration-300  ${
-           screenSize === "md" ||  screenSize === "lg" || screenSize === "xl" || screenSize === "2xl"
+          className={`flex-1  transition-all duration-300  pb-12 md:pb-1  ${
+            screenSize === "lg" ||
+            screenSize === "xl" ||
+            screenSize === "2xl"
               ? "ml-20"
               : "ml-0"
           }`}
@@ -24,7 +26,9 @@ const ShopLayout = () => {
           <Outlet />
         </main>
       </div>
-      {(screenSize === "xs" || screenSize === "sm") && <ShopFooter />}
+      {(screenSize === "md" || screenSize === "xs" || screenSize === "sm") && (
+        <ShopFooter />
+      )}
     </div>
   );
 };

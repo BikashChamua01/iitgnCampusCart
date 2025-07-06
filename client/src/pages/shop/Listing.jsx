@@ -15,13 +15,31 @@ const ShopListing = () => {
     (state) => state.shopProducts
   );
 
+  const onEdit = () => {
+    console.log("Edit");
+  };
+  const onDelete = () => {
+    console.log("Delete");
+  };
+
   return (
     <>
       <header>{`${user.userName}'s Products`}</header>
-      <div>
-        {myListing.map((product) => {
-          return <MylistingCard product={product} key={product._id} />;
-        })}
+      <div
+        className="
+  grid grid-cols-1  sm:grid-cols-2 lg:grid-cols-4
+  gap-4 sm:gap-6 p-2 sm:p-4 lg:p-6
+  max-w-7xl mx-auto
+"
+      >
+        {myListing.map((product) => (
+          <MylistingCard
+            product={product}
+            key={product._id}
+            onEdit={onEdit}
+            onDelete={onDelete}
+          />
+        ))}
       </div>
     </>
   );
