@@ -27,11 +27,13 @@ const LoginForm = () => {
           toast.success("Successfully logged in");
         } else {
           toast.error(data.msg || "Failed to login");
+          
         }
         setLoading(false); // ✅ Move here
       })
       .catch((error) => {
         toast.error(error.message || "Failed to login");
+        // alert(error.message);
         setLoading(false); // ✅ Also here
       });
   }; 

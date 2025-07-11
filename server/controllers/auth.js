@@ -7,6 +7,7 @@ const user = require("../models/user");
 const register = async (req, res) => {
   try {
     const { userName, email, password } = req.body;
+    // console.log(email,password,"trying to register");
 
     // 1. Validate required fields
     if (!userName || !email || !password) {
@@ -45,6 +46,7 @@ const register = async (req, res) => {
     const token = newUser.createJWT();
 
     // 7. Respond with success
+    console.log(email,password,"register success");
     return res.status(StatusCodes.CREATED).json({
       success: true,
       msg: "Registration successful",
@@ -66,6 +68,7 @@ const register = async (req, res) => {
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;
+    // console.log(email,password,"trying to login");
 
     if (!email || !password) {
       return res.status(StatusCodes.BAD_REQUEST).json({
@@ -112,6 +115,7 @@ const login = async (req, res) => {
         isAdmin: user.isAdmin,
       },
     });
+   
   } catch (error) {
     console.error("Login error:", error);
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
