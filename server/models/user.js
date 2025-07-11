@@ -37,7 +37,7 @@ const userSchema = mongoose.Schema(
             minSymbols: 1,
           });
         },
-        message:
+        msg:
           "Password must contain at least one letter, one number, and one special character",
       },
     },
@@ -91,4 +91,4 @@ userSchema.methods.verifyPassword = async function (candidatePassword) {
   }
 };
 
-module.exports = mongoose.model("USER", userSchema);
+module.exports = mongoose.model("User", userSchema);
