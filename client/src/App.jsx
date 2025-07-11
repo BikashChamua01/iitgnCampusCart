@@ -2,6 +2,7 @@
 import ShopLayout from "./components/shop/layout";
 import ShopHome from "./pages/shop/Home";
 import ShopProducts from "./pages/shop/Products";
+import ProductDetails from "./pages/shop/ProductDetails";
 import ShopListing from "./pages/shop/Listing";
 
 // import the admin pages
@@ -71,6 +72,8 @@ const App = () => {
             <Route path="about" element={<About />} />
             <Route path="listings" element={<ShopListing />} />
             <Route path="sell" element={<Sell />} />
+            <Route path="products/:id" element={<ProductDetails />} />
+      
           </Route>
 
           {/* Admin pages */}
