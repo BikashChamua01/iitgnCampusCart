@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const { register, login, editProfile, logout } = require("../controllers/auth");
+const { register, login, editProfile, logout, userProfile} = require("../controllers/auth");
 const {
   sendVerificationCode,
   verifyCode,
@@ -14,6 +14,7 @@ router.post("/verify-code", verifyCode);
 router.post("/login", login);
 router.post("/register", register);
 router.patch("/editProfile/:id", editProfile);
+router.get("/userProfile/:id", userProfile);
 router.get("/check-auth", checkAuth, (req, res) => {
   const user = req.user;
   return res.json({
