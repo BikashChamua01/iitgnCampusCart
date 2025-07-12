@@ -98,6 +98,7 @@ const MyListingCard = ({ product, onEdit, onDelete }) => {
               hover:bg-purple-300 hover:shadow-lg hover:shadow-purple-300
               transition-all duration-200
               focus:outline-none focus:ring-2 focus:ring-purple-400
+              cursor-pointer
             "
           >
             Edit
@@ -115,6 +116,7 @@ const MyListingCard = ({ product, onEdit, onDelete }) => {
               hover:bg-red-200 hover:shadow-lg hover:shadow-red-200
               transition-all duration-200
               focus:outline-none focus:ring-2 focus:ring-red-300
+              cursor-pointer
             "
           >
             Delete

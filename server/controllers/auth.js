@@ -43,7 +43,7 @@ const register = async (req, res) => {
     const token = newUser.createJWT();
 
     // 7. Respond with success
-    console.log(email,password,"register success");
+    console.log(email, password, "register success");
     return res.status(StatusCodes.CREATED).json({
       success: true,
       msg: "Registration successful",
@@ -122,7 +122,6 @@ const login = async (req, res) => {
         isAdmin: user.isAdmin,
       },
     });
-   
   } catch (error) {
     console.error("Login error:", error);
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
@@ -222,4 +221,28 @@ const logout = (req, res) => {
   });
 };
 
-module.exports = { register, login, editProfile, logout };
+const userProfile = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await User.findById(id);
+    if (!user) {
+      return res.status(StatusCodes.NOT_FOUND).json({
+        succcess: false,
+        msg: "User not found",
+      });
+    }
+    // console.log(user);
+    return res.status(StatusCodes.OK).json({
+      succcess: true,
+      msg: "User found",
+      user,
+    });
+  } catch (error) {
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      success: false,
+      msg: "failed to get the user",
+    });
+  }
+};
+
+module.exports = { register, login, editProfile, logout, userProfile };

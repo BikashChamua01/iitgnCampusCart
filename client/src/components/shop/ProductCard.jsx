@@ -23,7 +23,8 @@ const ProductCard = ({ product }) => {
       : null;
 
   return (
-    <div className="relative bg-white shadow-lg rounded-xl overflow-hidden border border-[#e2d3f3] hover:shadow-2xl transition duration-300 group">
+    <Link to={`/shop/products/${product._id}`}>
+    <div className="relative bg-white shadow-lg rounded-xl overflow-hidden border border-[#e2d3f3] hover:shadow-2xl transition duration-300 group cursor-pointer ">
       {/* Discount Badge */}
       {discount && (
         <span className="absolute top-3 left-3 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded z-10">
@@ -100,6 +101,7 @@ const ProductCard = ({ product }) => {
         </div>
       </div>
     </div>
+    </Link>
   );
 };
 
