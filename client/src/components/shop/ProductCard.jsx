@@ -63,10 +63,15 @@ const ProductCard = ({ product }) => {
 
         {/* Category & Condition */}
         <div className="text-sm text-gray-700 flex flex-wrap gap-2">
-          <span className="px-2 py-1 bg-[#f3e8ff] text-[#6a0dad] rounded-full text-xs font-medium">
+          <span className={`px-2 py-1 bg-[#f3e8ff] text-[#6a0dad] rounded-full text-xs font-medium
+            
+            `}>
             {category}
           </span>
-          <span className="px-2 py-1 bg-purple-100 text-purple-700 rounded-full text-xs font-medium">
+          <span className={`px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium
+             ${condition=="Poor" ?"text-red-600 bg-red-300":""}
+            ${condition == "Fair" ? "text-yellow-700 bg-yellow-100" : ""}
+            `}>
             {condition}
           </span>
         </div>
