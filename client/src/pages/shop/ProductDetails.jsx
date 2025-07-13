@@ -2,7 +2,13 @@ import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import axios from "axios";
 import { motion } from "framer-motion";
-import { FaTag, FaCheckCircle, FaUserCircle, FaEnvelope, FaUser } from "react-icons/fa";
+import {
+  FaTag,
+  FaCheckCircle,
+  FaUserCircle,
+  FaEnvelope,
+  FaUser,
+} from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllProducts } from "../../store/product-slice";
 import ProductCard from "../../components/shop/ProductCard";
@@ -65,9 +71,7 @@ const ProductDetail = () => {
   // Filter similar products (same category, not this product)
   const similarProducts = products
     .filter(
-      (p) =>
-        p.category === category &&
-        p._id !== product._id // Exclude current product
+      (p) => p.category === category && p._id !== product._id // Exclude current product
     )
     .slice(0, 4); // Show up to 4 similar products
 
@@ -91,7 +95,8 @@ const ProductDetail = () => {
               />
               {originalPrice && (
                 <span className="absolute top-2 left-2 bg-red-500 text-white px-3 py-1 rounded-full text-xs font-bold">
-                  {Math.round(((originalPrice - price) / originalPrice) * 100)}% OFF
+                  {Math.round(((originalPrice - price) / originalPrice) * 100)}%
+                  OFF
                 </span>
               )}
             </div>
@@ -128,9 +133,11 @@ const ProductDetail = () => {
                 <h2 className="text-3xl font-extrabold text-purple-800 mb-2">
                   {title}
                 </h2>
-                <p className="text-gray-700 text-base mb-4">{description}</p>
+                <p className="text-gray-700 text-base mb-4 break-words">{description}</p>
                 <div className="flex items-center gap-4">
-                  <span className="text-2xl font-bold text-purple-700">₹{price}</span>
+                  <span className="text-2xl font-bold text-purple-700">
+                    ₹{price}
+                  </span>
                   {originalPrice && (
                     <span className="line-through text-gray-400 text-lg">
                       ₹{originalPrice}
@@ -145,26 +152,25 @@ const ProductDetail = () => {
                     <FaCheckCircle className="mr-1" /> {condition}
                   </span>
                 </div>
-                
               </div>
               {/* Seller Details */}
               {seller && (
                 <div className="flex items-center gap-4 bg-white rounded-lg p-4 shadow-inner ">
-                  
                   <img
                     src={seller.avatar || "/user-avatar.png"}
                     alt={seller.name}
                     className="w-14 h-14 rounded-full object-cover border-2 border-purple-300"
                   />
-                  
+
                   <div>
-                    
                     <div className="text-lg font-bold text-purple-800 flex items-center gap-2">
                       <FaUserCircle /> {seller.name}
                     </div>
+
                     <div className="text-gray-500 flex items-center gap-2 text-sm mt-1">
                       <FaEnvelope /> {seller.email}
                     </div>
+
                     <Link
                       // to={`/user/${seller._id}`}
                       to={`#`}
@@ -177,9 +183,7 @@ const ProductDetail = () => {
               )}
             </motion.div>
             {/* Add to Cart Button (outside the card, below it) */}
-            <button
-              className="mt-6 w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-3 rounded-xl font-semibold shadow hover:scale-105 transition-transform cursor-pointer"
-            >
+            <button className="mt-6 w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-3 rounded-xl font-semibold shadow hover:scale-105 transition-transform cursor-pointer">
               Add to Cart
             </button>
           </div>
@@ -187,7 +191,9 @@ const ProductDetail = () => {
 
         {/* Similar Products */}
         <div className="mt-12">
-          <h3 className="text-2xl font-bold text-purple-800 mb-6">Similar Products</h3>
+          <h3 className="text-2xl font-bold text-purple-800 mb-6">
+            Similar Products
+          </h3>
           {similarProducts.length === 0 ? (
             <div className="text-gray-500">No similar products found.</div>
           ) : (
