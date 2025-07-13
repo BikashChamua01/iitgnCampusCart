@@ -100,9 +100,10 @@ const getSingleProduct = async (req, res) => {
 const deleteProduct = async (req, res) => {
   try {
     const { id } = req.params;
-
+    
     // Check if product exists
     const product = await Product.findById(id);
+    console.log("hello")
     if (!product) {
       return res.status(StatusCodes.NOT_FOUND).json({
         success: false,
@@ -266,7 +267,6 @@ const myListings = async (req, res) => {
     });
   }
 };
-
 
 module.exports = {
   createProduct,

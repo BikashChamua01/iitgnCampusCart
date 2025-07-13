@@ -18,7 +18,7 @@ const Sell = () => {
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e) => {
+  const handleUpload = async (e) => {
     e.preventDefault();
 
     if (
@@ -82,7 +82,7 @@ const Sell = () => {
         </h1>
 
         <form
-          onSubmit={handleSubmit}
+          onSubmit={handleUpload}
           className="bg-white shadow-lg rounded-2xl p-6 md:p-10 flex flex-col md:flex-row gap-8"
         >
           {/* Left Panel: Image Upload */}
@@ -98,7 +98,7 @@ const Sell = () => {
               disabled={loading}
               className="mt-6 bg-[#6a0dad] text-white font-semibold py-2 px-4 rounded-lg transition duration-300 disabled:opacity-60 border-2 border-transparent hover:bg-white hover:text-[#6a0dad] hover:border-[#b27dd8] cursor-pointer"
               onClick={(event)=>{
-                handleSubmit(event);
+                handleUpload(event);
               }}
 
             >

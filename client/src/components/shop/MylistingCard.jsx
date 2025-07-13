@@ -17,10 +17,10 @@ const MyListingCard = ({ product, onEdit, onDelete }) => {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 1 }}
+      transition={{ duration: 0.2 }}
       whileHover={{
         scale: 1.03,
-        boxShadow: "0 8px 32px 0 rgba(168, 85, 247, 0.25)",
+        boxShadow: "0 2px 20px 0 rgba(168, 85, 247, 0.25)",
       }}
       className="
         relative bg-white rounded-xl shadow-lg
@@ -28,7 +28,8 @@ const MyListingCard = ({ product, onEdit, onDelete }) => {
         self-center mx-7 lg:mx-0
         transition-all duration-300 ease-in-out
         hover:shadow-purple-400/40
-        group cursor-pointer 
+        cursor-pointer 
+        h-62
       "
     >
       {/* Circle image: half above the card */}
@@ -59,7 +60,7 @@ const MyListingCard = ({ product, onEdit, onDelete }) => {
         </h3>
 
         {/* Description */}
-        <p className="text-xs sm:text-sm text-gray-600 text-center mb-2 line-clamp-2">
+        <p className="text-xs sm:text-sm text-gray-600 text-center mb-2 line-clamp-2 h-10 flex items-center justify-center">
           {description}
         </p>
 
@@ -84,7 +85,7 @@ const MyListingCard = ({ product, onEdit, onDelete }) => {
         </div>
 
         {/* Actions */}
-        <div className="flex gap-2 mt-2">
+        <div className="absolute bottom-3 right-3 left-3 flex gap-2 mt-2 ">
           <motion.button
             whileHover={{
               scale: 1.06,
