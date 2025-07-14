@@ -5,7 +5,9 @@ const User = require("../models/user");
 
 const register = async (req, res) => {
   try {
+    console.log(req.body);
     const { userName, email, password, phoneNumber, gender, image } = req.body;
+    
 
     // 1. Validate required fields
     if (!userName || !email || !password) {

@@ -37,7 +37,7 @@ const userSchema = mongoose.Schema(
 profilePicture: {
   url: {
     type: String,
-    required: true,
+    
     // match: [
     //   /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/,
     //   "Please enter a valid URL"

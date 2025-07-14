@@ -147,6 +147,7 @@ const RegistrationForm = () => {
       });
   };
 
+const genders = ["","Male","Female"];
   return (
     <div className="min-h-screen flex items-center justify-center p-4">
       <form
@@ -227,6 +228,45 @@ const RegistrationForm = () => {
             </button>
           </div>
         )}
+        {/* phone Number */}
+        <div className="mb-4">
+          <label className="block font-medium mb-1 text-[#2b2b2b]">
+            Phone Number
+          </label>
+          <input
+            type="text"
+            name="phoneNumber"
+            value={formData.phoneNumber}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border border-[#7635b6] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6a0dad]"
+            placeholder="Enter your Phone Number"
+          />
+          {errors.phoneNumber && (
+            <p className="text-red-600 mt-1">{errors.phoneNumber}</p>
+          )}
+        </div>
+        {/* gender */}
+      <div className="mb-4">
+          <label className="block font-medium mb-1 text-[#2b2b2b]">
+        <span className="text-[#2b2b2b] font-medium">Gender</span>
+        <select
+          name="gender"
+          value={formData.gender}
+          onChange={handleChange}
+          // className="w-full mt-1 px-4 py-2 border border-[#7635b6] rounded-lg bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#6a0dad]"
+           className="w-full px-4 py-2 border border-[#7635b6] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6a0dad]"
+        >
+          {genders.map((c) => (
+            <option key={c} value={c}>
+              {c}
+            </option>
+          ))}
+        </select>
+      </label>
+      </div>
+
+      
+      
 
         {/* Password */}
         <div className="mb-4">
