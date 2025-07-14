@@ -5,7 +5,7 @@ const User = require("../models/user");
 
 const register = async (req, res) => {
   try {
-    const { userName, email, password } = req.body;
+    const { userName, email, password, phoneNumber, gender, image } = req.body;
 
     // 1. Validate required fields
     if (!userName || !email || !password) {
@@ -33,7 +33,14 @@ const register = async (req, res) => {
     }
 
     // 4. Register the new user
-    const newUser = new User({ userName, email, password });
+    const newUser = new User({
+      userName,
+      email,
+      password,
+      phoneNumber,
+      gender,
+      image,
+    });
     await newUser.save();
 
     // 5. Remove the temp email record (optional cleanup)
