@@ -2,12 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import axios from "axios";
 import { motion } from "framer-motion";
-import {
-  FaTag,
-  FaCheckCircle,
-  FaUserCircle,
-  FaEnvelope,
-} from "react-icons/fa";
+import { FaTag, FaCheckCircle, FaUserCircle, FaEnvelope } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllProducts } from "../../store/product-slice";
 import ProductCard from "../../components/shop/ProductCard";
@@ -42,11 +37,13 @@ const ProductDetail = () => {
     const fetchSeller = async () => {
       setSellerLoading(true);
       try {
-        const res = await axios.get(`/api/v1/auth/userProfile/${product.seller}`);
+        const res = await axios.get(
+          `/api/v1/auth/userProfile/${product.seller}`
+        );
         setSeller(res.data.user);
       } catch (error) {
         console.error("Error fetching seller:", error);
-        setSeller(null)
+        setSeller(null);
       } finally {
         setSellerLoading(false);
       }
@@ -106,7 +103,8 @@ const ProductDetail = () => {
               />
               {originalPrice && (
                 <span className="absolute top-2 left-2 bg-red-500 text-white px-2 py-1 rounded-full text-xs font-semibold shadow">
-                  {Math.round(((originalPrice - price) / originalPrice) * 100)}% OFF
+                  {Math.round(((originalPrice - price) / originalPrice) * 100)}%
+                  OFF
                 </span>
               )}
             </div>
@@ -168,9 +166,11 @@ const ProductDetail = () => {
 
               {/* Seller Info */}
               {seller && !sellerLoading && (
-                <div className={`flex items-center gap-4 bg-white rounded-lg p-4 shadow-inner
+                <div
+                  className={`flex items-center gap-4 bg-white rounded-lg p-4 shadow-inner
                 
-                `}>
+                `}
+                >
                   <img
                     src={seller.avatar || "/user-avatar.png"}
                     alt={seller.name}
@@ -194,9 +194,11 @@ const ProductDetail = () => {
               )}
             </motion.div>
 
-            <button className={`w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white px-5 py-3 rounded-xl font-semibold shadow hover:scale-105 transition-transform cursor-pointer 
+            <button
+              className={`w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white px-5 py-3 rounded-xl font-semibold shadow hover:scale-105 transition-transform cursor-pointer 
                
-              `}>
+              `}
+            >
               Add to Cart
             </button>
           </div>

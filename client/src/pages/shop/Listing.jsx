@@ -20,7 +20,11 @@ const ShopListing = () => {
 
   const onEdit = async (productId) => {
     try {
-      navigate("/shop/sell");
+      navigate("/shop/sell", {
+        state: {
+          productId,
+        },
+      });
     } catch (error) {
       console.log(error);
       toast.error("Failed to edit product", error);

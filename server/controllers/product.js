@@ -79,13 +79,13 @@ const getSingleProduct = async (req, res) => {
     const product = await Product.findById(id);
     if (!product) {
       return res.status(StatusCodes.NOT_FOUND).json({
-        succcess: false,
+        success: false,
         msg: "Product not found",
       });
     }
 
     return res.status(StatusCodes.OK).json({
-      succcess: true,
+      success: true,
       msg: "Product found",
       product,
     });
@@ -100,10 +100,9 @@ const getSingleProduct = async (req, res) => {
 const deleteProduct = async (req, res) => {
   try {
     const { id } = req.params;
-    
     // Check if product exists
     const product = await Product.findById(id);
-    console.log("hello")
+    console.log("hello");
     if (!product) {
       return res.status(StatusCodes.NOT_FOUND).json({
         success: false,
@@ -113,7 +112,7 @@ const deleteProduct = async (req, res) => {
     //If the current person is the selller or the admin then only he can do it
     if (product.seller != req.user.userId && !req.user.isAdmin) {
       return res.status(StatusCodes.UNAUTHORIZED).json({
-        succcess: false,
+        success: false,
         msg: "You are Not authorized to delete this product",
       });
     }
@@ -154,17 +153,20 @@ const editProduct = async (req, res) => {
       });
     }
 
+    // console.log("after product found");
+
     if (findProduct.seller != req.user.userId && !req.user.isAdmin) {
       return res.status(StatusCodes.UNAUTHORIZED).json({
-        succcess: false,
+        success: false,
         msg: "You are Not authorized to edit this product",
       });
     }
 
+    // console.log("User validation");
+
     // Step 1: Validate total image count
-    const retainedImages = Array.isArray(existingImages)
-      ? existingImages
-      : [existingImages]; // handle single string sent by form-data
+    const retainedImages = JSON.parse(existingImages);
+    console.log(retainedImages);
 
     const newFiles = req.files || [];
     const totalImagesCount = retainedImages.length + newFiles.length;
@@ -177,11 +179,21 @@ const editProduct = async (req, res) => {
     }
 
     // Step 2: Upload new images to Cloudinary
-    const uploadedImageUrls = [];
-    for (const file of newFiles) {
-      const uploaded = await uploadToCloudinary(file.buffer);
-      uploadedImageUrls.push(uploaded.secure_url);
-    }
+    // const uploadedImageUrls = [];
+    // for (const file of newFiles) {
+    //   const uploaded = await uploadToCloudinary(file.buffer);
+    //   uploadedImageUrls.push(uploaded.secure_url);
+    // }
+
+    const uploadResults = await Promise.all(
+      req.files.map((file) => uploadToCloudinary(file.buffer))
+    );
+    const uploadedImageUrls = uploadResults.map(
+      ({ secure_url, public_id }) => ({
+        url: secure_url,
+        public_id,
+      })
+    );
 
     // Step 3: Update fields
     findProduct.title = title || findProduct.title;
