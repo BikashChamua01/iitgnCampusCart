@@ -1,5 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
+import DeleteConfirmDialog from "./DeleteProductDialogButton";
 
 const MyListingCard = ({ product, onEdit, onDelete }) => {
   const {
@@ -104,7 +105,7 @@ const MyListingCard = ({ product, onEdit, onDelete }) => {
           >
             Edit
           </motion.button>
-          <motion.button
+          {/* <motion.button
             whileHover={{
               scale: 1.06,
               boxShadow: "0 2px 12px 0 rgba(239, 68, 68, 0.18)",
@@ -121,7 +122,8 @@ const MyListingCard = ({ product, onEdit, onDelete }) => {
             "
           >
             Delete
-          </motion.button>
+          </motion.button> */}
+          <DeleteConfirmDialog onConfirm={() => onDelete(productId)} />
         </div>
       </div>
     </motion.div>

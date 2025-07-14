@@ -68,12 +68,12 @@ const DeleteImageButton = ({ onDelete, image }) => {
           </AlertDialogHeader>
 
           <AlertDialogFooter className="mt-6 flex justify-end gap-2">
-            <AlertDialogCancel className="bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-md px-4 py-2 transition">
+            <AlertDialogCancel className="bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-md px-4 py-2 transition cursor-pointer">
               Cancel
             </AlertDialogCancel>
             <AlertDialogAction
               onClick={onDelete}
-              className="bg-red-500 hover:bg-red-600 text-white rounded-md px-4 py-2 transition"
+              className="bg-red-500 hover:bg-red-600 text-white rounded-md px-4 py-2 transition cursor-pointer"
             >
               Delete
             </AlertDialogAction>
