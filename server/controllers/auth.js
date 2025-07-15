@@ -4,12 +4,11 @@ const Tempmail = require("../models/tempemail");
 const User = require("../models/user");
 const uploadToCloudinary = require("../utils/uploadHelper");
 
-
 const register = async (req, res) => {
   try {
     // console.log("req files is ", req.files);
     const { userName, email, password, phoneNumber, gender } = req.body;
- 
+
     const uploadResults = await Promise.all(
       req.files.map((file) => uploadToCloudinary(file.buffer))
     );
@@ -19,7 +18,6 @@ const register = async (req, res) => {
     }));
     const profilePicture = images[0];
     // console.log("pp", profilePhoto);
-    
 
     // 1. Validate required fields
     if (!userName || !email || !password) {
@@ -53,7 +51,7 @@ const register = async (req, res) => {
       password,
       phoneNumber,
       gender,
-      profilePicture
+      profilePicture,
     });
     // console.log("new user to save is", newUser);
     await newUser.save();
@@ -142,6 +140,7 @@ const login = async (req, res) => {
         userId: user._id,
         userName: user.userName,
         isAdmin: user.isAdmin,
+        profilePicture: user.profilePicture.url,
       },
     });
   } catch (error) {

@@ -15,7 +15,7 @@ const ShopLayout = () => {
           <ShopSidebar />
         ) : null}
         <main
-          className={`flex-1  transition-all duration-300  pb-12 md:pb-1  ${
+          className={`flex-1  transition-all duration-300  pb-12 md:pb-1 mt-2 ${
             screenSize === "lg" ||
             screenSize === "xl" ||
             screenSize === "2xl"

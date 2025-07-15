@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from "react-redux";
 import { fetchAllProducts } from "../../store/product-slice";
 import ProductCard from "../../components/shop/ProductCard";
 import { motion } from "framer-motion";
@@ -10,7 +10,10 @@ const ShopProducts = () => {
   const { products, loading } = useSelector((state) => state.shopProducts);
 
   // Extract unique categories for filter dropdown
-  const categories = ["All", ...Array.from(new Set(products.map(p => p.category)))];
+  const categories = [
+    "All",
+    ...Array.from(new Set(products.map((p) => p.category))),
+  ];
 
   // State for search and category filter
   const [search, setSearch] = useState("");
@@ -21,13 +24,14 @@ const ShopProducts = () => {
   }, [dispatch]);
 
   // Filter products based on search and category
-  const filteredProducts = products.filter(product =>
-    (selectedCategory === "All" || product.category === selectedCategory) &&
-    product.title.toLowerCase().includes(search.toLowerCase())
+  const filteredProducts = products.filter(
+    (product) =>
+      (selectedCategory === "All" || product.category === selectedCategory) &&
+      product.title.toLowerCase().includes(search.toLowerCase())
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-100 to-cream-100 py-10 px-4 w-full">
+    <div className="min-h-screen bg-gradient-to-br py-4 px-4 w-full">
       <div className="max-w-7xl mx-auto">
         {/* <h1 className="text-3xl font-bold text-[#6a0dad] text-center mb-10">
           Explore All Products
@@ -35,23 +39,25 @@ const ShopProducts = () => {
 
         {/* Search & Filter */}
         <div className="flex flex-col md:flex-row items-center justify-between mb-8 gap-4">
-          <div className="flex items-center bg-white rounded-md shadow px-3 py-2 w-full md:w-1/3">
+          <div className="flex items-center bg-white rounded-2xl shadow px-3 py-2 w-full md:w-1/3 border border-fuchsia-500">
             <FaSearch className="text-gray-400 mr-2" />
             <input
               type="text"
               placeholder="Search products..."
               value={search}
-              onChange={e => setSearch(e.target.value)}
-              className="outline-none w-full bg-transparent"
+              onChange={(e) => setSearch(e.target.value)}
+              className="outline-none w-full bg-transparent "
             />
           </div>
           <select
-            className="bg-white border rounded-md px-3 py-2 shadow w-full md:w-1/4"
+            className="bg-white  rounded-md px-3 py-2 shadow w-full md:w-1/4 border border-fuchsia-500"
             value={selectedCategory}
-            onChange={e => setSelectedCategory(e.target.value)}
+            onChange={(e) => setSelectedCategory(e.target.value)}
           >
-            {categories.map(cat => (
-              <option key={cat} value={cat}>{cat}</option>
+            {categories.map((cat) => (
+              <option key={cat} value={cat}>
+                {cat}
+              </option>
             ))}
           </select>
         </div>
@@ -59,9 +65,25 @@ const ShopProducts = () => {
         {/* Product Grid */}
         {loading ? (
           <div className="flex justify-center items-center h-60">
-            <svg className="animate-spin h-10 w-10 text-[#6a0dad]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
+            <svg
+              className="animate-spin h-10 w-10 text-[#6a0dad]"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle
+                className="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                strokeWidth="4"
+              ></circle>
+              <path
+                className="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8v8z"
+              ></path>
             </svg>
           </div>
         ) : (

@@ -25,22 +25,21 @@ const userSchema = mongoose.Schema(
       type: String,
       match: [
         /^(\+91[\-\s]?|91[\-\s]?|0)?[6-9]\d{9}$/,
-        "Please enter a valid phone number"
+        "Please enter a valid phone number",
       ],
-     },
+    },
     gender: {
       type: String,
-      enum: ["Male", "Female", ""], 
-      default: ""
+      enum: ["Male", "Female", ""],
+      default: "",
     },
 
-profilePicture: {
-  url: {
-    type: String,
-  
-  },
-  public_id: { type: String },
-   },
+    profilePicture: {
+      url: {
+        type: String,
+      },
+      public_id: { type: String },
+    },
 
     password: {
       type: String,
@@ -57,8 +56,7 @@ profilePicture: {
             minSymbols: 1,
           });
         },
-        msg:
-          "Password must contain at least one letter, one number, and one special character",
+        msg: "Password must contain at least one letter, one number, and one special character",
       },
     },
 
@@ -87,6 +85,8 @@ userSchema.methods.createJWT = function () {
       userId: this._id,
       userName: this.userName,
       isAdmin: this.isAdmin,
+      profilePicture: this.profilePicture.url,
+      gender : this.gender
     },
     process.env.JWT_SECRET,
     {

@@ -220,6 +220,18 @@ const RegistrationForm = () => {
         className="rounded-2xl p-8 w-full max-w-md h-screen overflow-y-scroll md:h-auto md:overflow-y-hidden "
       >
         {/* ... other form fields ... */}
+        <h2 className="text-2xl font-bold text-center text-[#6a0dad] mb-6">
+                  <div className="text-4xl mb-2">Create You Account</div>
+                  <div className="text-sm text-[#5b0d92]">
+                    Already have an account ?{" "}
+                    <Link
+                      to="/auth/login"
+                      className="underline hover:text-[#6a0dad] font-medium"
+                    >
+                      login
+                    </Link>
+                  </div>
+                </h2>
 
         {/* User Name */}
         <div className="mb-4">
