@@ -11,8 +11,12 @@ export const register = createAsyncThunk(
   "/auth/register",
   async (formData, { rejectWithValue }) => {
     try {
+      console.log(formData)
       const response = await axios.post("/api/v1/auth/register", formData, {
         withCredentials: true,
+        headers: {
+            "Content-Type": "multipart/form-data",
+          },
       });
       return response.data;
     } catch (error) {

@@ -1,12 +1,16 @@
 // src/pages/auth/RegistrationForm.jsx
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { register } from "../../store/auth-slice";
 import { useDispatch } from "react-redux";
 import { toast } from "sonner";
-// 📌 new import
 import { validateForm } from "../../utils/validateForm";
+import getCroppedImg from "@/components/shop/cropImage";
+
+// Import react-easy-crop for cropping UI
+import Cropper from "react-easy-crop";
+import { Images } from "lucide-react";
 
 const RegistrationForm = () => {
   const initialFormData = {
@@ -14,11 +18,13 @@ const RegistrationForm = () => {
     email: "",
     password: "",
     confirmPassword: "",
+    phoneNumber: "",
+    gender: "",
+    profilePhoto:"",
   };
   const dispatch = useDispatch();
   const [formData, setFormData] = useState(initialFormData);
 
-  // 📌 new errors state
   const [errors, setErrors] = useState({});
 
   const [otp, setOtp] = useState(new Array(6).fill(""));
@@ -26,7 +32,15 @@ const RegistrationForm = () => {
   const [otpVerified, setOtpVerified] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  // --- UPDATED handleChange to set errors ---
+  // States for image cropping
+  const [imageSrc, setImageSrc] = useState(null);
+  const [crop, setCrop] = useState({ x: 0, y: 0 });
+  const [zoom, setZoom] = useState(1);
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
+  const [croppedImageURL, setCroppedImageURL] = useState(null);
+  const [croppedFile, setCroppedFile] = useState(null);
+
+  // Handle form input changes with validation
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -35,9 +49,8 @@ const RegistrationForm = () => {
       [name]: value,
     }));
 
-    // run full-form validation and pick out this field
     const allErrors = validateForm({ ...formData, [name]: value });
-    // also check confirmPassword match when either changes
+
     if (
       (name === "password" && formData.confirmPassword) ||
       name === "confirmPassword"
@@ -54,7 +67,7 @@ const RegistrationForm = () => {
     setErrors(allErrors);
   };
 
-  // --- OTP handlers unchanged ---
+  // OTP handlers (unchanged)
   const handleVerifyEmail = async () => {
     if (!formData.email) return alert("Please enter your email");
 
@@ -115,13 +128,52 @@ const RegistrationForm = () => {
     }
   };
 
-  // --- UPDATED handleRegister to block if errors exist ---
+  // Handle cropping complete event
+  const onCropComplete = useCallback((croppedArea, croppedAreaPixels) => {
+    setCroppedAreaPixels(croppedAreaPixels);
+  }, []);
+
+  // Handle file input change for profile photo
+  const handleFileChange = async (e) => {
+    if (e.target.files && e.target.files.length > 0) {
+      const file = e.target.files[0];
+      const imageDataUrl = await readFile(file);
+      setImageSrc(imageDataUrl);
+      setCroppedImageURL(null);
+      // setCroppedFile(null);
+    }
+  };
+
+  // Utility to read file as data URL
+  const readFile = (file) => {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.addEventListener("load", () => resolve(reader.result));
+      reader.readAsDataURL(file);
+    });
+  };
+
+  // Generate cropped image and store file and preview URL
+  const showCroppedImage = useCallback(async () => {
+    try {
+      const { blob, url } = await getCroppedImg(imageSrc, croppedAreaPixels);
+      setCroppedImageURL(url);
+       const file = new File([blob], "avatar.jpg", { type: blob.type });
+
+      setCroppedFile(file); 
+      setImageSrc(null); // Close cropper UI after cropping
+    } catch (e) {
+      console.error(e);
+      alert("Failed to crop image.");
+    }
+  }, [imageSrc, croppedAreaPixels]);
+
+  // Handle form submission
   const handleRegister = async (e) => {
     e.preventDefault();
+     
 
-    // run full-form validation
     const formErrors = validateForm(formData);
-    // confirm password match
     if (formData.password !== formData.confirmPassword) {
       formErrors.confirmPassword = "Passwords must match";
     }
@@ -132,11 +184,27 @@ const RegistrationForm = () => {
 
     if (!otpVerified) return alert("Please verify your email first.");
     setLoading(true);
+  
+     
+    
+    // Prepare form data including cropped profile photo if available
+     const submissionData = new FormData();
+  submissionData.append("userName", formData.userName);
+  submissionData.append("email", formData.email);
+  submissionData.append("password", formData.password);
+  submissionData.append("confirmPassword", formData.confirmPassword);
+  submissionData.append("phoneNumber", formData.phoneNumber);
+  submissionData.append("gender", formData.gender);
+  if (croppedFile) {
+    submissionData.append("images", croppedFile);
+  }
+  
+  //  console.log(submissionData);
 
-    dispatch(register(formData))
+
+    dispatch(register(submissionData))
       .unwrap()
       .then((data) => {
-        console.log("Hello this is inside then", data);
         setLoading(false);
         toast.success(data.msg || "Registration successful");
       })
@@ -147,14 +215,15 @@ const RegistrationForm = () => {
       });
   };
 
-const genders = ["","Male","Female"];
+  const genders = ["", "Male", "Female"];
+
   return (
-    <div className="min-h-screen flex items-center justify-center p-4">
+    <div className="min-h-screen flex items-center justify-center p-4 overflow-y-auto h-screen">
       <form
         onSubmit={handleRegister}
         className="rounded-2xl p-8 w-full max-w-md"
       >
-        {/* ... header omitted for brevity ... */}
+        {/* ... other form fields ... */}
 
         {/* User Name */}
         <div className="mb-4">
@@ -228,7 +297,8 @@ const genders = ["","Male","Female"];
             </button>
           </div>
         )}
-        {/* phone Number */}
+
+        {/* Phone Number */}
         <div className="mb-4">
           <label className="block font-medium mb-1 text-[#2b2b2b]">
             Phone Number
@@ -245,28 +315,90 @@ const genders = ["","Male","Female"];
             <p className="text-red-600 mt-1">{errors.phoneNumber}</p>
           )}
         </div>
-        {/* gender */}
-      <div className="mb-4">
-          <label className="block font-medium mb-1 text-[#2b2b2b]">
-        <span className="text-[#2b2b2b] font-medium">Gender</span>
-        <select
-          name="gender"
-          value={formData.gender}
-          onChange={handleChange}
-          // className="w-full mt-1 px-4 py-2 border border-[#7635b6] rounded-lg bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#6a0dad]"
-           className="w-full px-4 py-2 border border-[#7635b6] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6a0dad]"
-        >
-          {genders.map((c) => (
-            <option key={c} value={c}>
-              {c}
-            </option>
-          ))}
-        </select>
-      </label>
-      </div>
 
-      
-      
+        {/* Gender */}
+        <div className="mb-4">
+          <label className="block font-medium mb-1 text-[#2b2b2b]">
+            <span className="text-[#2b2b2b] font-medium">Gender</span>
+            <select
+              name="gender"
+              value={formData.gender}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border border-[#7635b6] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6a0dad]"
+            >
+              {genders.map((c) => (
+                <option key={c} value={c}>
+                  {c}
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
+
+        {/* Profile Photo Upload */}
+        <div className="mb-6">
+          <label className="block font-medium mb-1 text-[#2b2b2b]">
+            Profile Photo
+          </label>
+          {!imageSrc && (
+            <>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleFileChange}
+                className="w-full px-4 py-2 border border-[#7635b6] rounded-lg cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#6a0dad]"
+              />
+              {croppedImageURL && (
+                <img
+                  src={croppedImageURL}
+                  alt="Cropped"
+                  className="mt-4 w-32 h-32 object-cover rounded-full border border-[#7635b6]"
+                  
+                />
+              )}
+            </>
+          )}
+
+          {/* Cropper UI */}
+          {imageSrc && (
+            <div className="relative w-full h-64 bg-gray-100 rounded-lg overflow-hidden mb-4">
+              <Cropper
+                image={imageSrc}
+                crop={crop}
+                zoom={zoom}
+                aspect={1}
+                cropShape="round"
+                onCropChange={setCrop}
+                onZoomChange={setZoom}
+                onCropComplete={onCropComplete}
+              />
+            </div>
+          )}
+
+          {/* Crop and Cancel buttons */}
+          {imageSrc && (
+            <div className="flex space-x-4">
+              <button
+                type="button"
+                onClick={showCroppedImage}
+                className="bg-[#6a0dad] text-white px-4 py-2 rounded-lg hover:bg-[#5a099a] transition duration-300"
+              >
+                Crop Image
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setImageSrc(null);
+                  setCroppedImageURL(null);
+                  // setCroppedFile(null);
+                }}
+                className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400 transition duration-300"
+              >
+                Cancel
+              </button>
+            </div>
+          )}
+        </div>
 
         {/* Password */}
         <div className="mb-4">

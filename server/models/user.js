@@ -37,12 +37,9 @@ const userSchema = mongoose.Schema(
 profilePicture: {
   url: {
     type: String,
-    
-    // match: [
-    //   /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/,
-    //   "Please enter a valid URL"
-    // ]
-  }
+  
+  },
+  public_id: { type: String },
    },
 
     password: {
