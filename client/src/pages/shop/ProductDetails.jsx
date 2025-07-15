@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import axios from "axios";
+// eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
 import { FaTag, FaCheckCircle, FaUserCircle, FaEnvelope, FaPhone } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
@@ -87,7 +88,7 @@ const ProductDetail = () => {
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-white py-6 px-3 sm:px-4">
       <div className="max-w-6xl mx-auto space-y-12">
         {/* Image + Details */}
-        <div className="flex flex-col md:flex-row gap-6 md:gap-8 bg-white p-4 sm:p-6 rounded-lg ">
+        <div className="flex flex-col md:flex-row gap-6 md:gap-8 bg-white p-4 sm:p-6 rounded-lg items-center">
           {/* Product Image */}
           <motion.div
             className="md:w-1/2 flex flex-col items-center"
@@ -99,7 +100,7 @@ const ProductDetail = () => {
               <img
                 src={currentImageUrl || images[0]?.url || "/placeholder.png"}
                 alt={title}
-                className="rounded-xl w-full h-64 sm:h-80 object-cover shadow-lg border-2 border-purple-100"
+                className="rounded-xl w-full h-66 sm:h-80 object-contain"
               />
               {originalPrice && (
                 <span className="absolute top-2 left-2 bg-red-500 text-white px-2 py-1 rounded-full text-xs font-semibold shadow">
