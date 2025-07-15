@@ -20,7 +20,7 @@ const RegistrationForm = () => {
     confirmPassword: "",
     phoneNumber: "",
     gender: "",
-    profilePhoto:"",
+    profilePhoto: "",
   };
   const dispatch = useDispatch();
   const [formData, setFormData] = useState(initialFormData);
@@ -158,9 +158,9 @@ const RegistrationForm = () => {
     try {
       const { blob, url } = await getCroppedImg(imageSrc, croppedAreaPixels);
       setCroppedImageURL(url);
-       const file = new File([blob], "avatar.jpg", { type: blob.type });
+      const file = new File([blob], "avatar.jpg", { type: blob.type });
 
-      setCroppedFile(file); 
+      setCroppedFile(file);
       setImageSrc(null); // Close cropper UI after cropping
     } catch (e) {
       console.error(e);
@@ -171,7 +171,6 @@ const RegistrationForm = () => {
   // Handle form submission
   const handleRegister = async (e) => {
     e.preventDefault();
-     
 
     const formErrors = validateForm(formData);
     if (formData.password !== formData.confirmPassword) {
@@ -184,23 +183,20 @@ const RegistrationForm = () => {
 
     if (!otpVerified) return alert("Please verify your email first.");
     setLoading(true);
-  
-     
-    
-    // Prepare form data including cropped profile photo if available
-     const submissionData = new FormData();
-  submissionData.append("userName", formData.userName);
-  submissionData.append("email", formData.email);
-  submissionData.append("password", formData.password);
-  submissionData.append("confirmPassword", formData.confirmPassword);
-  submissionData.append("phoneNumber", formData.phoneNumber);
-  submissionData.append("gender", formData.gender);
-  if (croppedFile) {
-    submissionData.append("images", croppedFile);
-  }
-  
-  //  console.log(submissionData);
 
+    // Prepare form data including cropped profile photo if available
+    const submissionData = new FormData();
+    submissionData.append("userName", formData.userName);
+    submissionData.append("email", formData.email);
+    submissionData.append("password", formData.password);
+    submissionData.append("confirmPassword", formData.confirmPassword);
+    submissionData.append("phoneNumber", formData.phoneNumber);
+    submissionData.append("gender", formData.gender);
+    if (croppedFile) {
+      submissionData.append("images", croppedFile);
+    }
+
+    //  console.log(submissionData);
 
     dispatch(register(submissionData))
       .unwrap()
@@ -218,7 +214,7 @@ const RegistrationForm = () => {
   const genders = ["", "Male", "Female"];
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 overflow-y-auto h-screen">
+    <div className="min-h-screen flex items-center justify-center p-4">
       <form
         onSubmit={handleRegister}
         className="rounded-2xl p-8 w-full max-w-md"
@@ -297,10 +293,10 @@ const RegistrationForm = () => {
             </button>
           </div>
         )}
-
-        {/* Phone Number */}
-        <div className="mb-4">
-          <label className="block font-medium mb-1 text-[#2b2b2b]">
+        <div className="flex mb-4 justify-between">
+          {/* Phone Number */}
+          <div className="">
+          <label className="block font-medium  text-[#2b2b2b]">
             Phone Number
           </label>
           <input
@@ -309,16 +305,16 @@ const RegistrationForm = () => {
             value={formData.phoneNumber}
             onChange={handleChange}
             className="w-full px-4 py-2 border border-[#7635b6] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6a0dad]"
-            placeholder="Enter your Phone Number"
+            placeholder="Enter Phone Number"
           />
           {errors.phoneNumber && (
             <p className="text-red-600 mt-1">{errors.phoneNumber}</p>
           )}
-        </div>
+          </div>
 
-        {/* Gender */}
-        <div className="mb-4">
-          <label className="block font-medium mb-1 text-[#2b2b2b]">
+          {/* Gender */}
+          <div className="">
+          <label className="block font-medium  text-[#2b2b2b]">
             <span className="text-[#2b2b2b] font-medium">Gender</span>
             <select
               name="gender"
@@ -333,11 +329,12 @@ const RegistrationForm = () => {
               ))}
             </select>
           </label>
+          </div>
         </div>
 
         {/* Profile Photo Upload */}
-        <div className="mb-6">
-          <label className="block font-medium mb-1 text-[#2b2b2b]">
+        <div className="mb-4">
+          <label className="block font-medium  text-[#2b2b2b]">
             Profile Photo
           </label>
           {!imageSrc && (
@@ -352,8 +349,7 @@ const RegistrationForm = () => {
                 <img
                   src={croppedImageURL}
                   alt="Cropped"
-                  className="mt-4 w-32 h-32 object-cover rounded-full border border-[#7635b6]"
-                  
+                  className="mt-1 w-32 h-32 object-cover rounded-full border border-[#7635b6]"
                 />
               )}
             </>
@@ -400,8 +396,9 @@ const RegistrationForm = () => {
           )}
         </div>
 
+        <div className="flex mb-4 justify-between">
         {/* Password */}
-        <div className="mb-4">
+        <div className="">
           <label className="block font-medium mb-1 text-[#2b2b2b]">
             Password
           </label>
@@ -419,7 +416,7 @@ const RegistrationForm = () => {
         </div>
 
         {/* Confirm Password */}
-        <div className="mb-4">
+        <div className="ml-1">
           <label className="block font-medium mb-1 text-[#2b2b2b]">
             Confirm Password
           </label>
@@ -428,12 +425,13 @@ const RegistrationForm = () => {
             name="confirmPassword"
             value={formData.confirmPassword}
             onChange={handleChange}
-            className="w-full px-4 py-2 border border-[#7635b6] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6a0dad]"
+            className="w-full px-1 py-2  border border-[#7635b6] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6a0dad]"
             placeholder="Confirm your password"
           />
           {errors.confirmPassword && (
             <p className="text-red-600 mt-1">{errors.confirmPassword}</p>
           )}
+        </div>
         </div>
 
         {/* Submit */}
