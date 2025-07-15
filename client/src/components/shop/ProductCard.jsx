@@ -90,11 +90,11 @@ const ProductCard = ({ product }) => {
         {/* Buttons */}
         <div className="flex gap-2 mt-3">
           {/* <Link to={`/shop/products/${product._id}`}> */}
-            <button className="flex-1 text-sm font-semibold bg-[#6a0dad] text-white px-4 py-2 rounded-md hover:bg-white hover:text-[#6a0dad] hover:border hover:border-[#b27dd8] transition cursor-pointer">
+            <button className="custom-button ">
               View Details
             </button>
           {/* </Link> */}
-          <button
+          {/* <button
             disabled={!available}
             className={`flex items-center justify-center bg-green-500 hover:bg-green-600 text-white px-3 py-2 rounded-md transition ${
               !available && "opacity-50 cursor-not-allowed"
@@ -102,7 +102,7 @@ const ProductCard = ({ product }) => {
             title={available ? "Add to Cart" : "Not Available"}
           >
             <FaShoppingCart />
-          </button>
+          </button> */}
         </div>
       </div>
     </div>
