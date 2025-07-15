@@ -214,10 +214,10 @@ const RegistrationForm = () => {
   const genders = ["", "Male", "Female"];
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4">
+    <div className="min-h-screen flex items-center justify-center p-4 ">
       <form
         onSubmit={handleRegister}
-        className="rounded-2xl p-8 w-full max-w-md"
+        className="rounded-2xl p-8 w-full max-w-md h-screen overflow-y-scroll md:h-auto md:overflow-y-hidden "
       >
         {/* ... other form fields ... */}
 
@@ -293,42 +293,43 @@ const RegistrationForm = () => {
             </button>
           </div>
         )}
-        <div className="flex mb-4 justify-between">
+        {/* Phone Number  + Gender*/}
+        <div className="flex flex-col md:flex-row mb-4 justify-between">
           {/* Phone Number */}
-          <div className="">
-          <label className="block font-medium  text-[#2b2b2b]">
-            Phone Number
-          </label>
-          <input
-            type="text"
-            name="phoneNumber"
-            value={formData.phoneNumber}
-            onChange={handleChange}
-            className="w-full px-4 py-2 border border-[#7635b6] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6a0dad]"
-            placeholder="Enter Phone Number"
-          />
-          {errors.phoneNumber && (
-            <p className="text-red-600 mt-1">{errors.phoneNumber}</p>
-          )}
+          <div className="mb-4 md:mb-0">
+            <label className="block font-medium  text-[#2b2b2b]">
+              Phone Number
+            </label>
+            <input
+              type="text"
+              name="phoneNumber"
+              value={formData.phoneNumber}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border border-[#7635b6] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6a0dad]"
+              placeholder="Enter Phone Number"
+            />
+            {errors.phoneNumber && (
+              <p className="text-red-600 mt-1">{errors.phoneNumber}</p>
+            )}
           </div>
 
           {/* Gender */}
-          <div className="">
-          <label className="block font-medium  text-[#2b2b2b]">
-            <span className="text-[#2b2b2b] font-medium">Gender</span>
-            <select
-              name="gender"
-              value={formData.gender}
-              onChange={handleChange}
-              className="w-full px-4 py-2 border border-[#7635b6] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6a0dad]"
-            >
-              {genders.map((c) => (
-                <option key={c} value={c}>
-                  {c}
-                </option>
-              ))}
-            </select>
-          </label>
+          <div className="mb-4 md:mb-0">
+            <label className="block font-medium  text-[#2b2b2b]">
+              <span className="text-[#2b2b2b] font-medium">Gender</span>
+              <select
+                name="gender"
+                value={formData.gender}
+                onChange={handleChange}
+                className="w-full px-4 py-2 border border-[#7635b6] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6a0dad]"
+              >
+                {genders.map((c) => (
+                  <option key={c} value={c}>
+                    {c}
+                  </option>
+                ))}
+              </select>
+            </label>
           </div>
         </div>
 
@@ -395,43 +396,43 @@ const RegistrationForm = () => {
             </div>
           )}
         </div>
+{/* Password +confirm password */}
+        <div className="flex mb-4 flex-col md:flex-row justify-between">
+          {/* Password */}
+          <div className="mb-4 md:mb-0">
+            <label className="block font-medium mb-1 text-[#2b2b2b]">
+              Password
+            </label>
+            <input
+              type="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border border-[#7635b6] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6a0dad]"
+              placeholder="Enter your password"
+            />
+            {errors.password && (
+              <p className="text-red-600 mt-1">{errors.password}</p>
+            )}
+          </div>
 
-        <div className="flex mb-4 justify-between">
-        {/* Password */}
-        <div className="">
-          <label className="block font-medium mb-1 text-[#2b2b2b]">
-            Password
-          </label>
-          <input
-            type="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            className="w-full px-4 py-2 border border-[#7635b6] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6a0dad]"
-            placeholder="Enter your password"
-          />
-          {errors.password && (
-            <p className="text-red-600 mt-1">{errors.password}</p>
-          )}
-        </div>
-
-        {/* Confirm Password */}
-        <div className="ml-1">
-          <label className="block font-medium mb-1 text-[#2b2b2b]">
-            Confirm Password
-          </label>
-          <input
-            type="password"
-            name="confirmPassword"
-            value={formData.confirmPassword}
-            onChange={handleChange}
-            className="w-full px-1 py-2  border border-[#7635b6] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6a0dad]"
-            placeholder="Confirm your password"
-          />
-          {errors.confirmPassword && (
-            <p className="text-red-600 mt-1">{errors.confirmPassword}</p>
-          )}
-        </div>
+          {/* Confirm Password */}
+          <div className="mb-4  md:mb-0 md:ml-1">
+            <label className="block font-medium mb-1 text-[#2b2b2b]">
+              Confirm Password
+            </label>
+            <input
+              type="password"
+              name="confirmPassword"
+              value={formData.confirmPassword}
+              onChange={handleChange}
+              className="w-full px-1 py-2  border border-[#7635b6] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6a0dad]"
+              placeholder="Confirm your password"
+            />
+            {errors.confirmPassword && (
+              <p className="text-red-600 mt-1">{errors.confirmPassword}</p>
+            )}
+          </div>
         </div>
 
         {/* Submit */}
