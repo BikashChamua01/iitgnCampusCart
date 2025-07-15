@@ -108,13 +108,10 @@ const ProductCard = ({ product }) => {
           )}
         </div>
 
-]
         {/* Buttons */}
         <div className="flex gap-2 mt-3">
           {/* <Link to={`/shop/products/${product._id}`}> */}
-            <button className="custom-button ">
-              View Details
-            </button>
+          <button className="custom-button ">View Details</button>
           {/* </Link> */}
           {/* <button
 ]
