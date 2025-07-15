@@ -1,7 +1,7 @@
 // controllers/product.js
 const Product = require("../models/product");
 const { StatusCodes } = require("http-status-codes");
-const uploadToCloudinary = require("../utils/uploadHelper"); // the file where you put the above code
+const uploadToCloudinary = require("../utils/uploadHelper"); 
 const mongoose = require("mongoose");
 const User = require("../models/user");
 

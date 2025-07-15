@@ -2,10 +2,24 @@ const { StatusCodes } = require("http-status-codes");
 const mongoose = require("mongoose");
 const Tempmail = require("../models/tempemail");
 const User = require("../models/user");
+const uploadToCloudinary = require("../utils/uploadHelper");
+
 
 const register = async (req, res) => {
   try {
-    const { userName, email, password } = req.body;
+    // console.log("req files is ", req.files);
+    const { userName, email, password, phoneNumber, gender } = req.body;
+ 
+    const uploadResults = await Promise.all(
+      req.files.map((file) => uploadToCloudinary(file.buffer))
+    );
+    const images = uploadResults.map(({ secure_url, public_id }) => ({
+      url: secure_url,
+      public_id,
+    }));
+    const profilePicture = images[0];
+    // console.log("pp", profilePhoto);
+    
 
     // 1. Validate required fields
     if (!userName || !email || !password) {
@@ -33,7 +47,15 @@ const register = async (req, res) => {
     }
 
     // 4. Register the new user
-    const newUser = new User({ userName, email, password });
+    const newUser = new User({
+      userName,
+      email,
+      password,
+      phoneNumber,
+      gender,
+      profilePicture
+    });
+    // console.log("new user to save is", newUser);
     await newUser.save();
 
     // 5. Remove the temp email record (optional cleanup)

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import axios from "axios";
 import { motion } from "framer-motion";
-import { FaTag, FaCheckCircle, FaUserCircle, FaEnvelope } from "react-icons/fa";
+import { FaTag, FaCheckCircle, FaUserCircle, FaEnvelope, FaPhone } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllProducts } from "../../store/product-slice";
 import ProductCard from "../../components/shop/ProductCard";
@@ -175,7 +175,7 @@ const ProductDetail = () => {
                 `}
                 >
                   <img
-                    src={seller.avatar || "/user-avatar.png"}
+                    src={(seller.profilePicture && seller.profilePicture.url) || "/images/user-avatar.png"}
                     alt={seller.name}
                     className="w-14 h-14 rounded-full object-cover border-2 border-purple-300"
                   />
@@ -185,6 +185,9 @@ const ProductDetail = () => {
                     </div>
                     <div className="text-gray-500 flex items-center gap-2 text-sm mt-1">
                       <FaEnvelope /> {seller.email}
+                    </div>
+                    <div className="text-gray-500 flex items-center gap-2 text-sm mt-1">
+                      <FaPhone /> {seller.phoneNumber}
                     </div>
                     <Link
                       to={`/user/${seller._id}`}

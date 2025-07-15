@@ -21,6 +21,26 @@ const userSchema = mongoose.Schema(
         "Please enter a valid email address",
       ],
     },
+    phoneNumber: {
+      type: String,
+      match: [
+        /^(\+91[\-\s]?|91[\-\s]?|0)?[6-9]\d{9}$/,
+        "Please enter a valid phone number"
+      ],
+     },
+    gender: {
+      type: String,
+      enum: ["Male", "Female", ""], 
+      default: ""
+    },
+
+profilePicture: {
+  url: {
+    type: String,
+  
+  },
+  public_id: { type: String },
+   },
 
     password: {
       type: String,
