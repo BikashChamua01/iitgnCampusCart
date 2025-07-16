@@ -7,14 +7,14 @@ const AdminLayout = () => {
   const screenSize = useScreenSize();
 
   return (
-    <div className="min-h-screen flex flex-col bg-amber-50">
+    <div className="min-h-screen flex flex-col bg-white">
       <AdminHeader />
       <div className="flex flex-1 pt-14">
         {screenSize === "lg" || screenSize === "xl" || screenSize === "2xl" ? (
           <AdminSidebar />
         ) : null}
         <main
-          className={`flex-1 p-4 transition-all duration-300 ${
+          className={`flex-1 p-4 transition-all duration-300  ${
             screenSize === "lg" || screenSize === "xl" || screenSize === "2xl"
               ? "ml-20"
               : ""

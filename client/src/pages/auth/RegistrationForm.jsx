@@ -221,17 +221,17 @@ const RegistrationForm = () => {
       >
         {/* ... other form fields ... */}
         <h2 className="text-2xl font-bold text-center text-[#6a0dad] mb-6">
-                  <div className="text-4xl mb-2">Create You Account</div>
-                  <div className="text-sm text-[#5b0d92]">
-                    Already have an account ?{" "}
-                    <Link
-                      to="/auth/login"
-                      className="underline hover:text-[#6a0dad] font-medium"
-                    >
-                      login
-                    </Link>
-                  </div>
-                </h2>
+          <div className="text-4xl mb-2">Create You Account</div>
+          <div className="text-sm text-[#5b0d92]">
+            Already have an account ?{" "}
+            <Link
+              to="/auth/login"
+              className="underline hover:text-[#6a0dad] font-medium"
+            >
+              login
+            </Link>
+          </div>
+        </h2>
 
         {/* User Name */}
         <div className="mb-4">
@@ -359,11 +359,13 @@ const RegistrationForm = () => {
                 className="w-full px-4 py-2 border border-[#7635b6] rounded-lg cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#6a0dad]"
               />
               {croppedImageURL && (
-                <img
-                  src={croppedImageURL}
-                  alt="Cropped"
-                  className="mt-1 w-32 h-32 object-cover rounded-full border border-[#7635b6]"
-                />
+                <div className="mt-2 max-w-[150px] aspect-square overflow-hidden rounded-full border border-[#7635b6]">
+                  <img
+                    src={croppedImageURL}
+                    alt="Cropped"
+                    className="w-full h-full object-contain"
+                  />
+                </div>
               )}
             </>
           )}
@@ -408,7 +410,7 @@ const RegistrationForm = () => {
             </div>
           )}
         </div>
-{/* Password +confirm password */}
+        {/* Password +confirm password */}
         <div className="flex mb-4 flex-col md:flex-row justify-between">
           {/* Password */}
           <div className="mb-4 md:mb-0">

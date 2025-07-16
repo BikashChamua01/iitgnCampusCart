@@ -32,7 +32,7 @@ const ShopProducts = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br py-4 px-4 w-full">
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-9xl mx-auto">
         {/* <h1 className="text-3xl font-bold text-[#6a0dad] text-center mb-10">
           Explore All Products
         </h1> */}

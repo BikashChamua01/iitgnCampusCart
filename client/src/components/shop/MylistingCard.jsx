@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import DeleteConfirmDialog from "./DeleteProductDialogButton";
 import { Link } from "react-router-dom";
 
-const MyListingCard = ({ product, onEdit, onDelete }) => {
+const MyListingCard = ({ product, onEdit, onDelete, isAdmin }) => {
   const {
     _id: productId,
     title,
@@ -16,6 +16,9 @@ const MyListingCard = ({ product, onEdit, onDelete }) => {
     condition,
   } = product;
 
+  const truncateText = (text, maxLength) => {
+    return text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
+  };
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -28,7 +31,14 @@ const MyListingCard = ({ product, onEdit, onDelete }) => {
       className="relative bg-white rounded-xl shadow-lg p-4 sm:p-5 overflow-visible mt-16 sm:mt-20 self-center mx-7 lg:mx-0 transition-all duration-300 ease-in-out hover:shadow-purple-400/40 cursor-pointer h-62"
     >
       {/* Image and content go inside Link */}
-      <Link to={`/shop/products/${product._id}`} className="block">
+      <Link
+        to={
+          !isAdmin
+            ? `/shop/products/${product._id}`
+            : `/admin/products/${product._id}`
+        }
+        className="block"
+      >
         {/* Circle image */}
         <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
           <img
@@ -43,8 +53,8 @@ const MyListingCard = ({ product, onEdit, onDelete }) => {
           <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-1 text-center truncate">
             {title}
           </h3>
-          <p className="text-xs sm:text-sm text-gray-600 text-center mb-2 line-clamp-2 h-10 flex items-center justify-center">
-            {description}
+          <p className="text-xs sm:text-sm text-gray-600 text-center mb-2 line-clamp-2 h-10 flex items-start justify-center">
+            {truncateText(description, 70)}
           </p>
           <div className="flex flex-wrap gap-2 justify-center mb-2">
             <span className="bg-purple-100 text-purple-800 text-xs font-medium rounded-full px-2 py-0.5">

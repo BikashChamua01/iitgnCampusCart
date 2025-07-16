@@ -266,4 +266,5 @@ const userProfile = async (req, res) => {
   }
 };
 
-module.exports = { register, login, editProfile, logout, userProfile };
+
+module.exports = { register, login, editProfile, logout, userProfile, };

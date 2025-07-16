@@ -1,11 +1,11 @@
-import React from 'react'
-
+import React from "react";
+import ShopListing from "../shop/Listing";
 const AdminProducts = () => {
   return (
-    <div>
-      Admin products
-    </div>
-  )
-}
+    <>
+        <ShopListing />
+    </>
+  );
+};
 
-export default AdminProducts
+export default AdminProducts;
