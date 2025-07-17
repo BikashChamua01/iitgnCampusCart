@@ -1,25 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchAllUsers } from "@/store/users";
-import { Trash } from "lucide-react";
-
-// --- Inline shake animation CSS ---
-const shakeStyles = `
-  @keyframes shakeOnce {
-    0% { transform: translateX(0); }
-    15% { transform: translateX(-7px) rotate(-9deg); }
-    30% { transform: translateX(6px) rotate(7deg);}
-    45% { transform: translateX(-4px) rotate(-6deg); }
-    60% { transform: translateX(5px) rotate(7deg);}
-    75% { transform: translateX(-2px); }
-    100% { transform: translateX(0) rotate(0);}
-  }
-  /* Button hover applies animation and color to icon: */
-  .shake-on-hover:hover .trash-shake { 
-    animation: shakeOnce .45s;
-    color: white !important;
-  }
-`;
+import { fetchAllProducts } from "@/store/product-slice";
+import axios from "axios";
+import Loader from "@/components/common/Loader";
+import { toast } from "sonner";
+import DeleteUserButton from "@/components/admin/DeleteUserDialogbox";
 
 const AdminUsers = () => {
   const dispatch = useDispatch();
@@ -34,10 +20,28 @@ const AdminUsers = () => {
     dispatch(fetchAllUsers({ pageNumber, limit }));
   }, [dispatch, user?.userId, user?.isAdmin, pageNumber, limit]);
 
-  // Placeholder for delete logic
-  const handleDelete = (deleteId) => {
-    console.log(deleteId);
-    // dispatch(deleteUser(deleteId));
+  // Delete User
+  const handleDelete = async (deleteId) => {
+    try {
+      const response = await axios.post(
+        `/api/v1/users/delete-account/${deleteId}`,
+        {},
+        {
+          withCredentials: true,
+        }
+      );
+      console.log(response.data);
+      if (response.data.success) {
+        toast.success("User deleted Successfully");
+        dispatch(fetchAllUsers({ pageNumber, limit }));
+        dispatch(fetchAllProducts());
+        return;
+      } else {
+        return toast.error("Some Error Ocuured! Can not delete this user");
+      }
+    } catch (error) {
+      console.log(error, "In the delete account function");
+    }
   };
 
   // MOBILE CARD
@@ -71,14 +75,7 @@ const AdminUsers = () => {
         </span>
       </div>
       <div className="flex mt-1">
-        <button
-          onClick={() => onDelete(user._id)}
-          type="button"
-          className="shake-on-hover cursor-pointer inline-flex items-center gap-2 px-4 py-2 text-sm rounded-full font-semibold bg-violet-50 border border-violet-200 shadow-sm text-violet-700 hover:bg-violet-500 hover:text-white hover:border-violet-400 active:scale-95 transition"
-        >
-          <Trash className="trash-shake w-5 h-5 text-violet-600 transition-colors" />
-          Delete
-        </button>
+        <DeleteUserButton onDelete={onDelete} user={user} />
       </div>
     </div>
   );
@@ -102,32 +99,25 @@ const AdminUsers = () => {
       <td>{user.phoneNumber}</td>
       <td>{user.gender}</td>
       <td>
-        <button
-          onClick={() => onDelete(user._id)}
-          type="button"
-          className="shake-on-hover cursor-pointer inline-flex items-center gap-2 px-4 py-2 rounded-full font-semibold bg-violet-50 border border-violet-200 shadow-sm text-violet-700 hover:bg-violet-500 hover:text-white hover:border-violet-400 active:scale-95 transition"
-        >
-          <Trash className="trash-shake w-5 h-5 text-violet-600 transition-colors" />
-          Delete
-        </button>
+        <DeleteUserButton onDelete={onDelete} user={user} />
       </td>
     </tr>
   );
 
-  return (
+  return isUsersLoading ? (
+    <Loader />
+  ) : (
     <div className="bg-gradient-to-br from-violet-50 via-white to-violet-100 min-h-screen pt-2 pb-14 px-1 sm:px-4">
-      {/* --- Shake animation style (global, but scoped to this component) --- */}
-      <style>{shakeStyles}</style>
       <div className="max-w-3xl md:max-w-7xl mx-auto pt-7">
         <h2 className=" m-auto text-[2rem] sm:text-[2.4rem] font-extrabold mb-7 text-violet-700 tracking-tight text-center">
           User Management
         </h2>
         {/* Mobile Cards */}
-       <div className="mx-2">
-         {users?.map((u) => (
-          <UserCard key={u._id} user={u} onDelete={handleDelete} />
-        ))}
-       </div>
+        <div className="mx-2">
+          {users?.map((u) => (
+            <UserCard key={u._id} user={u} onDelete={handleDelete} />
+          ))}
+        </div>
 
         {/* Desktop Table */}
         <div className="desktop-table rounded-2xl overflow-hidden hidden md:block shadow-lg">

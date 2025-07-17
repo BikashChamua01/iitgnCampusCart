@@ -41,7 +41,7 @@ const ShopListing = () => {
         }
       );
       if (response.data.success) {
-        dispatch(fetchAllProducts);
+        dispatch(fetchAllProducts());
         dispatch(fetchMyListing(user.userId));
         toast.success("Product deleted Successfully");
       }

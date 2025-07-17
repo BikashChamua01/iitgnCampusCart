@@ -26,6 +26,26 @@ export const fetchAllUsers = createAsyncThunk(
   }
 );
 
+export const deleteUserAccount = createAsyncThunk(
+  "/delete-account",
+  async (userId, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(
+        `/api/v1/users/delete-account/${userId}`,
+        {},
+        {
+          withCredentials: true,
+        }
+      );
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      return rejectWithValue(error.message || error.msg);
+    }
+  }
+);
+
 const usersSlice = createSlice({
   name: "users-slice",
   initialState,
