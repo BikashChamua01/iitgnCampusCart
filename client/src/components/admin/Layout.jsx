@@ -15,7 +15,7 @@ const AdminLayout = () => {
           <AdminSidebar />
         ) : null}
         <main
-          className={`flex-1 p-4 transition-all duration-300  ${
+          className={`flex-1  transition-all duration-300 mb-10 sm:mb-1 ${
             screenSize === "lg" || screenSize === "xl" || screenSize === "2xl"
               ? "ml-20"
               : ""
