@@ -1,6 +1,7 @@
 import { Outlet } from "react-router-dom";
 import AdminHeader from "./Header";
 import AdminSidebar from "./sidebar";
+import AdminFooter from "./Footer";
 import useScreenSize from "../../hooks/useScreenSize";
 
 const AdminLayout = () => {
@@ -23,7 +24,7 @@ const AdminLayout = () => {
           <Outlet />
         </main>
       </div>
-      {(screenSize === "xs" || screenSize === "sm") && <ShopFooter />}
+      {(screenSize === "xs" || screenSize === "sm") && <AdminFooter />}
     </div>
   );
 };
