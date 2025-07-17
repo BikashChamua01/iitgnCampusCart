@@ -76,8 +76,9 @@ const checkAuth = async (req, res, next) => {
   }
 };
 
-const checkAuthAndAdmin = (req, res, next) => {
-  if (!req.user || !req.user.isAdmin) {
+const checkAdmin = (req, res, next) => {
+  const token = req.cookies.token
+  if ( !req.user?.isAdmin) {
     return res.status(StatusCodes.UNAUTHORIZED).json({
       success: false,
       msg: "You are not authorized as admin",
@@ -88,5 +89,5 @@ const checkAuthAndAdmin = (req, res, next) => {
 
 module.exports = {
   checkAuth,
-  checkAuthAndAdmin,
+  checkAdmin,
 };

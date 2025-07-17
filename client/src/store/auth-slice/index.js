@@ -11,12 +11,12 @@ export const register = createAsyncThunk(
   "/auth/register",
   async (formData, { rejectWithValue }) => {
     try {
-      console.log(formData)
+      console.log(formData);
       const response = await axios.post("/api/v1/auth/register", formData, {
         withCredentials: true,
         headers: {
-            "Content-Type": "multipart/form-data",
-          },
+          "Content-Type": "multipart/form-data",
+        },
       });
       return response.data;
     } catch (error) {
@@ -78,7 +78,6 @@ export const logout = createAsyncThunk(
   }
 );
 
-
 const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -111,7 +110,6 @@ const authSlice = createSlice({
         state.isLoading = false;
         state.user = action.payload.user || null;
         state.isAuthenticated = action.payload.success;
-        console.log();
       })
       .addCase(checkAuth.rejected, (state) => {
         state.isLoading = false;
