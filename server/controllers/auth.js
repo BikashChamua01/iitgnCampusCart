@@ -162,88 +162,7 @@ const login = async (req, res) => {
   }
 };
 
-const editProfile = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const { userName, email, password, oldPassword } = req.body;
 
-    // 1. ID must be present
-    if (!id) {
-      return res
-        .status(StatusCodes.BAD_REQUEST)
-        .json({ success: false, msg: "User ID is required in the URL" });
-    }
-
-    // 2. Validate ID format
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      return res
-        .status(StatusCodes.BAD_REQUEST)
-        .json({ success: false, msg: "Invalid User ID format" });
-    }
-
-    // 3. Fetch existing user document
-    const user = await User.findById(id);
-    if (!user) {
-      return res
-        .status(StatusCodes.NOT_FOUND)
-        .json({ success: false, msg: "User not found" });
-    }
-
-    // 4. Apply only provided changes
-    if (userName != null) user.userName = userName;
-    if (email != null) user.email = email;
-
-    // 5. If password change is requested
-    if (password != null) {
-      if (!oldPassword) {
-        return res.status(StatusCodes.BAD_REQUEST).json({
-          success: false,
-          msg: "Current password is required to change password",
-        });
-      }
-
-      const isMatch = await bcrypt.compare(oldPassword, user.password);
-      if (!isMatch) {
-        return res
-          .status(StatusCodes.UNAUTHORIZED)
-          .json({ success: false, msg: "Current password is incorrect" });
-      }
-
-      user.password = password; // Will be hashed by pre-save hook
-    }
-
-    // 6. Validate and save user
-    await user.validate();
-    const updated = await user.save();
-
-    // 7. Create new JWT
-    const token = updated.createJWT();
-
-    // 8. Set cookie
-    res.cookie("token", token, {
-      httpOnly: true,
-      secure: false, // true in production (HTTPS)
-      sameSite: "None", // "Lax" if frontend/backend same origin
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-    });
-
-    // 9. Send updated user response
-    return res.status(StatusCodes.OK).json({
-      success: true,
-      msg: "Profile updated successfully",
-      user: {
-        id: updated._id,
-        userName: updated.userName,
-        email: updated.email,
-      },
-    });
-  } catch (err) {
-    console.error("Error in editProfile:", err);
-    return res
-      .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .json({ success: false, msg: "Server error. Please try again later." });
-  }
-};
 
 const logout = (req, res) => {
   res.clearCookie("token").json({
@@ -252,28 +171,5 @@ const logout = (req, res) => {
   });
 };
 
-const userProfile = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const user = await User.findById(id);
-    if (!user) {
-      return res.status(StatusCodes.NOT_FOUND).json({
-        succcess: false,
-        msg: "User not found",
-      });
-    }
-    // console.log(user);
-    return res.status(StatusCodes.OK).json({
-      succcess: true,
-      msg: "User found",
-      user,
-    });
-  } catch (error) {
-    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-      success: false,
-      msg: "failed to get the user",
-    });
-  }
-};
 
-module.exports = { register, login, editProfile, logout, userProfile };
+module.exports = { register, login, logout,};

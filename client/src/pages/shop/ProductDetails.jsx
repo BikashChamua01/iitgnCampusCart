@@ -39,7 +39,7 @@ const ProductDetail = () => {
       setSellerLoading(true);
       try {
         const res = await axios.get(
-          `/api/v1/auth/userProfile/${product.seller}`
+          `/api/v1/users/userProfile/${product.seller}`
         );
         setSeller(res.data.user);
       } catch (error) {
