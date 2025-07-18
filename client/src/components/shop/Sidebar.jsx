@@ -23,9 +23,9 @@ const ShopSidebar = () => {
 
   return (
     <aside
-      className="w-20 hidden fixed left-0 top-12  md:flex flex-col justify-between items-center "
+      className="w-20 hidden bg-sky-900 fixed left-0 top-12  md:flex flex-col justify-between items-center "
       style={{
-        backgroundColor: "#6a0dad", // Deep purple
+        // backgroundColor: "#6a0dad", // Deep purple
         color: "#f4f4f4", // Light text
         height: "calc(100vh - 3rem)", // Adjust for header height
       }}

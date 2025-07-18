@@ -3,64 +3,193 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchAllProducts } from "../../store/product-slice";
 import ProductCard from "../../components/shop/ProductCard";
 import { motion } from "framer-motion";
-import { FaSearch, FaBoxOpen } from "react-icons/fa";
+import { FaBoxOpen, FaFilter, FaSearch } from "react-icons/fa";
+import { LayoutGrid, Rows3, List, ChevronDown, X } from "lucide-react";
 
 const ShopProducts = () => {
   const dispatch = useDispatch();
   const { products, loading } = useSelector((state) => state.shopProducts);
 
-  // Extract unique categories for filter dropdown
   const categories = [
     "All",
     ...Array.from(new Set(products.map((p) => p.category))),
   ];
 
-  // State for search and category filter
   const [search, setSearch] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const [sortOption, setSortOption] = useState("");
+  const [showFilters, setShowFilters] = useState(false);
+  const [viewType, setViewType] = useState("grid");
 
   useEffect(() => {
     dispatch(fetchAllProducts());
   }, [dispatch]);
 
-  // Filter products based on search and category
   const filteredProducts = products.filter(
     (product) =>
       (selectedCategory === "All" || product.category === selectedCategory) &&
       product.title.toLowerCase().includes(search.toLowerCase())
   );
 
-  return (
-    <div className="min-h-screen bg-gradient-to-br py-4 px-4 w-full">
-      <div className="max-w-9xl mx-auto">
-        {/* <h1 className="text-3xl font-bold text-[#6a0dad] text-center mb-10">
-          Explore All Products
-        </h1> */}
+  const sortedProducts = [...filteredProducts].sort((a, b) => {
+    switch (sortOption) {
+      case "priceLowHigh":
+        return a.price - b.price;
+      case "priceHighLow":
+        return b.price - a.price;
+      case "newest":
+        return new Date(b.createdAt) - new Date(a.createdAt);
+      case "oldest":
+        return new Date(a.createdAt) - new Date(b.createdAt);
+      case "rating":
+        return b.rating - a.rating;
+      default:
+        return 0;
+    }
+  });
 
-        {/* Search & Filter */}
-        <div className="flex flex-col md:flex-row items-center justify-between mb-8 gap-4">
-          <div className="flex items-center bg-white rounded-2xl shadow px-3 py-2 w-full md:w-1/3 border border-fuchsia-500">
-            <FaSearch className="text-gray-400 mr-2" />
-            <input
-              type="text"
-              placeholder="Search products..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="outline-none w-full bg-transparent "
-            />
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-white to-purple-50 py-4 px-4 w-full relative">
+      <div className="max-w-7xl mx-auto ">
+        {/* Toolbar */}
+        {/* <hr/> */}
+        <div className="flex items-center justify-between flex-wrap border rounded-md md:mx-0 pr-4 md:px-10 py-2 mb-4  bg-white md:gap-3  z-500">
+          {/* View Icons */}
+          {/* <div className="flex items-center gap-2">
+            <button
+              onClick={() => setViewType("grid")}
+              className={`p-2 rounded hover:bg-gray-100 ${
+                viewType === "grid" ? "bg-gray-200" : ""
+              }`}
+            >
+              <LayoutGrid size={18} />
+            </button>
+            <button
+              onClick={() => setViewType("compact")}
+              className={`p-2 rounded hover:bg-gray-100 ${
+                viewType === "compact" ? "bg-gray-200" : ""
+              }`}
+            >
+              <Rows3 size={18} />
+            </button>
+            <button
+              onClick={() => setViewType("list")}
+              className={`p-2 rounded hover:bg-gray-100 ${
+                viewType === "list" ? "bg-gray-200" : ""
+              }`}
+            >
+              <List size={18} />
+            </button>
+
+            
+          </div> */}
+          <div>
+            <select
+              className="bg-white text-sm border border-gray-300 rounded-md px-5 py-3 focus:outline-none w-full md:w-auto hidden md:block"
+              value={sortOption}
+              onChange={(e) => setSortOption(e.target.value)}
+            >
+              <option value="">Sort By</option>
+              <option value="priceLowHigh">Price: Low to High</option>
+              <option value="priceHighLow">Price: High to Low</option>
+              <option value="newest">Newest</option>
+              <option value="oldest">Oldest</option>
+              <option value="rating">Rating</option>
+            </select>
           </div>
-          <select
-            className="bg-white  rounded-md px-3 py-2 shadow w-full md:w-1/4 border border-fuchsia-500"
-            value={selectedCategory}
-            onChange={(e) => setSelectedCategory(e.target.value)}
-          >
-            {categories.map((cat) => (
-              <option key={cat} value={cat}>
-                {cat}
-              </option>
-            ))}
-          </select>
+
+          {/* Product Count */}
+          <div className="text-sm text-gray-700 font-semibold">
+            {sortedProducts.length} PRODUCTS
+          </div>
+
+          {/* Sort & Filter Controls */}
+          <div className="">
+            
+
+            <button
+              onClick={() => setShowFilters(true)}
+              className="flex items-center text-sm text-fuchsia-600 border border-fuchsia-500 px-4 py-2 rounded-md hover:bg-fuchsia-50 transition"
+            >
+              <FaFilter className="mr-2" />
+              Filter
+            </button>
+          </div>
         </div>
+        {/* <hr className="mb-4"/> */}
+
+        {/* Sidebar Filter */}
+        {showFilters && (
+          <motion.div
+            initial={{ x: "100%" }}
+            animate={{ x: 0 }}
+            exit={{ x: "100%" }}
+            transition={{ type: "spring", stiffness: 200, damping: 30 }}
+            className="fixed top-0 right-0 w-80 max-w-[90%] h-full bg-white z-50 shadow-lg p-5 border-l border-gray-200"
+          >
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-lg font-semibold">Filters</h2>
+              <button
+                onClick={() => setShowFilters(false)}
+                className="text-sm text-gray-500 hover:text-gray-800"
+              >
+                <X />
+              </button>
+            </div>
+
+            {/* Filters */}
+            <div className="space-y-4 ">
+              {/* Search */}
+              <div>
+                <label className="text-sm font-medium text-gray-700 ">
+                  Search
+                </label>
+                <div className="flex items-center mt-1 px-2 py-3 border border-gray-300 rounded-md">
+                  <FaSearch className="text-gray-400 mr-2" />
+                  <input
+                    type="text"
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    placeholder="Search products..."
+                    className="w-full outline-none bg-transparent text-sm"
+                  />
+                </div>
+              </div>
+
+              {/* Category */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Category
+                </label>
+                <select
+                  className="mt-1 block w-full border-gray-300 rounded-md shadow-sm p-3"
+                  value={selectedCategory}
+                  onChange={(e) => setSelectedCategory(e.target.value)}
+                >
+                  {categories.map((cat) => (
+                    <option key={cat} value={cat}>
+                      {cat}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <select
+              className="bg-white text-sm border border-gray-300 rounded-md px-5 py-3 focus:outline-none w-full md:w-auto md:hidden "
+              value={sortOption}
+              onChange={(e) => setSortOption(e.target.value)}
+            >
+              <option value="">Sort By</option>
+              <option value="priceLowHigh">Price: Low to High</option>
+              <option value="priceHighLow">Price: High to Low</option>
+              <option value="newest">Newest</option>
+              <option value="oldest">Oldest</option>
+              <option value="rating">Rating</option>
+            </select>
+              </div>
+            </div>
+          </motion.div>
+        )}
 
         {/* Product Grid */}
         {loading ? (
@@ -100,13 +229,13 @@ const ShopProducts = () => {
               },
             }}
           >
-            {filteredProducts.length === 0 ? (
+            {sortedProducts.length === 0 ? (
               <div className="col-span-full flex flex-col items-center text-gray-500 mt-10">
                 <FaBoxOpen size={36} className="mb-2" />
                 <p>No products found. Try adjusting your search or filters!</p>
               </div>
             ) : (
-              filteredProducts.map((product) => (
+              sortedProducts.map((product) => (
                 <motion.div
                   key={product._id}
                   whileHover={{ scale: 1.03 }}
