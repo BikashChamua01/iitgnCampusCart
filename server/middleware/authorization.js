@@ -1,5 +1,6 @@
 const { StatusCodes } = require("http-status-codes");
 const jwt = require("jsonwebtoken");
+const User = require("../models/user");
 require("dotenv").config();
 
 // const verifyToken = (req, res, next) => {
@@ -65,6 +66,18 @@ const checkAuth = async (req, res, next) => {
       });
     }
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    console.log(decoded);
+    const { userId } = decoded;
+
+    const foundUser = await User.findById(userId);
+    console.log(foundUser, "Found User ");
+    if (!foundUser) {
+      return res.status(StatusCodes.BAD_REQUEST).json({
+        success: false,
+        msg: "You are logged out please login again",
+      });
+    }
+
     req.user = decoded;
     next();
   } catch (error) {
@@ -77,8 +90,8 @@ const checkAuth = async (req, res, next) => {
 };
 
 const checkAdmin = (req, res, next) => {
-  const token = req.cookies.token
-  if ( !req.user?.isAdmin) {
+  const token = req.cookies.token;
+  if (!req.user?.isAdmin) {
     return res.status(StatusCodes.UNAUTHORIZED).json({
       success: false,
       msg: "You are not authorized as admin",

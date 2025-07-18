@@ -34,12 +34,36 @@ const sendVerificationCode = async (req, res) => {
       },
       { upsert: true }
     );
-
+    // Send the mail
     await transport.sendMail({
       to: email,
-      subject: "Email verfication code for IITGN campus cart",
-      html: `<p>Your verification code is <b>${code}</b>. It is valid for 10 minutes.</p>`,
+      subject: "Email verification code for IITGN Campus Cart",
+      html: `
+  <div style="max-width:450px;margin:30px auto;background:#f9f9fb;border-radius:10px;box-shadow:0 2px 8px #e0e0e8;font-family:sans-serif;padding:24px 32px;">
+    <div style="text-align:center;margin-bottom:18px;">
+      <img src="https://iitgn.ac.in/assets/img/lectures/ifdls/iitgn_logo.png" alt="IITGN Logo" style="height:60px;margin-bottom:8px;">
+      <h2 style="color:#204ba6;margin:12px 0 6px 0;font-size:1.6em;letter-spacing:1px;">Campus Cart at IITGN</h2>
+    </div>
+    <hr style="border:none;border-top:1px solid #e1e4ed;margin-bottom:24px;">
+    <p style="font-size:1.07em;color:#2d2d4f;">
+      Hello,
+      <br/>
+      Your email verification code for <b>Campus Cart</b> is:
+    </p>
+    <div style="text-align:center;margin:28px 0;">
+      <span style="padding:13px 38px;border-radius:8px;font-size:2em;color:#fff;background:linear-gradient(90deg,#204ba6 70%,#1852a1 100%);font-weight:bold;letter-spacing:3px;display:inline-block;">${code}</span>
+    </div>
+    <p style="font-size:1em;color:#454575;">
+      This code is valid for <b>10 minutes</b>.
+    </p>
+    <p style="font-size:0.95em;color:#888eaa;margin-top:36px;">
+      Need help? Contact the <b>IITGN Campus Cart</b> team.<br>
+      <span style="font-size:0.9em">© ${new Date().getFullYear()} IIT Gandhinagar</span>
+    </p>
+  </div>
+  `,
     });
+    // mail sending done
 
     res.status(200).json({ msg: "Verification code sent." });
   } catch (error) {

@@ -9,11 +9,11 @@ const ShopHeader = () => {
 
   return (
     <nav
-      className="fixed top-0 left-0 right-0 z-50 flex justify-between items-center px-4 py-2 shadow-md"
-      style={{
-        backgroundColor: "#6a0dad", // Deep purple background
-        color: "#f4f4f4", // Light text
-      }}
+      className="fixed top-0 left-0 right-0 z-50 flex justify-between items-center px-4 py-2 shadow-md bg-violet-600 text-white"
+      // style={{
+      //   backgroundColor: "#6a0dad", // Deep purple background
+      //   color: "#f4f4f4", // Light text
+      // }}
     >
       {/* Logo */}
       <div className="text-xl font-semibold tracking-wide">CampusCart</div>
