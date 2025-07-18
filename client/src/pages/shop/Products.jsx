@@ -53,7 +53,7 @@ const ShopProducts = () => {
       <div className="max-w-7xl mx-auto ">
         {/* Toolbar */}
         {/* <hr/> */}
-        <div className="flex items-center justify-between flex-wrap border rounded-md md:mx-0 pr-4 md:px-10 py-2 mb-4  bg-white md:gap-3  z-500">
+        <div className="flex items-center justify-between flex-wrap border rounded-md md:mx-0 pr-4 md:px-10 py-2 mb-8  bg-white md:gap-3  z-50">
           {/* View Icons */}
           {/* <div className="flex items-center gap-2">
             <button
@@ -83,9 +83,10 @@ const ShopProducts = () => {
 
             
           </div> */}
-          <div>
+          <div >
             <select
-              className="bg-white text-sm border border-gray-300 rounded-md px-5 py-3 focus:outline-none w-full md:w-auto hidden md:block"
+              className="bg-white text-sm border border-gray-300 rounded-md px-7 py-3 focus:outline-none w-full md:w-auto hidden md:block
+            "
               value={sortOption}
               onChange={(e) => setSortOption(e.target.value)}
             >
@@ -125,7 +126,7 @@ const ShopProducts = () => {
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "spring", stiffness: 200, damping: 30 }}
-            className="fixed top-0 right-0 w-80 max-w-[90%] h-full bg-white z-50 shadow-lg p-5 border-l border-gray-200"
+            className="fixed top-16 right-0 w-80 max-w-[90%] h-full bg-white z-50 shadow-lg p-5 border-l border-gray-200"
           >
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-lg font-semibold">Filters</h2>
@@ -242,7 +243,7 @@ const ShopProducts = () => {
                   whileTap={{ scale: 0.98 }}
                   initial={{ opacity: 0, y: 40 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4 }}
+                  transition={{ duration: 0.1 }}
                 >
                   <ProductCard product={product} />
                 </motion.div>
