@@ -83,9 +83,9 @@ const ShopProducts = () => {
 
             
           </div> */}
-          <div >
+          <div>
             <select
-              className="bg-white text-sm border border-gray-300 rounded-md px-7 py-3 focus:outline-none w-full md:w-auto hidden md:block
+              className="bg-white text-sm border border-gray-300 rounded-md pr-20 pl-5 py-3 focus:outline-none w-full md:w-auto hidden md:block
             "
               value={sortOption}
               onChange={(e) => setSortOption(e.target.value)}
@@ -95,7 +95,7 @@ const ShopProducts = () => {
               <option value="priceHighLow">Price: High to Low</option>
               <option value="newest">Newest</option>
               <option value="oldest">Oldest</option>
-              <option value="rating">Rating</option>
+              {/* <option value="rating">Rating</option> */}
             </select>
           </div>
 
@@ -106,8 +106,6 @@ const ShopProducts = () => {
 
           {/* Sort & Filter Controls */}
           <div className="">
-            
-
             <button
               onClick={() => setShowFilters(true)}
               className="flex items-center text-sm text-fuchsia-600 border border-fuchsia-500 px-4 py-2 rounded-md hover:bg-fuchsia-50 transition"
@@ -126,7 +124,7 @@ const ShopProducts = () => {
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "spring", stiffness: 200, damping: 30 }}
-            className="fixed top-16 right-0 w-80 max-w-[90%] h-full bg-white z-50 shadow-lg p-5 border-l border-gray-200"
+            className="fixed top-15.5 right-0 w-80 max-w-[90%] h-full bg-white z-50 shadow-lg p-5 border-l border-gray-200"
           >
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-lg font-semibold">Filters</h2>
@@ -163,7 +161,7 @@ const ShopProducts = () => {
                   Category
                 </label>
                 <select
-                  className="mt-1 block w-full border-gray-300 rounded-md shadow-sm p-3"
+                  className="mt-1 block w-full border border-gray-300 rounded-md  p-3"
                   value={selectedCategory}
                   onChange={(e) => setSelectedCategory(e.target.value)}
                 >
@@ -174,19 +172,22 @@ const ShopProducts = () => {
                   ))}
                 </select>
               </div>
-              <div>
+              <div className="md:hidden">
+                <label className="block text-sm font-medium text-gray-700">
+                  Sort
+                </label>
                 <select
-              className="bg-white text-sm border border-gray-300 rounded-md px-5 py-3 focus:outline-none w-full md:w-auto md:hidden "
-              value={sortOption}
-              onChange={(e) => setSortOption(e.target.value)}
-            >
-              <option value="">Sort By</option>
-              <option value="priceLowHigh">Price: Low to High</option>
-              <option value="priceHighLow">Price: High to Low</option>
-              <option value="newest">Newest</option>
-              <option value="oldest">Oldest</option>
-              <option value="rating">Rating</option>
-            </select>
+                  className="bg-white text-sm border border-gray-300 rounded-md px-5 py-3 focus:outline-none w-full md:w-auto  "
+                  value={sortOption}
+                  onChange={(e) => setSortOption(e.target.value)}
+                >
+                  <option value="">Sort By</option>
+                  <option value="priceLowHigh">Price: Low to High</option>
+                  <option value="priceHighLow">Price: High to Low</option>
+                  <option value="newest">Newest</option>
+                  <option value="oldest">Oldest</option>
+                  <option value="rating">Rating</option>
+                </select>
               </div>
             </div>
           </motion.div>
