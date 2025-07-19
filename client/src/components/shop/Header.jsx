@@ -1,6 +1,6 @@
 import { FaSearch, FaUserCircle, FaCartPlus } from "react-icons/fa";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,Link } from "react-router-dom";
 
 const ShopHeader = () => {
   const { user } = useSelector((state) => state.auth);
@@ -20,9 +20,9 @@ const ShopHeader = () => {
       <div className="text-xl font-semibold tracking-wide">CampusCart</div>
 
       {/* Right Section */}
-      <div className="flex items-center gap-x-5">
+      <div className="flex items-center gap-x-10 mr-2">
         {/* Search Bar */}
-        <div className="relative hidden md:block w-64">
+        {/* <div className="relative hidden md:block w-64">
           <span
             className="absolute inset-y-0 left-0 flex items-center pl-3"
             style={{ color: "#6a0dad" }}
@@ -38,15 +38,15 @@ const ShopHeader = () => {
               boxShadow: "0 1px 2px rgba(0,0,0,0.05)",
             }}
           />
-        </div>
+        </div> */}
 
         {/* Sell Button */}
         <div
-          className="flex items-center gap-1 cursor-pointer hover:text-white"
+          className="flex items-center gap-2 cursor-pointer hover:text-white"
           style={{ color: "#f4f4f4" }}
           onClick={() => navigate("/shop/sell")}
         >
-          <FaCartPlus className="w-4 h-4" />
+          <FaCartPlus className="w-7 h-7" />
           <span
             className="text-sm font-medium"
             // onClick={() => navigate("/shop/sell")}
@@ -57,27 +57,22 @@ const ShopHeader = () => {
 
         {/* User Dropdown */}
         <div className="relative">
-          <button className="group focus:outline-none">
+          <Link className=""
+            to="/user/userAccount">
             {profilePicture ? (
               <img
                 src={profilePicture}
                 alt="Profile"
                 className="w-10 h-10 rounded-full object-cover border-2 border-white cursor-pointer"
               />
-            ) : gender === "male" ? (
+            ) :  (
               <img
-                src="/images/male_avatar.jpeg"
+                src="/images/user-avatar.png"
                 alt="Profile"
                 className="w-10 h-10 rounded-full object-cover border-2 border-white cursor-pointer"
               />
-            ) : (
-              <img
-                src="/images/female_avatar.jpeg"
-                alt="Profile"
-                className="w-10 h-10 rounded-full object-cover border-2 border-white cursor-pointer"
-              />
-            )}
-            <div className="z-10 hidden group-hover:block absolute right-0 mt-0 w-36 bg-white text-[#2b2b2b] rounded-lg shadow-md">
+            ) }
+            {/* <div className="z-10 hidden group-hover:block absolute right-0 mt-0 w-36 bg-white text-[#2b2b2b] rounded-lg shadow-md">
               <ul className="py-2 text-sm">
                 <li className="hover:bg-[#ede4f7] px-4 py-2 rounded">
                   <a href="#">Profile</a>
@@ -89,8 +84,8 @@ const ShopHeader = () => {
                   <a href="#">Logout</a>
                 </li>
               </ul>
-            </div>
-          </button>
+            </div> */}
+          </Link>
         </div>
       </div>
     </nav>

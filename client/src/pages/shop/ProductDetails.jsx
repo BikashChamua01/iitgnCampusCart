@@ -42,6 +42,7 @@ const ProductDetail = () => {
           `/api/v1/users/userProfile/${product.seller}`
         );
         setSeller(res.data.user);
+        // console.log(seller);
       } catch (error) {
         console.error("Error fetching seller:", error);
         setSeller(null);
