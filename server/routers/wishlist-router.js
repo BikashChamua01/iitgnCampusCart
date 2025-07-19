@@ -8,8 +8,8 @@ const {
 
 const { checkAuth } = require("../middleware/authorization");
 
-router.post("/add/:id", checkAuth, addToWishList);
-router.delete("/delete/:id", checkAuth, deleteFromWishList);
+router.post("/add/:productId", checkAuth, addToWishList);
+router.delete("/delete/:productId", checkAuth, deleteFromWishList);
 router.get("/get-wishlist", checkAuth, fetchWishList);
 
 module.exports = router;
