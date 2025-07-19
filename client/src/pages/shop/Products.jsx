@@ -7,7 +7,7 @@ import ProductCard from "../../components/shop/ProductCard";
 import { motion } from "framer-motion";
 import { FaBoxOpen, FaFilter, FaSearch } from "react-icons/fa";
 import Loader from "@/components/common/Loader";
-import { LayoutGrid, Rows3, List, ChevronDown } from "lucide-react";
+import { LayoutGrid, Rows3, List, ChevronDown,X } from "lucide-react";
 import axios from "axios";
 import { toast } from "sonner";
 
@@ -197,6 +197,7 @@ const ShopProducts = () => {
                 className="text-sm text-gray-500 hover:text-gray-800"
               >
                 <X />
+                
               </button>
             </div>
 
