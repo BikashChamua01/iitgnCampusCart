@@ -4,7 +4,6 @@ const { StatusCodes } = require("http-status-codes");
 const mongoose = require("mongoose");
 const Tempmail = require("../models/tempemail");
 
-
 const fetchAllUsers = async (req, res) => {
   try {
     const limit = parseInt(req.query.limit) || 10;
@@ -55,11 +54,9 @@ const deleteUserAccount = async (req, res) => {
 
     // Delete all products uploaded by the user
     const deletedProducts = await Product.deleteMany({ seller: id });
-    console.log("Deleted products:", deletedProducts);
 
     // Delete user account
     const deletedUser = await User.findByIdAndDelete(id);
-    console.log("Deleted user:", deletedUser);
 
     return res.status(StatusCodes.OK).json({
       success: true,
@@ -188,4 +185,4 @@ const editProfile = async (req, res) => {
   }
 };
 
-module.exports = { fetchAllUsers, deleteUserAccount, editProfile,  userProfile,  };
+module.exports = { fetchAllUsers, deleteUserAccount, editProfile, userProfile };
