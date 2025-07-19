@@ -1,9 +1,11 @@
-// import the user pages
+// import the user shop pages
 import ShopLayout from "./components/shop/layout";
 import ShopHome from "./pages/shop/Home";
 import ShopProducts from "./pages/shop/Products";
 import ProductDetails from "./pages/shop/ProductDetails";
 import ShopListing from "./pages/shop/Listing";
+// import user pages
+import UserAccount from "./pages/user/UserAccount";
 
 // import the admin pages
 import AdminLayout from "./components/admin/Layout";
@@ -33,6 +35,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 
+
 const App = () => {
   const dispatch = useDispatch();
   const { isAuthenticated, user, isLoading } = useSelector(
@@ -58,7 +61,7 @@ const App = () => {
             }
           />
 
-          {/* User pages */}
+          {/* User shop pages */}
           <Route
             path="/shop"
             element={
@@ -73,7 +76,17 @@ const App = () => {
             <Route path="listings" element={<ShopListing />} />
             <Route path="sell" element={<Sell />} />
             <Route path="products/:id" element={<ProductDetails />} />
-      
+          </Route>
+          {/* User pages */}
+          <Route
+          path="/user"
+            element={
+              <CheckAuth isAuthenticated={isAuthenticated} user={user}>
+                <ShopLayout />
+              </CheckAuth>
+            }>
+            <Route path="userAccount" element={<UserAccount/>}/>
+
           </Route>
 
           {/* Admin pages */}

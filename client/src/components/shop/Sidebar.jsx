@@ -23,9 +23,9 @@ const ShopSidebar = () => {
 
   return (
     <aside
-      className="w-20 hidden fixed left-0 top-12  md:flex flex-col justify-between items-center "
+      className="w-20 hidden bg-sky-900 fixed left-0 top-12  md:flex flex-col justify-between items-center "
       style={{
-        backgroundColor: "#6a0dad", // Deep purple
+        // backgroundColor: "#6a0dad", // Deep purple
         color: "#f4f4f4", // Light text
         height: "calc(100vh - 3rem)", // Adjust for header height
       }}
@@ -41,8 +41,8 @@ const ShopSidebar = () => {
                 key={to}
                 className={`flex flex-col items-center text-sm font-medium px-2 py-2 w-full text-center transition-all duration-200 ${
                   isActive
-                    ? "bg-[#5a099a] text-white shadow" // darker purple on active
-                    : "hover:bg-[#b491c8] hover:text-white" // soft purple on hover
+                    ? "bg-[#0580a2] text-white shadow" // darker purple on active
+                    : "hover:bg-[#046383] hover:text-white" // soft purple on hover
                 }`}
               >
                 <div className="text-lg">{icon}</div>
@@ -56,7 +56,7 @@ const ShopSidebar = () => {
       {/* Logout button pinned to bottom */}
       <div className="mb-6 w-full">
         <div
-          className="flex flex-col items-center text-sm px-2 py-2 w-full text-center transition-all duration-200 hover:bg-[#b491c8] hover:text-white"
+          className="flex flex-col items-center text-sm px-2 py-2 w-full text-center transition-all duration-200 hover:bg-[#046383] hover:text-white"
           style={{ color: "#f4f4f4" }}
           onClick={() =>
             dispatch(logout()).then(() => toast.success("Logged-Out"))
