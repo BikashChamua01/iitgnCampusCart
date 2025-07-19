@@ -9,6 +9,9 @@ const register = async (req, res) => {
     // console.log("req files is ", req.files);
     const { userName, email, password, phoneNumber, gender } = req.body;
 
+    const isLocalhost =
+      req.hostname === "localhost" || req.hostname === "127.0.0.1";
+
     const uploadResults = await Promise.all(
       req.files.map((file) => uploadToCloudinary(file.buffer))
     );
@@ -61,6 +64,13 @@ const register = async (req, res) => {
 
     // 6. Generate JWT token
     const token = newUser.createJWT();
+
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: !isLocalhost,
+      sameSite: isLocalhost ? "Lax" : "None",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
 
     // 7. Respond with success
     console.log(email, password, "register success");
@@ -160,7 +170,6 @@ const logout = (req, res) => {
     msg: "Logged out successfully!",
   });
 };
-
 
 
 module.exports = { register, login, logout,};
