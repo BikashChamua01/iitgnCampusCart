@@ -1,14 +1,25 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllProducts } from "../../store/product-slice";
+import { fetchWishlist } from "@/store/wishlist-slice";
 import ProductCard from "../../components/shop/ProductCard";
+// eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
 import { FaBoxOpen, FaFilter, FaSearch } from "react-icons/fa";
-import { LayoutGrid, Rows3, List, ChevronDown, X } from "lucide-react";
+import Loader from "@/components/common/Loader";
+import { LayoutGrid, Rows3, List, ChevronDown } from "lucide-react";
+import axios from "axios";
+import { toast } from "sonner";
 
 const ShopProducts = () => {
   const dispatch = useDispatch();
   const { products, loading } = useSelector((state) => state.shopProducts);
+  const { user } = useSelector((state) => state.auth);
+  const { wishlist } = useSelector((state) => state.wishlist);
+
+  // conver the wishlist array to set
+  const wishlistSet = new Set(wishlist.map((product) => product._id));
+  console.log("wishlist set in the product page ", wishlistSet);
 
   const categories = [
     "All",
@@ -19,11 +30,13 @@ const ShopProducts = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [sortOption, setSortOption] = useState("");
   const [showFilters, setShowFilters] = useState(false);
-  const [viewType, setViewType] = useState("grid");
 
   useEffect(() => {
     dispatch(fetchAllProducts());
   }, [dispatch]);
+  useEffect(() => {
+    dispatch(fetchWishlist());
+  }, [dispatch, user.userId]);
 
   const filteredProducts = products.filter(
     (product) =>
@@ -47,6 +60,57 @@ const ShopProducts = () => {
         return 0;
     }
   });
+
+  // wishlis functions
+  const addToWishlist = async (productId) => {
+    try {
+      const response = await axios.post(
+        `/api/v1/wishlist/add/${productId}`,
+        {},
+        {
+          withCredentials: true,
+        }
+      );
+      if (response.data?.success) {
+        dispatch(fetchWishlist());
+        return toast.success(
+          response.data.msg || "Product successfully added to wishlist"
+        );
+      } else {
+        return toast.error(
+          response.data?.msg ||
+            response.data?.message ||
+            "Failed to add to wishlist"
+        );
+      }
+    } catch (error) {
+      console.log("Error in wishlisting Product page", error);
+    }
+  };
+
+  const deleteFromWishlist = async (productId) => {
+    try {
+      const response = await axios.delete(
+        `/api/v1/wishlist/delete/${productId}`,
+        {},
+        {
+          withCredentials: true,
+        }
+      );
+      if (response.data?.success) {
+        dispatch(fetchWishlist());
+        return toast.success(response.data?.msg || "Removed from wishlist");
+      } else
+        return toast.error(
+          response.data.msg || "Some error occured while wishlisting"
+        );
+    } catch (error) {
+      console.log("Error in addToWishlist ", error);
+      return toast.error(
+        error?.message || "Some error occured while wishlisting"
+      );
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-white to-purple-50 py-4 px-4 w-full relative">
@@ -195,28 +259,7 @@ const ShopProducts = () => {
 
         {/* Product Grid */}
         {loading ? (
-          <div className="flex justify-center items-center h-60">
-            <svg
-              className="animate-spin h-10 w-10 text-[#6a0dad]"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <circle
-                className="opacity-25"
-                cx="12"
-                cy="12"
-                r="10"
-                stroke="currentColor"
-                strokeWidth="4"
-              ></circle>
-              <path
-                className="opacity-75"
-                fill="currentColor"
-                d="M4 12a8 8 0 018-8v8z"
-              ></path>
-            </svg>
-          </div>
+          <Loader />
         ) : (
           <motion.div
             className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
@@ -246,7 +289,12 @@ const ShopProducts = () => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.1 }}
                 >
-                  <ProductCard product={product} />
+                  <ProductCard
+                    product={product}
+                    isWishlisted={wishlistSet.has(product._id.toString())}
+                    addToWishlist={addToWishlist}
+                    deleteFromWishlist={deleteFromWishlist}
+                  />
                 </motion.div>
               ))
             )}

@@ -1,8 +1,7 @@
 @import "tailwindcss";
 /* ymp */
-body
-{
-  background-color : white;
+body {
+  background-color: white;
 }
 .custom-button {
   width: 100%;
@@ -23,3 +22,69 @@ body
 .custom-button:hover {
   transform: scale(1.05);
 }
+
+/********************* For the wishlist button *********************/
+
+.heart-icon {
+  will-change: transform, color, filter;
+}
+
+/* Fancy pop animation for "add" */
+@keyframes fancy-pop {
+  0% {
+    transform: scale(1) rotate(-6deg);
+    filter: drop-shadow(0 0 0 #f8bbd0);
+  }
+  50% {
+    transform: scale(1.36) rotate(6deg);
+    filter: drop-shadow(0 0 8px #f06292);
+  }
+  70% {
+    transform: scale(1.15) rotate(-3deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    filter: none;
+  }
+}
+
+.fancy-pop {
+  animation: fancy-pop 0.5s cubic-bezier(0.55, 1.5, 0.51, 1.29);
+}
+
+/* Wobble on hover */
+.heart-icon:not(.fancy-pop):hover {
+  animation: heart-wobble 0.5s both;
+}
+
+.heart-icon.heart-outline {
+  stroke: #000;
+  stroke-width: 40;
+  stroke-linejoin: round;
+}
+
+.heart-icon.not-wishlisted {
+  /* Creates a faux border around the heart using a text-shadow trick */
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000,
+    1px 1px 0 #000;
+}
+
+@keyframes heart-wobble {
+  0% {
+    transform: scale(1) rotate(0deg);
+  }
+  30% {
+    transform: scale(1.1) rotate(-8deg);
+  }
+  60% {
+    transform: scale(0.95) rotate(4deg);
+  }
+  80% {
+    transform: scale(1.03) rotate(-2deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+/********************* For the wishlist button **********************/
