@@ -66,11 +66,9 @@ const checkAuth = async (req, res, next) => {
       });
     }
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    console.log(decoded);
     const { userId } = decoded;
 
     const foundUser = await User.findById(userId);
-    console.log(foundUser, "Found User ");
     if (!foundUser) {
       return res.status(StatusCodes.BAD_REQUEST).json({
         success: false,

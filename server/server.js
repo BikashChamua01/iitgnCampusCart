@@ -30,10 +30,12 @@ app.use(
 const authRouter = require("./routers/auth");
 const productRouter = require("./routers/product");
 const usersRouter = require("./routers/users-routes");
+const wishlistRouter = require("./routers/wishlist-router");
 // Use the routers
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/products", productRouter);
 app.use("/api/v1/users", usersRouter);
+app.use("/api/v1/wishlist", wishlistRouter);
 
 // Connection to the database and start the server
 async function start() {
