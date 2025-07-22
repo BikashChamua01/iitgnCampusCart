@@ -32,9 +32,10 @@ const ShopHeader = () => {
       {/* Left: Logo */}
 
       <div className="w-1/3">
-      <Link to="/shop" className="flex items-center w-1/3">
-        <span className="text-2xl font-extrabold tracking-wide text-violet-700">
-          CampusCart </span>
+        <Link to="/shop" className="flex items-center w-1/3">
+          <span className="text-2xl font-extrabold tracking-wide text-violet-700">
+            CampusCart
+          </span>
         </Link>
       </div>
 
