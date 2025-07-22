@@ -7,7 +7,7 @@ import ProductCard from "../../components/shop/ProductCard";
 import { motion } from "framer-motion";
 import { FaBoxOpen, FaFilter, FaSearch } from "react-icons/fa";
 import Loader from "@/components/common/Loader";
-import { LayoutGrid, Rows3, List, ChevronDown,X } from "lucide-react";
+import { LayoutGrid, Rows3, List, ChevronDown, X } from "lucide-react";
 import axios from "axios";
 import { toast } from "sonner";
 
@@ -113,43 +113,14 @@ const ShopProducts = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white to-purple-50 py-4 px-4 w-full relative">
+    <div className="min-h-screen bg-gradient-to-br from-white to-purple-50 py-4  px-4 w-full relative">
       <div className="max-w-7xl mx-auto ">
         {/* Toolbar */}
         {/* <hr/> */}
-        <div className="flex items-center justify-between flex-wrap border rounded-md md:mx-0 pr-4 md:px-10 py-2 mb-8  bg-white md:gap-3  z-50">
-          {/* View Icons */}
-          {/* <div className="flex items-center gap-2">
-            <button
-              onClick={() => setViewType("grid")}
-              className={`p-2 rounded hover:bg-gray-100 ${
-                viewType === "grid" ? "bg-gray-200" : ""
-              }`}
-            >
-              <LayoutGrid size={18} />
-            </button>
-            <button
-              onClick={() => setViewType("compact")}
-              className={`p-2 rounded hover:bg-gray-100 ${
-                viewType === "compact" ? "bg-gray-200" : ""
-              }`}
-            >
-              <Rows3 size={18} />
-            </button>
-            <button
-              onClick={() => setViewType("list")}
-              className={`p-2 rounded hover:bg-gray-100 ${
-                viewType === "list" ? "bg-gray-200" : ""
-              }`}
-            >
-              <List size={18} />
-            </button>
-
-            
-          </div> */}
+        <div className="flex items-center justify-between flex-wrap border rounded-md md:mx-0 px-2 md:px-10 py-3 mb-8  bg-white md:gap-3  z-50">
           <div>
             <select
-              className="bg-white text-sm border border-gray-300 rounded-md pr-20 pl-5 py-3 focus:outline-none w-full md:w-auto hidden md:block
+              className="bg-white text-sm border border-gray-300 rounded-md pl-1  py-2 focus:outline-none  md:w-auto hidden md:block
             "
               value={sortOption}
               onChange={(e) => setSortOption(e.target.value)}
@@ -172,7 +143,7 @@ const ShopProducts = () => {
           <div className="">
             <button
               onClick={() => setShowFilters(true)}
-              className="flex items-center text-sm text-fuchsia-600 border border-fuchsia-500 px-4 py-2 rounded-md hover:bg-fuchsia-50 transition"
+              className="flex items-center text-sm text-fuchsia-600 border border-fuchsia-500 px-8 py-2 rounded-md hover:bg-fuchsia-50 transition"
             >
               <FaFilter className="mr-2" />
               Filter
@@ -188,7 +159,7 @@ const ShopProducts = () => {
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "spring", stiffness: 200, damping: 30 }}
-            className="fixed top-15.5 right-0 w-80 max-w-[90%] h-full bg-white z-50 shadow-lg p-5 border-l border-gray-200"
+            className="fixed top-14 right-0 w-80 max-w-[90%] h-full bg-white z-50 shadow-lg p-5 border-l border-gray-200"
           >
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-lg font-semibold">Filters</h2>
@@ -197,7 +168,6 @@ const ShopProducts = () => {
                 className="text-sm text-gray-500 hover:text-gray-800"
               >
                 <X />
-                
               </button>
             </div>
 
