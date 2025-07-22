@@ -2,9 +2,10 @@
 import React from "react";
 import ImageCarousel from "@/components/shop/CarouselHome";
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { categories } from "@/utils/formDatas";
 import { motion, AnimatePresence } from "framer-motion";
+
 
 // Category image url mapping (swap for your real images)
 const categoryImages = {
@@ -32,6 +33,13 @@ const cardVariants = {
 };
 
 const Home = () => {
+  const storage_name = "CAMPUSCART-FILTER";
+  const navigate = useNavigate();
+
+  const handleCategoryClick = (cat) => {
+    localStorage.setItem(storage_name, JSON.stringify(cat));
+    navigate("/shop/products");
+  };
   return (
     <main className="min-h-screen pb-16 w-full mt-3 md:mt-5">
       {/* Banner Carousel */}
@@ -55,7 +63,7 @@ const Home = () => {
                 exit="exit"
                 layout
               >
-                <div onClick={() => console.log("hello")}>
+                <div onClick={() => handleCategoryClick(cat)}>
                   <div className="flex flex-col items-center shadow rounded-xl p-2 pb-3 bg-white/90 ring-1 ring-violet-100 hover:ring-violet-400 transition hover:shadow-lg group cursor-pointer">
                     <div className="w-20 h-20 md:w-24 md:h-24 rounded-full overflow-hidden bg-violet-100 mb-2 flex items-center justify-center">
                       <img

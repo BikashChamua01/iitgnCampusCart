@@ -17,10 +17,10 @@ const ShopProducts = () => {
   const { products, loading } = useSelector((state) => state.shopProducts);
   const { user } = useSelector((state) => state.auth);
   const { wishlist } = useSelector((state) => state.wishlist);
+  const storage_name = "CAMPUSCART-FILTER";
 
   // conver the wishlist array to set
   const wishlistSet = new Set(wishlist.map((product) => product._id));
-  console.log("wishlist set in the product page ", wishlistSet);
 
   const categories = [
     "All",
@@ -39,11 +39,23 @@ const ShopProducts = () => {
     dispatch(fetchWishlist());
   }, [dispatch, user.userId]);
 
+  useEffect(() => {
+    const data = localStorage.getItem(storage_name);
+    setSelectedCategory(JSON.parse(data));
+  }, []);
+  useEffect(() => {
+    localStorage.setItem(storage_name, JSON.stringify(selectedCategory));
+  }, [selectedCategory]);
+
   const filteredProducts = products.filter(
     (product) =>
       (selectedCategory === "All" || product.category === selectedCategory) &&
       product.title.toLowerCase().includes(search.toLowerCase())
   );
+
+  const handleFilter = (event) => {
+    setSelectedCategory(event.target.value);
+  };
 
   const sortedProducts = [...filteredProducts].sort((a, b) => {
     switch (sortOption) {
@@ -123,7 +135,8 @@ const ShopProducts = () => {
             <select
               className="bg-white text-sm rounded-md px-3 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-violet-400 focus:ring-offset-1 focus:ring-offset-white cursor-pointer transition"
               value={sortOption}
-              onChange={(e) => setSortOption(e.target.value)}
+              name="sort"
+              onChange={(event) => setSortOption(event.target.value)}
             >
               <option value="">Sort By</option>
               <option value="priceLowHigh">Price: Low to High</option>
@@ -211,7 +224,7 @@ const ShopProducts = () => {
                     id="category-select"
                     className="mt-1 block w-full border border-gray-300 rounded-md p-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-violet-400 focus:border-violet-400 transition cursor-pointer"
                     value={selectedCategory}
-                    onChange={(e) => setSelectedCategory(e.target.value)}
+                    onChange={(e) => handleFilter(e)}
                   >
                     {categories.map((cat) => (
                       <option key={cat} value={cat}>
