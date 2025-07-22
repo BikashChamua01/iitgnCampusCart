@@ -21,12 +21,15 @@ const EditProfile = ({ user }) => {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+
     const allErrors = validateForm({
       ...form,
-      [e.target.name]: e.target.value,
-    });
+      [name]: value,
+    }, "editProfile");
     setErrors(allErrors);
+    console.log("Form Errors:", allErrors);
   };
 
   const dispatch = useDispatch();
@@ -135,9 +138,8 @@ const EditProfile = ({ user }) => {
                 id="email"
                 value={user.email}
                 disabled
-                className="cursor-not-allowed opacity-70"
                 placeholder={user.email}
-                className="w-full mt-1 px-4 py-2 border border-[#7635b6] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6a0dad]"
+                className="cursor-not-allowed opacity-70 w-full mt-1 px-4 py-2 border border-[#7635b6] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6a0dad]"
               />
             </div>
 
