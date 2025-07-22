@@ -41,7 +41,7 @@ const ShopProducts = () => {
 
   useEffect(() => {
     const data = localStorage.getItem(storage_name);
-    setSelectedCategory(JSON.parse(data));
+    data ? setSelectedCategory(JSON.parse(data)) : setSelectedCategory("All");
   }, []);
   useEffect(() => {
     localStorage.setItem(storage_name, JSON.stringify(selectedCategory));

@@ -12,6 +12,7 @@ const ShopHeader = () => {
   const { pathname } = useLocation();
   const { user } = useSelector((state) => state.auth);
   const { profilePicture } = user;
+  const storage_name = "CAMPUSCART-FILTER";
 
   const menuItems = [
     { to: "/shop", label: "Home", icon: <FaHome /> },
@@ -52,6 +53,11 @@ const ShopHeader = () => {
                   ? "text-violet-700 border-b-2 border-violet-600 pb-1"
                   : "text-violet-500 hover:text-violet-600 hover:pb-1"
               }`}
+              onClick={() => {
+                label === "Products"
+                  ? localStorage.clear(storage_name)
+                  : console.log("");
+              }}
             >
               <span className="text-lg">{icon}</span>
               <span>{label}</span>
