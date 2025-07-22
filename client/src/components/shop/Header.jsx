@@ -32,8 +32,14 @@ const ShopHeader = () => {
       {/* Left: Logo */}
       <div  className="flex items-center w-1/3">
         <Link to="/shop" className="text-2xl font-extrabold tracking-wide text-violet-700">
+      <div className="w-1/3">
+      <Link to="/shop" className="flex items-center w-1/3">
+        <span className="text-2xl font-extrabold tracking-wide text-violet-700">
           CampusCart
         </Link>
+      </div>
+        </span>
+      </Link>
       </div>
 
       {/* Center: Menu */}
