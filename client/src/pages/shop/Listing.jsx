@@ -52,12 +52,14 @@ const ShopListing = () => {
   };
 
   return (
-    <>
-      <header>{!user.isAdmin ? `${user.userName}'s Products` : ""}</header>
+    <div className="block w-full min-h-screen">
+      <header className="m-auto text-center p-2 text-2xl font-bold mb-1 mt-1 tracking-tight text-violet-700 drop-shadow-sm">
+        {!user.isAdmin ? `${user.userName.split(" ")[0]}'s Uploads` : ""}
+      </header>
       <div
         className="
   grid grid-cols-1  sm:grid-cols-2 lg:grid-cols-4
-  gap-4 sm:gap-6 p-2 sm:p-4 lg:p-6
+  gap-4 sm:gap-6 p-2 sm:p-3 lg:p-4
   max-w-7xl mx-auto
 "
       >
@@ -81,7 +83,7 @@ const ShopListing = () => {
               />
             ))}
       </div>
-    </>
+    </div>
   );
 };
 
