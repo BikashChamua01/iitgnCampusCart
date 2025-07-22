@@ -59,7 +59,7 @@ body {
 
 .heart-icon.heart-outline {
   stroke: #000;
-  stroke-width: 40;
+  stroke-width: 15;
   stroke-linejoin: round;
 }
 

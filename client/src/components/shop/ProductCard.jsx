@@ -73,15 +73,15 @@ const ProductCard = ({
             aria-label="Toggle wishlist"
           >
             <FaHeart
-  className={`
-    heart-icon w-6 h-6 transition-all duration-300
-    ${isWishlisted 
-      ? "text-red-600 fancy-pop"
-      : "text-white not-wishlisted group-hover:text-red-400 heart-outline"
-    }
-  `}
-/>
-
+              className={`
+            heart-icon w-6 h-6 transition-all duration-300
+            ${
+              isWishlisted
+                ? "text-red-600 fancy-pop"
+                : "text-white not-wishlisted group-hover:text-red-400 heart-outline"
+            }
+          `}
+            />
           </button>
 
           {/* discount and available tag */}

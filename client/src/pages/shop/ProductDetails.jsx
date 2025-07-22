@@ -1,9 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import axios from "axios";
+import Loader from "@/components/common/Loader";
 // eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
-import { FaTag, FaCheckCircle, FaUserCircle, FaEnvelope, FaPhone } from "react-icons/fa";
+import {
+  FaTag,
+  FaCheckCircle,
+  FaUserCircle,
+  FaEnvelope,
+  FaPhone,
+} from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllProducts } from "../../store/product-slice";
 import ProductCard from "../../components/shop/ProductCard";
@@ -57,12 +64,7 @@ const ProductDetail = () => {
     dispatch(fetchAllProducts());
   }, [dispatch]);
 
-  if (loading)
-    return (
-      <div className="flex justify-center items-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-500"></div>
-      </div>
-    );
+  if (loading) return <Loader />;
 
   if (!product)
     return (
@@ -160,10 +162,14 @@ const ProductDetail = () => {
                   <span className="flex items-center bg-purple-100 text-purple-700 px-3 py-1 rounded-full font-medium">
                     <FaTag className="mr-1" /> {category}
                   </span>
-                  <span className={`flex items-center bg-green-100 text-green-700 px-3 py-1 rounded-full font-medium
-                    ${condition=="Poor" ?"text-red-600 bg-red-300":""}
-                    ${condition == "Fair" ? "text-yellow-700 bg-yellow-100" : ""}
-                    `}>
+                  <span
+                    className={`flex items-center bg-green-100 text-green-700 px-3 py-1 rounded-full font-medium
+                    ${condition == "Poor" ? "text-red-600 bg-red-300" : ""}
+                    ${
+                      condition == "Fair" ? "text-yellow-700 bg-yellow-100" : ""
+                    }
+                    `}
+                  >
                     <FaCheckCircle className="mr-1" /> {condition}
                   </span>
                 </div>
@@ -177,7 +183,10 @@ const ProductDetail = () => {
                 `}
                 >
                   <img
-                    src={(seller.profilePicture && seller.profilePicture.url) || "/images/user-avatar.png"}
+                    src={
+                      (seller.profilePicture && seller.profilePicture.url) ||
+                      "/images/user-avatar.png"
+                    }
                     alt={seller.name}
                     className="w-14 h-14 rounded-full object-cover border-2 border-purple-300"
                   />
