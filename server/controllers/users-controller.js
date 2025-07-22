@@ -105,7 +105,8 @@ const userProfile = async (req, res) => {
 const editProfile = async (req, res) => {
   try {
     const { id } = req.params;
-    const { userName, email, password, oldPassword } = req.body;
+    console.log("body to edit here:",req.body);
+    const { userName, email, password, oldPassword,  gender, phoneNumber } = req.body;
 
     // 1. ID must be present
     if (!id) {
@@ -131,6 +132,8 @@ const editProfile = async (req, res) => {
 
     // 4. Apply only provided changes
     if (userName != null) user.userName = userName;
+    if (phoneNumber != null) user.phoneNumber = phoneNumber;
+    if (gender != null) user.gender = gender;
     if (email != null) user.email = email;
 
     // 5. If password change is requested

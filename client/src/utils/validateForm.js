@@ -1,6 +1,6 @@
 import validator from "validator";
 
-export function validateForm({ userName, email, password }) {
+export function validateForm({ userName, email, password, phoneNumber }) {
   const errors = {};
 
   if (!userName.trim()) {
@@ -28,6 +28,14 @@ export function validateForm({ userName, email, password }) {
   ) {
     errors.password =
       "Password must be at least 8 characters, include one number and one symbol";
+  }
+
+  if (!phoneNumber.trim()) {
+    errors.phoneNumber = "Phone number is required";
+  } else if (
+    !/^(\+91[\-\s]?|91[\-\s]?|0)?[6-9]\d{9}$/.test(phoneNumber.trim())
+  ) {
+    errors.phoneNumber = "Please enter a valid phone number";
   }
 
   return errors;
