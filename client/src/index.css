@@ -1,6 +1,6 @@
 @import "tailwindcss";
-// Add this to your main.jsx or main.tsx or in your Tailwind config's `content` section
-import "keen-slider/keen-slider.min.css";
+/* // Add this to your main.jsx or main.tsx or in your Tailwind config's `content` section */
+/* import "keen-slider/keen-slider.min.css"; (Remove this line from CSS, use in JS/TS file if needed) */
 
 /* ymp */
 body {
