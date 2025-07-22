@@ -88,10 +88,10 @@ const ProductDetail = () => {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-white py-6 px-3 sm:px-4">
-      <div className="max-w-6xl mx-auto space-y-12">
+    <div className="min-h-screen  py-6 px-3 sm:px-4">
+      <div className="max-w-7xl mx-auto space-y-12">
         {/* Image + Details */}
-        <div className="flex flex-col md:flex-row gap-6 md:gap-8 bg-white p-4 sm:p-6 rounded-lg items-center">
+        <div className="flex flex-col md:flex-row gap-6 md:gap-8 bg-gradient-to-br from-purple-50 to-purple-50 p-4 sm:p-6 rounded-lg items-center">
           {/* Product Image */}
           <motion.div
             className="md:w-1/2 flex flex-col items-center"
