@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchAllProducts } from "../../store/product-slice";
 import { fetchWishlist } from "@/store/wishlist-slice";
 import ProductCard from "../../components/shop/ProductCard";
+import FilterSidebar from "@/utils/FilterSidebar";
 // eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
 import { FaBoxOpen, FaFilter, FaSearch } from "react-icons/fa";
@@ -116,12 +117,11 @@ const ShopProducts = () => {
     <div className="min-h-screen bg-gradient-to-br from-white to-purple-50 py-4  px-4 w-full relative">
       <div className="max-w-7xl mx-auto ">
         {/* Toolbar */}
-        {/* <hr/> */}
-        <div className="flex items-center justify-between flex-wrap border rounded-md md:mx-0 px-2 md:px-10 py-3 mb-8  bg-white md:gap-3  z-50">
-          <div>
+        <div className="flex flex-wrap items-center justify-between bg-white  py-2 px-4 md:px-10 mb-8 border-b-1 border-violet-100 md:gap-6 z-50">
+          {/* Sort Select (desktop) */}
+          <div className="hidden md:block text-sm text-violet-700 border border-violet-600 rounded-md overflow-hidden">
             <select
-              className="bg-white text-sm border border-gray-300 rounded-md pl-1  py-2 focus:outline-none  md:w-auto hidden md:block
-            "
+              className="bg-white text-sm rounded-md px-3 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-violet-400 focus:ring-offset-1 focus:ring-offset-white cursor-pointer transition"
               value={sortOption}
               onChange={(e) => setSortOption(e.target.value)}
             >
@@ -134,98 +134,118 @@ const ShopProducts = () => {
             </select>
           </div>
 
-          {/* Product Count */}
-          <div className="text-sm text-gray-700 font-semibold">
-            {sortedProducts.length} PRODUCTS
+          {/* Centered Product Count */}
+          <div className="flex-1 flex justify-center">
+            <div className="text-sm font-semibold text-violet-700 bg-violet-100/60 rounded-full px-5 py-1 shadow-inner select-none tracking-wide">
+              {sortedProducts.length} PRODUCTS
+            </div>
           </div>
 
-          {/* Sort & Filter Controls */}
-          <div className="">
+          {/* Filter Button */}
+          <div>
             <button
               onClick={() => setShowFilters(true)}
-              className="flex items-center text-sm text-fuchsia-600 border border-fuchsia-500 px-8 py-2 rounded-md hover:bg-fuchsia-50 transition"
+              className="flex items-center text-sm text-violet-700 border border-violet-600 px-6 py-2 rounded-md shadow-sm hover:bg-violet-50 transition"
             >
               <FaFilter className="mr-2" />
               Filter
             </button>
           </div>
         </div>
-        {/* <hr className="mb-4"/> */}
 
         {/* Sidebar Filter */}
         {showFilters && (
-          <motion.div
-            initial={{ x: "100%" }}
-            animate={{ x: 0 }}
-            exit={{ x: "100%" }}
-            transition={{ type: "spring", stiffness: 200, damping: 30 }}
-            className="fixed top-14 right-0 w-80 max-w-[90%] h-full bg-white z-50 shadow-lg p-5 border-l border-gray-200"
+          <FilterSidebar
+            showFilters={showFilters}
+            setShowFilters={setShowFilters}
           >
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-lg font-semibold">Filters</h2>
-              <button
-                onClick={() => setShowFilters(false)}
-                className="text-sm text-gray-500 hover:text-gray-800"
-              >
-                <X />
-              </button>
-            </div>
+            <div>
+              <div className="flex justify-between items-center mb-6">
+                <h2
+                  id="filter-sidebar-title"
+                  className="text-lg font-semibold text-violet-800"
+                >
+                  Filters
+                </h2>
+                <button
+                  onClick={() => setShowFilters(false)}
+                  className="text-gray-500 hover:text-gray-800 focus:outline-none"
+                  aria-label="Close filter sidebar"
+                >
+                  <X size={24} />
+                </button>
+              </div>
 
-            {/* Filters */}
-            <div className="space-y-4 ">
-              {/* Search */}
-              <div>
-                <label className="text-sm font-medium text-gray-700 ">
-                  Search
-                </label>
-                <div className="flex items-center mt-1 px-2 py-3 border border-gray-300 rounded-md">
-                  <FaSearch className="text-gray-400 mr-2" />
-                  <input
-                    type="text"
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                    placeholder="Search products..."
-                    className="w-full outline-none bg-transparent text-sm"
-                  />
+              {/* Filters */}
+              <div className="space-y-6">
+                {/* Search */}
+                <div>
+                  <label
+                    htmlFor="search-input"
+                    className="block text-sm font-medium text-gray-700"
+                  >
+                    Search
+                  </label>
+                  <div className="mt-1 flex items-center border border-gray-300 rounded-md px-3 py-2 focus-within:ring-2 focus-within:ring-violet-400 focus-within:border-violet-400 transition">
+                    <FaSearch className="text-gray-400 mr-2 flex-shrink-0" />
+                    <input
+                      id="search-input"
+                      type="text"
+                      value={search}
+                      onChange={(e) => setSearch(e.target.value)}
+                      placeholder="Search products..."
+                      className="w-full bg-transparent outline-none text-sm text-gray-900"
+                    />
+                  </div>
+                </div>
+
+                {/* Category */}
+                <div>
+                  <label
+                    htmlFor="category-select"
+                    className="block text-sm font-medium text-gray-700"
+                  >
+                    Category
+                  </label>
+                  <select
+                    id="category-select"
+                    className="mt-1 block w-full border border-gray-300 rounded-md p-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-violet-400 focus:border-violet-400 transition cursor-pointer"
+                    value={selectedCategory}
+                    onChange={(e) => setSelectedCategory(e.target.value)}
+                  >
+                    {categories.map((cat) => (
+                      <option key={cat} value={cat}>
+                        {cat}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Sort for mobile only */}
+                <div className="md:hidden">
+                  <label
+                    htmlFor="sort-select-mobile"
+                    className="block text-sm font-medium text-gray-700"
+                  >
+                    Sort
+                  </label>
+                  <select
+                    id="sort-select-mobile"
+                    className="mt-1 block w-full border border-gray-300 rounded-md px-5 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-violet-400 focus:border-violet-400 transition cursor-pointer"
+                    value={sortOption}
+                    onChange={(e) => setSortOption(e.target.value)}
+                  >
+                    <option value="">Sort By</option>
+                    <option value="priceLowHigh">Price: Low to High</option>
+                    <option value="priceHighLow">Price: High to Low</option>
+                    <option value="newest">Newest</option>
+                    <option value="oldest">Oldest</option>
+                    <option value="rating">Rating</option>
+                  </select>
                 </div>
               </div>
-
-              {/* Category */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700">
-                  Category
-                </label>
-                <select
-                  className="mt-1 block w-full border border-gray-300 rounded-md  p-3"
-                  value={selectedCategory}
-                  onChange={(e) => setSelectedCategory(e.target.value)}
-                >
-                  {categories.map((cat) => (
-                    <option key={cat} value={cat}>
-                      {cat}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="md:hidden">
-                <label className="block text-sm font-medium text-gray-700">
-                  Sort
-                </label>
-                <select
-                  className="bg-white text-sm border border-gray-300 rounded-md px-5 py-3 focus:outline-none w-full md:w-auto  "
-                  value={sortOption}
-                  onChange={(e) => setSortOption(e.target.value)}
-                >
-                  <option value="">Sort By</option>
-                  <option value="priceLowHigh">Price: Low to High</option>
-                  <option value="priceHighLow">Price: High to Low</option>
-                  <option value="newest">Newest</option>
-                  <option value="oldest">Oldest</option>
-                  <option value="rating">Rating</option>
-                </select>
-              </div>
             </div>
-          </motion.div>
+          </FilterSidebar>
         )}
 
         {/* Product Grid */}

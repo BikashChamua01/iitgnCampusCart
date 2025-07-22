@@ -38,7 +38,7 @@ const ProductDetailsForm = ({ form, setForm }) => {
       </label>
 
       {/* prices */}
-      <div className="md:flex gap-1 ">
+      <div className="md:flex gap-2 ">
         {/* Price */}
         <label className="block md:w-1/2">
           <span className="text-[#2b2b2b] font-medium ">Selling Price (₹)</span>
@@ -69,7 +69,7 @@ const ProductDetailsForm = ({ form, setForm }) => {
         </label>
       </div>
       {/* CATEGORY AND CONDITION */}
-      <div className="md:flex gap-1 ">
+      <div className="md:flex gap-2 ">
         {/* Category */}
         <label className="block md:w-1/2">
           <span className="text-[#2b2b2b] font-medium">Category</span>
