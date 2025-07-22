@@ -1,21 +1,12 @@
 // src/components/ProductDetailsForm.jsx
 import React from "react";
+import { categories, conditions } from "@/utils/formDatas";
 
 const ProductDetailsForm = ({ form, setForm }) => {
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
 
-  const categories = [
-    "Books",
-    "Electronics",
-    "Clothing",
-    "Furniture",
-    "Cycle",
-    "Stationery",
-    "Others",
-  ];
 
-  const conditions = ["New", "Like New", "Good", "Fair", "Poor"];
 
   return (
     <div className="flex flex-col gap-2">
