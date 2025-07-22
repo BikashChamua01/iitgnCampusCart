@@ -36,7 +36,7 @@ const createProduct = async (req, res) => {
       title,
       description,
       price: Number(price),
-      originalPrice: Number(originalPrice),
+      originalPrice: originalPrice ? Number(originalPrice) : Number(0),
       category,
       condition,
       location,
