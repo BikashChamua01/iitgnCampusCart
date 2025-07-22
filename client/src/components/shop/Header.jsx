@@ -30,12 +30,10 @@ const ShopHeader = () => {
                   h-16 flex items-center justify-between px-4 md:px-8"
     >
       {/* Left: Logo */}
-      <div className="w-1/3">
-      <Link to="/shop" className="flex items-center w-1/3">
-        <span className="text-2xl font-extrabold tracking-wide text-violet-700">
+      <div  className="flex items-center w-1/3">
+        <Link to="/shop" className="text-2xl font-extrabold tracking-wide text-violet-700">
           CampusCart
-        </span>
-      </Link>
+        </Link>
       </div>
 
       {/* Center: Menu */}
