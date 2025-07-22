@@ -195,7 +195,7 @@ const Sell = () => {
 
         <form
           onSubmit={mode === "edit" ? handleEditSubmit : handleUpload}
-          className="flex flex-col md:flex-row gap-2 bg-white/95 shadow-2xl rounded-3xl overflow-hidden ring-1 ring-violet-100 md:p-8"
+          className="flex flex-col md:flex-row gap-2   rounded-3xl overflow-hidden md:p-8"
         >
           {/* Left Panel: Image Upload */}
           <section className="flex-1 p-6 flex flex-col gap-4 justify-between bg-gradient-to-br  align-middle ">
