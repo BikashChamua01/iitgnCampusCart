@@ -88,3 +88,23 @@ body {
 }
 
 /********************* For the wishlist button **********************/
+
+/* *****************Underline animation******************* */
+/* index.css */
+.underline-gradient::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  width: 0;
+  background-image: linear-gradient(to right, #38bdf8, #6366f1); /* sky-400 to indigo-500 */
+  transition: width 0.3s ease-in-out;
+}
+
+.underline-gradient:hover::after,
+.underline-gradient-active::after {
+  width: 100%;
+}
+/* *****************Underline animation******************* */
+

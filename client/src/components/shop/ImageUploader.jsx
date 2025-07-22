@@ -25,7 +25,7 @@ const ImageUploader = ({ images, setImages }) => {
     <div
       onDrop={handleDrop}
       onDragOver={(e) => e.preventDefault()}
-      className="border-2 border-dashed border-[#7635b6] rounded-xl p-4 text-center cursor-pointer bg-white hover:bg-purple-50 transition"
+      className="border-2 border-dashed border-[#7635b6] rounded-xl p-4 text-center cursor-pointer bg-white hover:bg-purple-50 transition h-full"
       onClick={() => document.getElementById("uploadInput").click()}
     >
       <input
