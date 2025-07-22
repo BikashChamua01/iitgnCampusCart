@@ -118,35 +118,6 @@ const ShopProducts = () => {
         {/* Toolbar */}
         {/* <hr/> */}
         <div className="flex items-center justify-between flex-wrap border rounded-md md:mx-0 pr-4 md:px-10 py-2 mb-8  bg-white md:gap-3  z-50">
-          {/* View Icons */}
-          {/* <div className="flex items-center gap-2">
-            <button
-              onClick={() => setViewType("grid")}
-              className={`p-2 rounded hover:bg-gray-100 ${
-                viewType === "grid" ? "bg-gray-200" : ""
-              }`}
-            >
-              <LayoutGrid size={18} />
-            </button>
-            <button
-              onClick={() => setViewType("compact")}
-              className={`p-2 rounded hover:bg-gray-100 ${
-                viewType === "compact" ? "bg-gray-200" : ""
-              }`}
-            >
-              <Rows3 size={18} />
-            </button>
-            <button
-              onClick={() => setViewType("list")}
-              className={`p-2 rounded hover:bg-gray-100 ${
-                viewType === "list" ? "bg-gray-200" : ""
-              }`}
-            >
-              <List size={18} />
-            </button>
-
-            
-          </div> */}
           <div>
             <select
               className="bg-white text-sm border border-gray-300 rounded-md pr-20 pl-5 py-3 focus:outline-none w-full md:w-auto hidden md:block
@@ -188,7 +159,7 @@ const ShopProducts = () => {
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "spring", stiffness: 200, damping: 30 }}
-            className="fixed top-15.5 right-0 w-80 max-w-[90%] h-full bg-white z-50 shadow-lg p-5 border-l border-gray-200"
+            className="fixed top-0 right-0 w-80 max-w-[90%] h-full bg-white z-50 shadow-lg p-5 border-l border-gray-200"
           >
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-lg font-semibold">Filters</h2>
