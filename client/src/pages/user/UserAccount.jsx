@@ -10,6 +10,7 @@ import { logout } from "../../store/auth-slice";
 import { useDispatch } from "react-redux";
 import { toast } from "sonner";
 import EditProfile from "@/components/common/EditProfile";
+import ChangePassword from "@/components/common/ChangePassword";
 
 const UserAccount = () => {
   const [user, setUser] = useState(null);
@@ -120,32 +121,7 @@ data-[state=active]:after:scale-x-100"
         </TabsContent>
 
         {/* Change Password Tab */}
-        <TabsContent value="password">
-          <Card className="w-full">
-            <CardHeader>
-              <CardTitle>Change Password</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="currentPassword">Current Password</Label>
-                <Input id="currentPassword" type="password" />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="newPassword">New Password</Label>
-                <Input id="newPassword" type="password" />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="confirmPassword">Confirm New Password</Label>
-                <Input id="confirmPassword" type="password" />
-              </div>
-              <div className="md:w-1/6 w-1/2">
-                <Button type="submit" className="custom-button ">
-                  Update Password
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
+        <ChangePassword />
 
         {/* Edit Profile Tab */}
         <EditProfile user={user} />
