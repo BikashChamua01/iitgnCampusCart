@@ -9,8 +9,6 @@ import { motion } from "framer-motion";
 import { FaBoxOpen, FaFilter, FaSearch } from "react-icons/fa";
 import Loader from "@/components/common/Loader";
 import { LayoutGrid, Rows3, List, ChevronDown, X } from "lucide-react";
-import axios from "axios";
-import { toast } from "sonner";
 
 const ShopProducts = () => {
   const dispatch = useDispatch();
@@ -73,57 +71,6 @@ const ShopProducts = () => {
         return 0;
     }
   });
-
-  // wishlis functions
-  const addToWishlist = async (productId) => {
-    try {
-      const response = await axios.post(
-        `/api/v1/wishlist/add/${productId}`,
-        {},
-        {
-          withCredentials: true,
-        }
-      );
-      if (response.data?.success) {
-        dispatch(fetchWishlist());
-        return toast.success(
-          response.data.msg || "Product successfully added to wishlist"
-        );
-      } else {
-        return toast.error(
-          response.data?.msg ||
-            response.data?.message ||
-            "Failed to add to wishlist"
-        );
-      }
-    } catch (error) {
-      console.log("Error in wishlisting Product page", error);
-    }
-  };
-
-  const deleteFromWishlist = async (productId) => {
-    try {
-      const response = await axios.delete(
-        `/api/v1/wishlist/delete/${productId}`,
-        {},
-        {
-          withCredentials: true,
-        }
-      );
-      if (response.data?.success) {
-        dispatch(fetchWishlist());
-        return toast.success(response.data?.msg || "Removed from wishlist");
-      } else
-        return toast.error(
-          response.data.msg || "Some error occured while wishlisting"
-        );
-    } catch (error) {
-      console.log("Error in addToWishlist ", error);
-      return toast.error(
-        error?.message || "Some error occured while wishlisting"
-      );
-    }
-  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-white to-purple-50 py-4  px-4 w-full relative">
@@ -296,8 +243,6 @@ const ShopProducts = () => {
                   <ProductCard
                     product={product}
                     isWishlisted={wishlistSet.has(product._id.toString())}
-                    addToWishlist={addToWishlist}
-                    deleteFromWishlist={deleteFromWishlist}
                   />
                 </motion.div>
               ))

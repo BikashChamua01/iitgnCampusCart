@@ -1,12 +1,12 @@
 import React from "react";
 import { FaRupeeSign, FaStar, FaHeart } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { addToWishlist, deleteFromWishlist } from "@/store/wishlist-slice";
 
 const ProductCard = ({
   product,
   isWishlisted,
-  addToWishlist,
-  deleteFromWishlist,
 }) => {
   const {
     _id,
@@ -20,6 +20,7 @@ const ProductCard = ({
     numReviews = 0,
     available = true,
   } = product;
+  const dispatch = useDispatch();
 
   const imageUrl = images[0]?.url || "/placeholder.png";
 
@@ -50,9 +51,9 @@ const ProductCard = ({
     event.stopPropagation();
 
     if (isWishlisted) {
-      deleteFromWishlist(product._id);
+      dispatch(deleteFromWishlist(product._id));
     } else {
-      addToWishlist(product._id);
+      dispatch(addToWishlist(product._id));
     }
   };
 

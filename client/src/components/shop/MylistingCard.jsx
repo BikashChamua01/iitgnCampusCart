@@ -23,9 +23,9 @@ const MyListingCard = ({ product, onEdit, onDelete, isAdmin }) => {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.2 }}
+      transition={{ duration: 0.01 }}
       whileHover={{
-        scale: 1.03,
+        scale: 1.01,
         boxShadow: "0 2px 20px 0 rgba(168, 85, 247, 0.25)",
       }}
       className="relative bg-white rounded-xl shadow-lg p-4 sm:p-5 overflow-visible mt-16 sm:mt-20 self-center mx-7 lg:mx-0 transition-all duration-300 ease-in-out hover:shadow-purple-400/40 cursor-pointer h-62"
