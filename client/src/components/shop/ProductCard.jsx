@@ -79,7 +79,7 @@ const ProductCard = ({
             ${
               isWishlisted
                 ? "text-red-600 fancy-pop"
-                : "text-white not-wishlisted hover:text-red-400 heart-outline"
+                : "text-white not-wishlisted hover:text-red-100 heart-outline"
             }
           `}
             />

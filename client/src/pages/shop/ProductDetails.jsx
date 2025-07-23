@@ -10,11 +10,12 @@ import {
   FaUserCircle,
   FaEnvelope,
   FaPhone,
+  FaHeart,
 } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllProducts } from "../../store/product-slice";
 import ProductCard from "../../components/shop/ProductCard";
-
+import { addToWishlist, deleteFromWishlist } from "@/store/wishlist-slice";
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -88,6 +89,22 @@ const ProductDetail = () => {
     images = [],
   } = product;
 
+  let isWishlisted = false;
+  if (product) {
+    isWishlisted = wishlistSet.has(product._id.toString());
+  }
+
+  const handleWishlist = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    if (isWishlisted) {
+      dispatch(deleteFromWishlist(product._id));
+    } else {
+      dispatch(addToWishlist(product._id));
+    }
+  };
+
   const similarProducts = products.filter(
     (p) => p.category === category && p._id !== product._id
   );
@@ -105,6 +122,23 @@ const ProductDetail = () => {
             transition={{ duration: 0.4 }}
           >
             <div className="relative w-full max-w-md mx-auto">
+              {/* wishlist button */}
+              <button
+                onClick={handleWishlist}
+                className="group absolute top-3 right-4 outline-none cursor-pointer z-10 bg-transparent border-none w-fit"
+                aria-label="Toggle wishlist"
+              >
+                <FaHeart
+                  className={`
+                        heart-icon w-6 h-6 transition-all duration-300
+                        ${
+                          isWishlisted
+                            ? "text-red-600 fancy-pop"
+                            : "text-white not-wishlisted hover:text-red-100 heart-outline"
+                        }
+                      `}
+                />
+              </button>
               <img
                 src={currentImageUrl || images[0]?.url || "/placeholder.png"}
                 alt={title}
