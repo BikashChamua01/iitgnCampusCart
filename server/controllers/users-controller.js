@@ -3,6 +3,8 @@ const Product = require("../models/product");
 const { StatusCodes } = require("http-status-codes");
 const mongoose = require("mongoose");
 const Tempmail = require("../models/tempemail");
+// const bcrypt = require("bcryptjs");
+
 
 const fetchAllUsers = async (req, res) => {
   try {
@@ -74,10 +76,98 @@ const deleteUserAccount = async (req, res) => {
 
 const changePassword = async (req, res) => {
   try {
-  } catch (error) {
-    console.log("Error in change password");
+    const { id } = req.params;
+    const { password: newPassword, oldPassword } = req.body;
+
+    // Log inputs
+    console.log("Change Password Request Body:", req.body);
+
+    // 1. Check if user ID is provided
+    if (!id) {
+      return res.status(StatusCodes.BAD_REQUEST).json({
+        success: false,
+        msg: "User ID is required in the URL",
+      });
+    }
+
+    // 2. Validate user ID format
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(StatusCodes.BAD_REQUEST).json({
+        success: false,
+        msg: "Invalid User ID format",
+      });
+    }
+
+    // 3. Fetch user and include password field
+    const user = await User.findById(id).select("+password");
+    if (!user) {
+      return res.status(StatusCodes.NOT_FOUND).json({
+        success: false,
+        msg: "User not found",
+      });
+    }
+
+    // 4. Ensure old password is provided
+    if (!oldPassword) {
+      return res.status(StatusCodes.BAD_REQUEST).json({
+        success: false,
+        msg: "Current password is required to change password",
+      });
+    }
+
+    // 5. Validate old password
+     const isMatch = await user.verifyPassword(oldPassword);
+    if (!isMatch) {
+      return res.status(StatusCodes.UNAUTHORIZED).json({
+        success: false,
+        msg: "Invalid current  password",
+      });
+    }
+
+    // 6. Validate new password
+    if (!newPassword || newPassword.length < 6) {
+      return res.status(StatusCodes.BAD_REQUEST).json({
+        success: false,
+        msg: "New password must be at least 6 characters long",
+      });
+    }
+
+    // 7. Update and save new password
+    user.password = newPassword;
+    await user.validate();
+    const updatedUser = await user.save();
+
+    // 8. Generate new token
+    const token = updatedUser.createJWT();
+
+    // 9. Set JWT cookie
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: false, // set to true in production
+      sameSite: "None",
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    });
+
+    // 10. Respond to client
+    return res.status(StatusCodes.OK).json({
+      success: true,
+      msg: "Password updated successfully!",
+      user: {
+        id: updatedUser._id,
+        userName: updatedUser.userName,
+        email: updatedUser.email,
+      },
+    });
+
+  } catch (err) {
+    console.error("Error in changePassword:", err);
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      success: false,
+      msg: "Server error. Please try again later.",
+    });
   }
 };
+
 
 const userProfile = async (req, res) => {
   try {
@@ -105,8 +195,9 @@ const userProfile = async (req, res) => {
 const editProfile = async (req, res) => {
   try {
     const { id } = req.params;
-    console.log("body to edit here:",req.body);
-    const { userName, email, password, oldPassword,  gender, phoneNumber } = req.body;
+    console.log("body to edit here:", req.body);
+    const { userName, email, password, oldPassword, gender, phoneNumber } =
+      req.body;
 
     // 1. ID must be present
     if (!id) {
@@ -188,4 +279,10 @@ const editProfile = async (req, res) => {
   }
 };
 
-module.exports = { fetchAllUsers, deleteUserAccount, editProfile, userProfile };
+module.exports = {
+  fetchAllUsers,
+  deleteUserAccount,
+  editProfile,
+  userProfile,
+  changePassword,
+};
