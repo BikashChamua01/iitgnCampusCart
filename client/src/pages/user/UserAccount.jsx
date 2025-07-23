@@ -13,10 +13,6 @@ import EditProfile from "@/components/common/EditProfile";
 
 const UserAccount = () => {
   const [user, setUser] = useState(null);
- 
- 
-
-  
 
   const dispatch = useDispatch();
 
@@ -114,9 +110,11 @@ data-[state=active]:after:scale-x-100"
                 dispatch(logout()).then(() => toast.success("Logged-Out"))
               }
             >
-              <button className="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 md:py-3 onpx-6 md:px-16 hover:py-3 hover:md:py-4 hover:md:px-18 rounded-xl shadow transition-all duration-300 cursor-pointer">
-                Logout
-              </button>
+              <div className="md:w-1/6 w-1/2">
+                <button className="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 md:py-3 onpx-6 md:px-16 hover:py-3 hover:md:py-4 hover:md:px-18 rounded-xl shadow transition-all duration-300 cursor-pointer   custom-button ">
+                  Logout
+                </button>
+              </div>
             </div>
           </Card>
         </TabsContent>
@@ -140,13 +138,17 @@ data-[state=active]:after:scale-x-100"
                 <Label htmlFor="confirmPassword">Confirm New Password</Label>
                 <Input id="confirmPassword" type="password" />
               </div>
-              <Button>Update Password</Button>
+              <div className="md:w-1/6 w-1/2">
+                <Button type="submit" className="custom-button ">
+                  Update Password
+                </Button>
+              </div>
             </CardContent>
           </Card>
         </TabsContent>
 
         {/* Edit Profile Tab */}
-        <EditProfile user={user}   />
+        <EditProfile user={user} />
       </Tabs>
     </div>
   );

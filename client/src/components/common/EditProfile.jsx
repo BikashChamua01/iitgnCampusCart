@@ -17,17 +17,20 @@ const EditProfile = ({ user }) => {
     phoneNumber: "",
     gender: "",
   });
-    const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState({});
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
 
-    const allErrors = validateForm({
-      ...form,
-      [name]: value,
-    }, "editProfile");
+    const allErrors = validateForm(
+      {
+        ...form,
+        [name]: value,
+      },
+      "editProfile"
+    );
     setErrors(allErrors);
     console.log("Form Errors:", allErrors);
   };
@@ -125,8 +128,8 @@ const EditProfile = ({ user }) => {
                 placeholder={user.userName}
               />
               {errors.userName && (
-            <p className="text-red-600 mt-1">{errors.userName}</p>
-          )}
+                <p className="text-red-600 mt-1">{errors.userName}</p>
+              )}
             </div>
 
             <div
@@ -153,8 +156,8 @@ const EditProfile = ({ user }) => {
                 className="w-full mt-1 px-4 py-2 border border-[#7635b6] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6a0dad]"
               />
               {errors.phoneNumber && (
-            <p className="text-red-600 mt-1">{errors.phoneNumber}</p>
-          )}
+                <p className="text-red-600 mt-1">{errors.phoneNumber}</p>
+              )}
             </div>
 
             <div className="space-y-2">
@@ -171,12 +174,16 @@ const EditProfile = ({ user }) => {
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
               </select>
-             
             </div>
-
-            <Button type="submit" disabled={isSubmitting}>
-              {isSubmitting ? "Saving..." : "Save Changes"}
-            </Button>
+            <div className="md:w-1/6 w-1/2">
+              <Button
+                type="submit"
+                className="custom-button "
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? "Saving..." : "Save Changes"}
+              </Button>
+            </div>
           </form>
         </CardContent>
       </Card>
