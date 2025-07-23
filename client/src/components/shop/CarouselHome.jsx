@@ -63,7 +63,7 @@ const ImageCarousel = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       instanceRef.current?.next();
-    }, 5000); // every 3 seconds
+    }, 5000); // every 5 seconds
     return () => clearInterval(interval);
   }, [instanceRef]);
 
@@ -91,7 +91,7 @@ const ImageCarousel = () => {
         }
       `}</style>
 
-      <div className="w-full max-w-7xl mx-auto">
+      <div className="w-full mx-auto">
         {/* Main carousel */}
         <div
           ref={sliderRef}
@@ -137,7 +137,7 @@ const ImageCarousel = () => {
               key={banner.id}
               src={banner.imageUrl}
               alt="Thumbnail"
-              className={`w-20 h-12 object-cover rounded ring-2 cursor-pointer transition-all duration-300 ${
+              className={`w-8 h-4 sm:w-15 sm:h-10  object-cover rounded ring-2 cursor-pointer transition-all duration-300 ${
                 idx === currentSlide ? "ring-violet-500" : "ring-transparent"
               }`}
               onClick={() => instanceRef.current?.moveToIdx(idx)}
