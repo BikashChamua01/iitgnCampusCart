@@ -15,6 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchAllProducts } from "../../store/product-slice";
 import ProductCard from "../../components/shop/ProductCard";
 
+
 const ProductDetail = () => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
@@ -22,6 +23,10 @@ const ProductDetail = () => {
   const [currentImageUrl, setImage] = useState(null);
   const [seller, setSeller] = useState(null);
   const [sellerLoading, setSellerLoading] = useState(false);
+  const { wishlist } = useSelector((state) => state.wishlist);
+
+  // convet the wishlist to set
+  const wishlistSet = new Set(wishlist.map((p) => p._id));
 
   const dispatch = useDispatch();
   const { products } = useSelector((state) => state.shopProducts);
@@ -231,7 +236,11 @@ const ProductDetail = () => {
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
               {similarProducts.map((sp) => (
-                <ProductCard key={sp._id} product={sp} />
+                <ProductCard
+                  key={sp._id}
+                  product={sp}
+                  isWishlisted={wishlistSet.has(sp._id.toString())}
+                />
               ))}
             </div>
           )}

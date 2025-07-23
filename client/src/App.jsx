@@ -35,15 +35,20 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 
+// reducers
+import { fetchWishlist } from "./store/wishlist-slice";
 
 const App = () => {
   const dispatch = useDispatch();
+  // Load the user
   const { isAuthenticated, user, isLoading } = useSelector(
     (state) => state.auth
   );
+  // Load the wishlist
 
   useEffect(() => {
     dispatch(checkAuth());
+    dispatch(fetchWishlist());
   }, [dispatch]);
 
   if (isLoading) return <Loader />;
@@ -79,14 +84,14 @@ const App = () => {
           </Route>
           {/* User pages */}
           <Route
-          path="/user"
+            path="/user"
             element={
               <CheckAuth isAuthenticated={isAuthenticated} user={user}>
                 <ShopLayout />
               </CheckAuth>
-            }>
-            <Route path="userAccount" element={<UserAccount/>}/>
-
+            }
+          >
+            <Route path="userAccount" element={<UserAccount />} />
           </Route>
 
           {/* Admin pages */}
