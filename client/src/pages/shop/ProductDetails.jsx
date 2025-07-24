@@ -217,9 +217,7 @@ const ProductDetail = () => {
               {/* Seller Info */}
               {seller && !sellerLoading && (
                 <div
-                  className={`flex items-center gap-4 bg-white rounded-lg p-4 shadow-inner
-                
-                `}
+                  className={`flex items-center gap-4 bg-white rounded-lg p-4 shadow-inner`}
                 >
                   <img
                     src={
@@ -231,13 +229,16 @@ const ProductDetail = () => {
                   />
                   <div>
                     <div className="text-base sm:text-lg font-semibold text-purple-800 flex items-center gap-2">
-                      <FaUserCircle /> {seller.name}
+                      <FaUserCircle /> {seller.userName}
                     </div>
                     <div className="text-gray-500 flex items-center gap-2 text-sm mt-1">
                       <FaEnvelope /> {seller.email}
                     </div>
                     <div className="text-gray-500 flex items-center gap-2 text-sm mt-1">
-                      <FaPhone /> {seller.phoneNumber}
+                      <FaPhone />{" "}
+                      {seller.phoneNumber
+                        ? seller.phoneNumber
+                        : "Not Available"}
                     </div>
                     <Link
                       to={`/user/${seller._id}`}
