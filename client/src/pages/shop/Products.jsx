@@ -24,13 +24,12 @@ const ShopProducts = () => {
   const [sortOption, setSortOption] = useState(""); //for the sorting
   const [showFilters, setShowFilters] = useState(false); //to open clode the sidebar
   const [filter, setFilter] = useState([]); //category filter
+  const [isFiltered, setIsFiltered] = useState(false); //this is used to toggle between the filter and the clear filter button in the header of the product
 
   // conver the wishlist array to set
   const wishlistSet = new Set(wishlist.map((product) => product._id));
 
-  const categories = [
-    ...Array.from(new Set(products.map((p) => p.category))),
-  ];
+  const categories = [...Array.from(new Set(products.map((p) => p.category)))];
   categories.sort();
 
   // get all the products
@@ -52,11 +51,11 @@ const ShopProducts = () => {
     localStorage.setItem(storage_name, JSON.stringify(filter));
   }, [filter]);
 
-  // const filteredProducts = products.filter(
-  //   (product) =>
-  //     (selectedCategory === "All" || product.category === selectedCategory) &&
-  //     product.title.toLowerCase().includes(search.toLowerCase())
-  // );
+  useEffect(() => {
+    if (search == "" && filter.length === 0 && sortOption === "") {
+      setIsFiltered(false);
+    } else setIsFiltered(true);
+  }, [search, filter, sortOption]);
 
   const filteredProducts =
     filter.length === 0
@@ -95,6 +94,12 @@ const ShopProducts = () => {
     setSearch("");
   };
 
+  // Handle the filter click button in the header/ toolbar
+  const handleFilterClick = () => {
+    if (isFiltered) return clearFilter();
+    setShowFilters(true);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-white to-purple-50 py-4  px-4 w-full relative">
       <div className="max-w-7xl mx-auto ">
@@ -110,11 +115,11 @@ const ShopProducts = () => {
           {/* Filter Button */}
           <div className="flex flex-1/2 justify-end">
             <button
-              onClick={() => setShowFilters(true)}
-              className="flex items-center text-sm text-violet-700 border border-violet-600 px-3 py-1 rounded-md shadow-sm hover:bg-violet-50 transition"
+              onClick={() => handleFilterClick()}
+              className={`flex items-center text-sm  border ${!isFiltered? "border-violet-600 text-violet-700" : "  border-red-600 text-red-700"} px-3 py-1 rounded-md shadow-sm hover:bg-violet-50 transition`}
             >
               <FaFilter className="mr-2" />
-              Filter
+              {!isFiltered ? "Filter" : "Clear Filter"}
             </button>
           </div>
         </div>
