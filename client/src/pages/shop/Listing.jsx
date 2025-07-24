@@ -4,6 +4,7 @@ import MylistingCard from "../../components/shop/MylistingCard";
 import { fetchMyListing, fetchAllProducts } from "../../store/product-slice";
 import { toast } from "sonner";
 import axios from "axios";
+import MyListingsEmpty from "@/components/shop/MyListingEmpty";
 import { useNavigate } from "react-router-dom";
 
 const ShopListing = () => {
@@ -50,6 +51,8 @@ const ShopListing = () => {
       toast.error("Failed to delete product", error);
     }
   };
+
+  if (myListing.length === 0) return <MyListingsEmpty />;
 
   return (
     <div className="block w-full min-h-screen">
