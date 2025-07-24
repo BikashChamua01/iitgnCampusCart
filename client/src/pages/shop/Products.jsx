@@ -29,7 +29,6 @@ const ShopProducts = () => {
   const wishlistSet = new Set(wishlist.map((product) => product._id));
 
   const categories = [
-    "All",
     ...Array.from(new Set(products.map((p) => p.category))),
   ];
   categories.sort();
