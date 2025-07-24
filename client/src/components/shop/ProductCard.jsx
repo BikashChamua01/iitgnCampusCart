@@ -4,10 +4,7 @@ import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addToWishlist, deleteFromWishlist } from "@/store/wishlist-slice";
 
-const ProductCard = ({
-  product,
-  isWishlisted,
-}) => {
+const ProductCard = ({ product, isWishlisted }) => {
   const {
     _id,
     title,

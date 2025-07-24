@@ -162,8 +162,6 @@ const login = async (req, res) => {
   }
 };
 
-
-
 const logout = (req, res) => {
   res.clearCookie("token").json({
     success: true,
@@ -171,5 +169,4 @@ const logout = (req, res) => {
   });
 };
 
-
-module.exports = { register, login, logout,};
+module.exports = { register, login, logout };

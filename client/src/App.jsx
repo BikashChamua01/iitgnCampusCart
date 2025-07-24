@@ -37,6 +37,7 @@ import { useDispatch } from "react-redux";
 
 // reducers
 import { fetchWishlist } from "./store/wishlist-slice";
+import { fetchAllProducts } from "./store/product-slice";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -49,6 +50,7 @@ const App = () => {
   useEffect(() => {
     dispatch(checkAuth());
     dispatch(fetchWishlist());
+    dispatch(fetchAllProducts());
   }, [dispatch]);
 
   if (isLoading) return <Loader />;

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAllProducts } from "../../store/product-slice";
 import { fetchWishlist } from "@/store/wishlist-slice";
 import ProductCard from "../../components/shop/ProductCard";
 import FilterSidebar from "@/utils/FilterSidebar";
@@ -32,11 +31,6 @@ const ShopProducts = () => {
   const categories = [...Array.from(new Set(products.map((p) => p.category)))];
   categories.sort();
 
-  // get all the products
-  useEffect(() => {
-    dispatch(fetchAllProducts());
-  }, [dispatch]);
-
   // Get the wishlist
   useEffect(() => {
     dispatch(fetchWishlist());
@@ -52,7 +46,7 @@ const ShopProducts = () => {
   }, [filter]);
 
   useEffect(() => {
-    if (search == "" && filter.length === 0 && sortOption === "") {
+    if (filter.length === 0 && sortOption === "") {
       setIsFiltered(false);
     } else setIsFiltered(true);
   }, [search, filter, sortOption]);
@@ -116,7 +110,11 @@ const ShopProducts = () => {
           <div className="flex flex-1/2 justify-end">
             <button
               onClick={() => handleFilterClick()}
-              className={`flex items-center text-sm  border ${!isFiltered? "border-violet-600 text-violet-700" : "  border-red-600 text-red-700"} px-3 py-1 rounded-md shadow-sm hover:bg-violet-50 transition`}
+              className={`flex items-center text-sm  border ${
+                !isFiltered
+                  ? "border-violet-600 text-violet-700"
+                  : "  border-red-600 text-red-700"
+              } px-3 py-1 rounded-md shadow-sm hover:bg-violet-50 transition`}
             >
               <FaFilter className="mr-2" />
               {!isFiltered ? "Filter" : "Clear Filter"}

@@ -144,7 +144,7 @@ const ProductDetail = () => {
                 alt={title}
                 className="rounded-xl w-full h-66 sm:h-80 object-contain"
               />
-              {originalPrice && (
+              {originalPrice !== 0 && (
                 <span className="absolute top-2 left-2 bg-red-500 text-white px-2 py-1 rounded-full text-xs font-semibold shadow">
                   {Math.round(((originalPrice - price) / originalPrice) * 100)}%
                   OFF
@@ -191,7 +191,7 @@ const ProductDetail = () => {
                   <span className="text-xl sm:text-2xl font-bold text-purple-700">
                     ₹{price}
                   </span>
-                  {originalPrice && (
+                  {originalPrice !== 0 && (
                     <span className="line-through text-gray-400 text-lg">
                       ₹{originalPrice}
                     </span>
@@ -252,9 +252,7 @@ const ProductDetail = () => {
             </motion.div>
 
             <button
-              className={`w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white px-5 py-3 rounded-xl font-semibold shadow hover:scale-105 transition-transform cursor-pointer 
-               
-              `}
+              className={`w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white px-5 py-3 rounded-xl font-semibold shadow hover:scale-105 transition-transform cursor-pointer`}
             >
               Add to Cart
             </button>
