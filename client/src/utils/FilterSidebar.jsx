@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from "react";
+// eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from "framer-motion";
 
 const FilterSidebar = ({ showFilters, setShowFilters, children }) => {
@@ -26,14 +27,14 @@ const FilterSidebar = ({ showFilters, setShowFilters, children }) => {
         <>
           {/* Backdrop */}
           <motion.div
-            className="fixed inset-0 z-40 bg-black/20 backdrop-blur-sm"
+            className="fixed inset-0 z-40 bg-black/20 backdrop-blur-sm "
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setShowFilters(false)}
             aria-hidden="true"
           />
-          
+
           {/* Sidebar */}
           <motion.div
             ref={sidebarRef}
@@ -41,7 +42,7 @@ const FilterSidebar = ({ showFilters, setShowFilters, children }) => {
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
-            className="fixed top-0 right-0 w-80 max-w-[90%] h-full bg-white shadow-xl border-l border-gray-200 p-6 z-50 overflow-y-auto"
+            className="fixed top-0 right-0 w-80 max-w-[90%] h-full bg-white shadow-xl border-l border-gray-200 p-6 z-50 overflow-y-auto shadow-sidebar"
             role="dialog"
             aria-modal="true"
             aria-labelledby="filter-sidebar-title"
