@@ -6,8 +6,6 @@ const ProductDetailsForm = ({ form, setForm }) => {
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
 
-
-
   return (
     <div className="flex flex-col gap-2">
       {/* Title */}

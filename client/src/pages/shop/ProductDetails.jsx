@@ -144,7 +144,7 @@ const ProductDetail = () => {
                 alt={title}
                 className="rounded-xl w-full h-66 sm:h-80 object-contain"
               />
-              {originalPrice && (
+              {originalPrice !== 0 && (
                 <span className="absolute top-2 left-2 bg-red-500 text-white px-2 py-1 rounded-full text-xs font-semibold shadow">
                   {Math.round(((originalPrice - price) / originalPrice) * 100)}%
                   OFF
@@ -191,7 +191,7 @@ const ProductDetail = () => {
                   <span className="text-xl sm:text-2xl font-bold text-purple-700">
                     ₹{price}
                   </span>
-                  {originalPrice && (
+                  {originalPrice !== 0 && (
                     <span className="line-through text-gray-400 text-lg">
                       ₹{originalPrice}
                     </span>
@@ -217,9 +217,7 @@ const ProductDetail = () => {
               {/* Seller Info */}
               {seller && !sellerLoading && (
                 <div
-                  className={`flex items-center gap-4 bg-white rounded-lg p-4 shadow-inner
-                
-                `}
+                  className={`flex items-center gap-4 bg-white rounded-lg p-4 shadow-inner`}
                 >
                   <img
                     src={
@@ -231,13 +229,16 @@ const ProductDetail = () => {
                   />
                   <div>
                     <div className="text-base sm:text-lg font-semibold text-purple-800 flex items-center gap-2">
-                      <FaUserCircle /> {seller.name}
+                      <FaUserCircle /> {seller.userName}
                     </div>
                     <div className="text-gray-500 flex items-center gap-2 text-sm mt-1">
                       <FaEnvelope /> {seller.email}
                     </div>
                     <div className="text-gray-500 flex items-center gap-2 text-sm mt-1">
-                      <FaPhone /> {seller.phoneNumber}
+                      <FaPhone />{" "}
+                      {seller.phoneNumber
+                        ? seller.phoneNumber
+                        : "Not Available"}
                     </div>
                     <Link
                       to={`/user/${seller._id}`}
@@ -251,9 +252,7 @@ const ProductDetail = () => {
             </motion.div>
 
             <button
-              className={`w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white px-5 py-3 rounded-xl font-semibold shadow hover:scale-105 transition-transform cursor-pointer 
-               
-              `}
+              className={`w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white px-5 py-3 rounded-xl font-semibold shadow hover:scale-105 transition-transform cursor-pointer`}
             >
               Add to Cart
             </button>

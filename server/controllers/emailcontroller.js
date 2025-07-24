@@ -2,6 +2,7 @@ const TEMPMAIL = require("../models/tempemail");
 const nodemailer = require("nodemailer");
 const bcrypt = require("bcrypt");
 require("dotenv").config();
+const { StatusCodes } = require("http-status-codes");
 
 const transport = nodemailer.createTransport({
   service: "Gmail",
@@ -98,5 +99,68 @@ const verifyCode = async (req, res) => {
 
   res.status(200).json({ success: true, msg: "Email verified successfully." });
 };
+
+const sendUserDeleteMessage = async (req, res) => {
+  try {
+    const { email, customMessage } = req.body;
+
+    await transport.sendMail({
+      to: email,
+      subject: "❗ IITGN CampusCart Account Deleted",
+      headers: {
+        "X-Priority": "1", // High priority
+        Importance: "high",
+      },
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; background-color: #f9f9f9; color: #333;">
+          <div style="text-align: center; margin-bottom: 20px;">
+            <img src="https://iitgn.ac.in/assets/img/lectures/ifdls/iitgn_logo.png" alt="IITGN Logo" style="height: 60px; margin-bottom: 8px;">
+          </div>
+
+          <div style="background-color: #ffffff; padding: 24px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+            <h2 style="color: #b30000; margin-top: 0;">Your IITGN CampusCart Account Has Been Deleted</h2>
+
+            <p style="font-size: 16px; line-height: 1.6;">
+              We would like to inform you that your account registered with <strong>${email}</strong> has been <strong>successfully deleted</strong> from <strong>IITGN CampusCart</strong>.
+            </p>
+
+            ${
+              customMessage
+                ? `<p style="font-size: 15px; color: #555; margin-top: 20px;"><em>${customMessage}</em></p>`
+                : ""
+            }
+
+            <p style="font-size: 16px; line-height: 1.6;">
+              If this was done in error or if you have any concerns, please reach out to our support team immediately.
+            </p>
+
+            <p style="margin-top: 24px; font-size: 16px;">
+              Thank you,<br>
+              <strong>IITGN CampusCart Team</strong>
+              <strong>iitgncampuscart@gmail.com</strong>
+            </p>
+          </div>
+
+          <div style="text-align: center; font-size: 13px; color: #999; margin-top: 20px;">
+            © ${new Date().getFullYear()} IITGN CampusCart. All rights reserved.
+          </div>
+        </div>
+      `,
+    });
+
+    res.status(200).json({
+      success: true,
+      msg: "User deletion email sent successfully.",
+    });
+  } catch (error) {
+    console.log("Error in sendUserDeleteMessage", error);
+    res.status(500).json({
+      success: false,
+      msg: "Unable to send user delete message",
+    });
+  }
+};
+
+
 
 module.exports = { sendVerificationCode, verifyCode };
