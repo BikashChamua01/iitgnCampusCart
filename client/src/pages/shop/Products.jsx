@@ -9,6 +9,9 @@ import { motion } from "framer-motion";
 import { FaBoxOpen, FaFilter, FaSearch } from "react-icons/fa";
 import Loader from "@/components/common/Loader";
 import { LayoutGrid, Rows3, List, ChevronDown, X } from "lucide-react";
+import { Filter } from "@/components/shop/Filter";
+import { Button } from "@/components/ui/button";
+import { SortDropDown } from "@/components/shop/Filter";
 
 const ShopProducts = () => {
   const dispatch = useDispatch();
@@ -17,6 +20,11 @@ const ShopProducts = () => {
   const { wishlist } = useSelector((state) => state.wishlist);
   const storage_name = "CAMPUSCART-FILTER";
 
+  const [search, setSearch] = useState(""); //for the search
+  const [sortOption, setSortOption] = useState(""); //for the sorting
+  const [showFilters, setShowFilters] = useState(false); //to open clode the sidebar
+  const [filter, setFilter] = useState([]); //category filter
+
   // conver the wishlist array to set
   const wishlistSet = new Set(wishlist.map((product) => product._id));
 
@@ -24,36 +32,45 @@ const ShopProducts = () => {
     "All",
     ...Array.from(new Set(products.map((p) => p.category))),
   ];
+  categories.sort();
 
-  const [search, setSearch] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("All");
-  const [sortOption, setSortOption] = useState("");
-  const [showFilters, setShowFilters] = useState(false);
-
+  // get all the products
   useEffect(() => {
     dispatch(fetchAllProducts());
   }, [dispatch]);
+
+  // Get the wishlist
   useEffect(() => {
     dispatch(fetchWishlist());
   }, [dispatch, user.userId]);
 
+  // to store the filter in the localestorage
   useEffect(() => {
     const data = localStorage.getItem(storage_name);
-    data ? setSelectedCategory(JSON.parse(data)) : setSelectedCategory("All");
+    data ? setFilter([...JSON.parse(data)]) : setFilter([]);
   }, []);
   useEffect(() => {
-    localStorage.setItem(storage_name, JSON.stringify(selectedCategory));
-  }, [selectedCategory]);
+    localStorage.setItem(storage_name, JSON.stringify(filter));
+  }, [filter]);
 
-  const filteredProducts = products.filter(
-    (product) =>
-      (selectedCategory === "All" || product.category === selectedCategory) &&
-      product.title.toLowerCase().includes(search.toLowerCase())
-  );
+  // const filteredProducts = products.filter(
+  //   (product) =>
+  //     (selectedCategory === "All" || product.category === selectedCategory) &&
+  //     product.title.toLowerCase().includes(search.toLowerCase())
+  // );
 
-  const handleFilter = (event) => {
-    setSelectedCategory(event.target.value);
-  };
+  const filteredProducts =
+    filter.length === 0
+      ? products.filter((product) =>
+          product.title.toLowerCase().includes(search.toLowerCase())
+        )
+      : products.filter((product) => {
+          const cat = product.category;
+          return (
+            (filter.indexOf("All") != -1 || filter.indexOf(cat) != -1) &&
+            product.title.toLowerCase().includes(search.toLowerCase())
+          );
+        });
 
   const sortedProducts = [...filteredProducts].sort((a, b) => {
     switch (sortOption) {
@@ -72,40 +89,30 @@ const ShopProducts = () => {
     }
   });
 
+  // Clear filter function
+  const clearFilter = () => {
+    setFilter([]);
+    setSortOption("");
+    setSearch("");
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-white to-purple-50 py-4  px-4 w-full relative">
       <div className="max-w-7xl mx-auto ">
         {/* Toolbar */}
-        <div className="flex flex-wrap items-center justify-between bg-white  py-2 px-4 md:px-10 mb-8 border-b-1 border-violet-100 md:gap-6 z-50">
-          {/* Sort Select (desktop) */}
-          <div className="hidden md:block text-sm text-violet-700 border border-violet-600 rounded-md overflow-hidden">
-            <select
-              className="bg-white text-sm rounded-md px-3 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-violet-400 focus:ring-offset-1 focus:ring-offset-white cursor-pointer transition"
-              value={sortOption}
-              name="sort"
-              onChange={(event) => setSortOption(event.target.value)}
-            >
-              <option value="">Sort By</option>
-              <option value="priceLowHigh">Price: Low to High</option>
-              <option value="priceHighLow">Price: High to Low</option>
-              <option value="newest">Newest</option>
-              <option value="oldest">Oldest</option>
-              {/* <option value="rating">Rating</option> */}
-            </select>
-          </div>
-
-          {/* Centered Product Count */}
-          <div className="flex-1 flex justify-center">
+        <div className="flex  items-center  bg-white  py-2 px-4 md:px-10 mb-8 border-b-1 border-violet-100 md:gap-6 z-50">
+          {/* Product Count */}
+          <div className="flex-1/2 flex justify-start">
             <div className="text-sm font-semibold text-violet-700 bg-violet-100/60 rounded-full px-5 py-1 shadow-inner select-none tracking-wide">
               {sortedProducts.length} PRODUCTS
             </div>
           </div>
 
           {/* Filter Button */}
-          <div>
+          <div className="flex flex-1/2 justify-end">
             <button
               onClick={() => setShowFilters(true)}
-              className="flex items-center text-sm text-violet-700 border border-violet-600 px-6 py-2 rounded-md shadow-sm hover:bg-violet-50 transition"
+              className="flex items-center text-sm text-violet-700 border border-violet-600 px-3 py-1 rounded-md shadow-sm hover:bg-violet-50 transition"
             >
               <FaFilter className="mr-2" />
               Filter
@@ -119,83 +126,66 @@ const ShopProducts = () => {
             showFilters={showFilters}
             setShowFilters={setShowFilters}
           >
-            <div>
-              <div className="flex justify-between items-center mb-6">
+            <div className="relative h-full flex flex-col w-full p-2 transition-all duration-300">
+              {/* Header */}
+              <div className="flex justify-between items-center mb-2 md:mb-8">
                 <h2
                   id="filter-sidebar-title"
-                  className="text-lg font-semibold text-violet-800"
+                  className="text-xl font-bold text-violet-800 tracking-tight"
                 >
                   Filters
                 </h2>
                 <button
                   onClick={() => setShowFilters(false)}
-                  className="text-gray-500 hover:text-gray-800 focus:outline-none"
+                  className="text-violet-400 hover:text-violet-700  rounded-full p-2 bg-violet-50 hover:bg-violet-100 shadow focus:ring-2 focus:ring-violet-200 transition cursor-pointer"
                   aria-label="Close filter sidebar"
                 >
-                  <X size={24} />
+                  <X size={26} />
                 </button>
               </div>
 
               {/* Filters */}
-              <div className="space-y-6">
+              <div className="space-y-3 md:space-y-8 flex-1">
                 {/* Search */}
                 <div>
                   <label
                     htmlFor="search-input"
-                    className="block text-sm font-medium text-gray-700"
+                    className="mb-2 text-md font-medium text-violet-700"
                   >
                     Search
                   </label>
-                  <div className="mt-1 flex items-center border border-gray-300 rounded-md px-3 py-2 focus-within:ring-2 focus-within:ring-violet-400 focus-within:border-violet-400 transition">
-                    <FaSearch className="text-gray-400 mr-2 flex-shrink-0" />
+                  <div className="flex items-center gap-2 rounded-xl px-4 py-2 border border-gray-200 hover:border-violet-300 bg-white/90 shadow-inner focus-within:ring-2 focus-within:ring-violet-200 transition mt-1">
+                    <FaSearch className="text-violet-300 transition group-hover:text-violet-500" />
                     <input
                       id="search-input"
                       type="text"
                       value={search}
                       onChange={(e) => setSearch(e.target.value)}
                       placeholder="Search products..."
-                      className="w-full bg-transparent outline-none text-sm text-gray-900"
+                      className="w-full bg-transparent outline-none border-none text-base text-gray-800 placeholder-gray-400 focus:placeholder-violet-300 transition "
+                      autoComplete="off"
+                      spellCheck={false}
                     />
                   </div>
                 </div>
 
-                {/* Category */}
+                {/* Sort */}
                 <div>
                   <label
-                    htmlFor="category-select"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Category
-                  </label>
-                  <select
-                    id="category-select"
-                    className="mt-1 block w-full border border-gray-300 rounded-md p-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-violet-400 focus:border-violet-400 transition cursor-pointer"
-                    value={selectedCategory}
-                    onChange={(e) => handleFilter(e)}
-                  >
-                    {categories.map((cat) => (
-                      <option key={cat} value={cat}>
-                        {cat}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                {/* Sort for mobile only */}
-                <div className="md:hidden">
-                  <label
                     htmlFor="sort-select-mobile"
-                    className="block text-sm font-medium text-gray-700"
+                    className="mb-2 text-md font-medium text-violet-700"
                   >
                     Sort
                   </label>
                   <select
                     id="sort-select-mobile"
-                    className="mt-1 block w-full border border-gray-300 rounded-md px-5 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-violet-400 focus:border-violet-400 transition cursor-pointer"
                     value={sortOption}
                     onChange={(e) => setSortOption(e.target.value)}
+                    className="block w-full rounded-xl px-4 py-2 bg-white/90 text-gray-800 border border-gray-200 hover:border-violet-500 shadow-inner focus:outline-none focus:ring-2 focus:ring-violet-200 focus:border-violet-300 transition cursor-pointer mt-1 appearance-none pr-10"
                   >
-                    <option value="">Sort By</option>
+                    <option value="" className="font-extralight">
+                      Sort By
+                    </option>
                     <option value="priceLowHigh">Price: Low to High</option>
                     <option value="priceHighLow">Price: High to Low</option>
                     <option value="newest">Newest</option>
@@ -203,7 +193,26 @@ const ShopProducts = () => {
                     <option value="rating">Rating</option>
                   </select>
                 </div>
+
+                {/* <SortDropDown
+                  sortOption={sortOption}
+                  setSortOption={setSortOption}
+                /> */}
+
+                {/* Category section */}
+                <div>
+                  <Filter
+                    categories={categories}
+                    filter={filter}
+                    setFilter={setFilter}
+                  />
+                </div>
               </div>
+
+              {/* Clear Filter Button */}
+              <Button className="custom-button" onClick={() => clearFilter()}>
+                Clear Filter
+              </Button>
             </div>
           </FilterSidebar>
         )}
