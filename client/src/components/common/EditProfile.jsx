@@ -29,7 +29,7 @@ const EditProfile = ({ user }) => {
         ...form,
         [name]: value,
       },
-      "editProfile"
+      "updateProfile"
     );
     setErrors(allErrors);
     console.log("Form Errors:", allErrors);
