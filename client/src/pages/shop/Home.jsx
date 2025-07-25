@@ -92,7 +92,7 @@ const Home = () => {
       </section>
 
       {/* Shop by Categories */}
-      <section className="w-full max-w-7xl mx-auto mt-10 px-4 md:px-6 py-10 bg-violet-50/40 rounded-3xl ">
+      <section className="w-full max-w-8xl mx-auto mt-10 px-4 md:px-15 py-8 bg-violet-50/50 rounded-3xl ">
         <motion.h3
           className="text-2xl md:text-3xl font-extrabold mb-8 text-violet-700 text-center tracking-wide"
           variants={sectionTitleVariants}

@@ -13,7 +13,7 @@ const RecentProductCard = ({ product }) => {
     if (hovering && images.length > 1) {
       slideIntervalRef.current = setInterval(() => {
         setCurrentIndex((prev) => (prev + 1) % images.length);
-      }, 2500);
+      }, 1500);
     } else {
       setCurrentIndex(0);
       if (slideIntervalRef.current) {
@@ -58,15 +58,15 @@ const RecentProductCard = ({ product }) => {
           )}
         </div>
 
-        <div className="p-4 flex flex-col space-y-1">
+        <div className="p-4 flex flex-col space-y-1 text-xs">
           <h3
             className="text-lg font-semibold text-violet-800 truncate"
             title={title}
           >
             {title}
           </h3>
-          <div className="flex gap-1 mt-3 flex-wrap text-sm">
-            <span className="flex items-center bg-purple-100 text-purple-700 px-2 py-1 rounded-full font-medium text-sm">
+          <div className="flex gap-1 mt-3 flex-wrap text-xs">
+            <span className="flex items-center bg-purple-100 text-purple-700 px-2 py-1 rounded-full font-medium text-xs">
               <FaTag className="mr-1" /> {category}
             </span>
             <span
