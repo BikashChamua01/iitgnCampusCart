@@ -11,6 +11,9 @@ import { useDispatch } from "react-redux";
 import { toast } from "sonner";
 import EditProfile from "@/components/common/EditProfile";
 import ChangePassword from "@/components/common/ChangePassword";
+import Wishlist from "../shop/Wishlist";
+import { User, Lock, Pencil, Heart } from "lucide-react";
+
 
 const UserAccount = () => {
   const [user, setUser] = useState(null);
@@ -44,14 +47,15 @@ const UserAccount = () => {
   return (
     <div className="w-full min-h-screen p-4 sm:p-8 bg-gray-">
       <Tabs defaultValue="profile" className="w-full max-w-6xl mx-auto">
-        <TabsList className="grid w-full grid-cols-3 mb-6">
+        <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 gap-4 mb-16 md:mb-6 ">
           <TabsTrigger
             value="profile"
             className="relative data-[state=active]:after:content-[''] data-[state=active]:after:absolute data-[state=active]:after:bottom-0 data-[state=active]:after:left-0 data-[state=active]:after:w-full data-[state=active]:after:h-[3px] data-[state=active]:after:rounded-2xl data-[state=active]:after:bg-gray-relative 
 after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-[3px] after:w-full after:rounded-2xl 
 after:bg-gray-700 after:scale-x-0 after:origin-left after:transition-transform after:duration-300 
-data-[state=active]:after:scale-x-100"
+data-[state=active]:after:scale-x-100  shadow-sm"
           >
+            <User className="w-4 h-4" />
             Profile
           </TabsTrigger>
           <TabsTrigger
@@ -59,8 +63,9 @@ data-[state=active]:after:scale-x-100"
             className="relative data-[state=active]:after:content-[''] data-[state=active]:after:absolute data-[state=active]:after:bottom-0 data-[state=active]:after:left-0 data-[state=active]:after:w-full data-[state=active]:after:h-[3px] data-[state=active]:after:rounded-2xl data-[state=active]:after:bg-gray-relative 
 after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-[3px] after:w-full after:rounded-2xl 
 after:bg-gray-700 after:scale-x-0 after:origin-left after:transition-transform after:duration-300 
-data-[state=active]:after:scale-x-100"
+data-[state=active]:after:scale-x-100 shadow-sm"
           >
+             <Lock className="w-4 h-4" />
             Change Password
           </TabsTrigger>
           <TabsTrigger
@@ -68,9 +73,20 @@ data-[state=active]:after:scale-x-100"
             className="relative data-[state=active]:after:content-[''] data-[state=active]:after:absolute data-[state=active]:after:bottom-0 data-[state=active]:after:left-0 data-[state=active]:after:w-full data-[state=active]:after:h-[3px] data-[state=active]:after:rounded-2xl data-[state=active]:after:bg-gray-relative 
 after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-[3px] after:w-full after:rounded-2xl 
 after:bg-gray-700 after:scale-x-0 after:origin-left after:transition-transform after:duration-300 
-data-[state=active]:after:scale-x-100"
+data-[state=active]:after:scale-x-100 shadow-sm"
           >
+            <Pencil className="w-4 h-4" />
             Edit Profile
+          </TabsTrigger>
+          <TabsTrigger
+            value="wishlist"
+            className="relative data-[state=active]:after:content-[''] data-[state=active]:after:absolute data-[state=active]:after:bottom-0 data-[state=active]:after:left-0 data-[state=active]:after:w-full data-[state=active]:after:h-[3px] data-[state=active]:after:rounded-2xl data-[state=active]:after:bg-gray-relative 
+after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-[3px] after:w-full after:rounded-2xl 
+after:bg-gray-700 after:scale-x-0 after:origin-left after:transition-transform after:duration-300 
+data-[state=active]:after:scale-x-100 shadow-sm"
+          >
+            <Heart className="w-4 h-4" />
+           Wishlist
           </TabsTrigger>
         </TabsList>
 
@@ -125,6 +141,10 @@ data-[state=active]:after:scale-x-100"
 
         {/* Edit Profile Tab */}
         <EditProfile user={user} />
+
+        {/* users Wishlist
+         */}
+         <Wishlist user={user}/>
       </Tabs>
     </div>
   );
