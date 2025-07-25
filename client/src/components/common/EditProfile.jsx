@@ -99,7 +99,6 @@ const EditProfile = ({ user }) => {
           withCredentials: true,
         }
       );
-
       toast.success("Profile updated successfully!");
     } catch (error) {
       console.error(error);

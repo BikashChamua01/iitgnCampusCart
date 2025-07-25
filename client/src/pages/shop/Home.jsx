@@ -85,7 +85,7 @@ const Home = () => {
   };
 
   return (
-    <main className="min-h-screen w-full pt-6 pb-16 ">
+    <main className="min-h-screen w-full pt-6 pb-16 px-2">
       {/* Banner Carousel */}
       <section className="w-full  mx-auto md:px-6">
         <ImageCarousel />
