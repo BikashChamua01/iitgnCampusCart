@@ -1,8 +1,8 @@
-import React from "react";
 import { FaRupeeSign, FaStar, FaHeart } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addToWishlist, deleteFromWishlist } from "@/store/wishlist-slice";
+import BuyRequestDialogBox from "./BuyRequestDialogBox";
 
 const ProductCard = ({ product, isWishlisted }) => {
   const {
@@ -134,11 +134,12 @@ const ProductCard = ({ product, isWishlisted }) => {
               </span>
             )}
           </div>
-          <div className="flex gap-1 mt-2">
-            <button className="custom-button">View Details</button>
-          </div>
         </div>
       </Link>
+
+      <div className="flex gap-1 m-2">
+        <BuyRequestDialogBox imageUrl={imageUrl} product={product} />
+      </div>
     </div>
   );
 };
