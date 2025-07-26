@@ -29,13 +29,24 @@ const markInterested = async (req, res) => {
       });
     }
 
-    const buyerIndex = interestedBuyers.buyers.findIndex(
-      (buyer) => buyer.buyerId === buyerId
-    );
+//check if it is seller 
+     if(sellerId.toString()===buyerId.toString()){
+      return res.status(StatusCodes.OK).json({
+        success: false,
+        msg: "You are seller of this Product!",
+        data: interestedBuyers,
+      });
 
+     }
+
+
+    const buyerIndex = interestedBuyers.buyers.findIndex(
+      (buyer) => buyer.buyerId.toString() === buyerId.toString()
+    );
+    
     if (buyerIndex !== -1) {
       return res.status(StatusCodes.OK).json({
-        success: true,
+        success: false,
         msg: "Product already marked as interested",
         data: interestedBuyers,
       });
@@ -62,12 +73,16 @@ const markInterested = async (req, res) => {
 const getBuyRequests = async (req, res) => {
   try {
     const { userId, isAdmin } = req.user;
-    const { productId, sellerId } = req.body;
-    if (userId.toString() != sellerId.toString() && !isAdmin)
-      return res.status(StatusCodes.UNAUTHORIZED).json({
-        success: false,
-        msg: "You are not authorized to access this ",
-      });
+    const { productId, sellerId } = req.query;
+    console.log(req.user);
+    console.log(req.query);
+    
+    
+    // if (userId.toString() != sellerId.toString() && !isAdmin)
+    //   return res.status(StatusCodes.UNAUTHORIZED).json({
+    //     success: false,
+    //     msg: "You are not authorized to access this ",
+    //   });
 
     // Check for the product
     const product = await Product.findById(productId);
