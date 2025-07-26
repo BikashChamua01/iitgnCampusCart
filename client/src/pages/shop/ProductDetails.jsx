@@ -15,6 +15,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllProducts } from "../../store/product-slice";
 import ProductCard from "../../components/shop/ProductCard";
+import BuyRequestDialogBox from "@/components/shop/BuyRequestDialogBox";
 import { addToWishlist, deleteFromWishlist } from "@/store/wishlist-slice";
 
 const ProductDetail = () => {
@@ -251,11 +252,10 @@ const ProductDetail = () => {
               )}
             </motion.div>
 
-            <button
-              className={`w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white px-5 py-3 rounded-xl font-semibold shadow hover:scale-105 transition-transform cursor-pointer`}
-            >
-              Add to Cart
-            </button>
+            <BuyRequestDialogBox
+              product={product}
+              imageUrl={product?.images[0]?.url}
+            />
           </div>
         </div>
 

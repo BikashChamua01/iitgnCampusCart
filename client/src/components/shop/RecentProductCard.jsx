@@ -65,8 +65,8 @@ const RecentProductCard = ({ product }) => {
           >
             {title}
           </h3>
-          <div className="flex gap-1 mt-3 flex-wrap text-xs">
-            <span className="flex items-center bg-purple-100 text-purple-700 px-2 py-1 rounded-full font-medium text-xs">
+          <div className=" flex-row sm:flex gap-1 mt-3 flex-wrap text-xs">
+            <span className="flex items-center bg-purple-100 text-purple-700 px-2 py-1 rounded-full font-medium text-xs my-1">
               <FaTag className="mr-1" /> {category}
             </span>
             <span

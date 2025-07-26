@@ -27,12 +27,11 @@ const UserAccount = () => {
   } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    // Replace this URL with your actual API endpoint
     axios
       .get(`/api/v1/users/userProfile/${userDetails.userId}`)
       .then((res) => setUser(res.data.user))
       .catch((err) => console.error("Failed to fetch user:", err));
-  }, []);
+  }, [userDetails.userId]);
 
   if (!user) {
     return (
@@ -41,8 +40,6 @@ const UserAccount = () => {
       </div>
     );
   }
-  console.log("User Details:", userDetails);
-  console.log("user State:", user);
 
   return (
     <div className="w-full min-h-screen p-4 sm:p-8 bg-gray-">
