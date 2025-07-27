@@ -17,19 +17,19 @@ const InterestedBuyersDialogBox = ({ productId }) => {
   const [open, setOpen] = useState(false);
   const [buyers, setBuyers] = useState([]);
   const [loading, setLoading] = useState(false);
-  const user = useSelector((state) => state.auth);
+  const { user } = useSelector((state) => state.auth);
 
   useEffect(() => {
     const fetchBuyers = async () => {
       if (!open || !productId) return;
       setLoading(true);
       try {
+        console.log(user.userId);
         const res = await axios.get(`/api/v1/interested/get-buy-requests`, {
           params: { productId, sellerId: user.userId },
           withCredentials: true,
         });
         const data = res.data;
-        console.log("we recieved", data);
         if (data?.success) {
           setBuyers(data.buyRequests || []);
         } else {
@@ -95,9 +95,13 @@ const InterestedBuyersDialogBox = ({ productId }) => {
                     className="border border-gray-300 rounded-lg p-3 bg-gray-50 text-sm shadow-sm"
                   >
                     <p className="font-semibold text-violet-700">
-                      {buyer.name || "Unknown Buyer"}
+                      {buyer.buyer.userName || "Unknown Buyer"}
                     </p>
-                    <p className="text-gray-600 text-xs">{buyer.email}</p>
+                    <p className="text-gray-600 text-xs">{buyer.buyer.email}</p>
+                    <p className="text-gray-600 text-xs">
+                      {buyer.buyer.phoneNumber}
+                    </p>
+
                     <p className="mt-2 text-gray-800">{buyer.buyerMessage}</p>
                   </div>
                 ))

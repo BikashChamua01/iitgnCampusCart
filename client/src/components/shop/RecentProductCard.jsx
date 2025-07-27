@@ -64,7 +64,9 @@ const RecentProductCard = ({ product, wishlist = false }) => {
             >
               <FaHeart
                 className={`w-5 h-5 transition-colors duration-300 ${
-                  isWishlisted ? "text-red-600" : "text-gray-400 hover:text-red-400"
+                  isWishlisted
+                    ? "text-red-600"
+                    : "text-gray-400 hover:text-red-400"
                 }`}
               />
             </button>
@@ -76,7 +78,9 @@ const RecentProductCard = ({ product, wishlist = false }) => {
               src={imgObj?.url}
               alt={`${title} ${idx + 1}`}
               className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ease-in-out ${
-                idx === currentIndex ? "opacity-100" : "opacity-0 pointer-events-none"
+                idx === currentIndex
+                  ? "opacity-100"
+                  : "opacity-0 pointer-events-none"
               }`}
               loading="lazy"
               draggable={false}
@@ -91,7 +95,10 @@ const RecentProductCard = ({ product, wishlist = false }) => {
         </div>
 
         <div className="p-4 flex flex-col space-y-1 text-xs">
-          <h3 className="text-lg font-semibold text-violet-800 truncate" title={title}>
+          <h3
+            className="text-lg font-semibold text-violet-800 truncate"
+            title={title}
+          >
             {title}
           </h3>
           <div className=" flex-row sm:flex gap-1 mt-3 flex-wrap text-xs">
@@ -99,10 +106,16 @@ const RecentProductCard = ({ product, wishlist = false }) => {
               <FaTag className="mr-1" /> {category}
             </span>
             <span
-              className={`flex items-center px-3 py-1 rounded-full font-medium
+              className={`flex items-center  px-2 py-1 rounded-full font-medium text-xs my-1
                 ${condition === "Poor" ? "text-red-600 bg-red-300" : ""}
                 ${condition === "Fair" ? "text-yellow-700 bg-yellow-100" : ""}
-                ${["Good", "Excellent"].includes(condition) ? "text-green-700 bg-green-100" : ""}
+                ${condition === "New" ? "text-blue-700 bg-blue-100" : ""}
+                ${condition === "Like New" ? "text-blue-700 bg-sky-300" : ""}
+                ${
+                  ["Good", "Excellent"].includes(condition)
+                    ? "text-green-700 bg-green-100"
+                    : ""
+                }
               `}
             >
               <FaCheckCircle className="mr-1" /> {condition}
