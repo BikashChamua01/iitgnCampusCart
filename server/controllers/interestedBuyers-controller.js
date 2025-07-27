@@ -2,6 +2,7 @@ const { StatusCodes } = require("http-status-codes");
 const Product = require("../models/product");
 const User = require("../models/user");
 const InterestedBuyers = require("../models/interestedBuyers");
+const Wishlist = require("../models/wishlist");
 
 const markInterested = async (req, res) => {
   try {
@@ -52,6 +53,25 @@ const markInterested = async (req, res) => {
     interestedBuyers.buyers.push({ buyer: buyerId, buyerMessage });
 
     await interestedBuyers.save();
+
+    // also insert the product id in the interests
+    let wishlist = await Wishlist.findOne({ userId: buyerId });
+    if (!wishlist) {
+      // make a new wishlist
+      wishlist = new Wishlist({
+        userId: buyerId,
+        products: [],
+        interests: [],
+      });
+    }
+
+    const productIndexInInterests = wishlist.interests.findIndex(
+      (pid) => pid.toString() === productId.toString()
+    );
+
+    if (productIndexInInterests === -1) wishlist.interests.push(productId);
+
+    await wishlist.save();
 
     return res.status(StatusCodes.OK).json({
       success: true,
