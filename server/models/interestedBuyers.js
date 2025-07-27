@@ -2,13 +2,6 @@ const mongoose = require("mongoose");
 
 const interestedBuyerSchema = mongoose.Schema(
   {
-    sellerId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
-    },
-    products: [
-      {
         productId: {
           type: mongoose.Schema.Types.ObjectId,
           ref: "Product",
@@ -27,8 +20,6 @@ const interestedBuyerSchema = mongoose.Schema(
           },
         ],
       },
-    ],
-  },
   { timestamps: true }
 );
 

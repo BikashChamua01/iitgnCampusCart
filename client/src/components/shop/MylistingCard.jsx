@@ -3,6 +3,8 @@ import React from "react";
 import { motion } from "framer-motion";
 import DeleteConfirmDialog from "./DeleteProductDialogButton";
 import { Link } from "react-router-dom";
+import InterestedBuyersDialogBox from "./InterestedBuyersDialogBox";
+import { User } from "lucide-react";
 
 const MyListingCard = ({ product, onEdit, onDelete, isAdmin }) => {
   const {
@@ -28,7 +30,7 @@ const MyListingCard = ({ product, onEdit, onDelete, isAdmin }) => {
         scale: 1.01,
         boxShadow: "0 2px 20px 0 rgba(168, 85, 247, 0.25)",
       }}
-      className="relative bg-white rounded-xl shadow-lg p-4 sm:p-5 overflow-visible mt-16 sm:mt-20 self-center mx-7 lg:mx-0 transition-all duration-300 ease-in-out hover:shadow-purple-400/40 cursor-pointer h-62"
+      className="relative bg-white rounded-xl shadow-lg p-4 sm:p-5 overflow-visible mt-16 sm:mt-20 self-center mx-7 lg:mx-0 transition-all duration-300 ease-in-out hover:shadow-purple-400/40 cursor-pointer h-80"
     >
       {/* Image and content go inside Link */}
       <Link
@@ -47,6 +49,7 @@ const MyListingCard = ({ product, onEdit, onDelete, isAdmin }) => {
             className="w-30 h-30 sm:w-34 sm:h-34 rounded-full object-cover border-4 border-purple-200 shadow-md transition-all duration-300 group-hover:shadow-purple-300"
           />
         </div>
+        
 
         {/* Content */}
         <div className="mt-12 flex flex-col justify-between">
@@ -72,11 +75,13 @@ const MyListingCard = ({ product, onEdit, onDelete, isAdmin }) => {
               </span>
             )}
           </div>
+
         </div>
       </Link>
 
       {/* Action buttons (Edit & Delete) outside the Link */}
-      <div className="absolute bottom-3 right-3 left-3 flex gap-2 mt-2">
+      <div>
+      <div className=" bottom-3 right-3 left-3 flex gap-2 mt-2 mb-5">
         <motion.button
           whileHover={{
             scale: 1.06,
@@ -89,6 +94,9 @@ const MyListingCard = ({ product, onEdit, onDelete, isAdmin }) => {
           Edit
         </motion.button>
         <DeleteConfirmDialog onConfirm={() => onDelete(productId)} />
+          
+      </div>
+      <InterestedBuyersDialogBox productId={product._id} />
       </div>
     </motion.div>
   );

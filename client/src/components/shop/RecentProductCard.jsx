@@ -1,13 +1,31 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
-import { FaTag, FaCheckCircle } from "react-icons/fa";
+import { FaTag, FaCheckCircle, FaHeart } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
+import { addToWishlist, deleteFromWishlist } from "@/store/wishlist-slice";
 
-const RecentProductCard = ({ product }) => {
+const RecentProductCard = ({ product, wishlist = false }) => {
   const { _id, title, images = [], category, condition } = product;
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [hovering, setHovering] = useState(false);
   const slideIntervalRef = useRef(null);
+
+  const dispatch = useDispatch();
+  const { wishlist: wishlistItems } = useSelector((state) => state.wishlist);
+  const wishlistSet = new Set(wishlistItems.map((item) => item._id));
+  const isWishlisted = wishlistSet.has(_id.toString());
+
+  const handleWishlistToggle = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    if (isWishlisted) {
+      dispatch(deleteFromWishlist(_id));
+    } else {
+      dispatch(addToWishlist(_id));
+    }
+  };
 
   useEffect(() => {
     if (hovering && images.length > 1) {
@@ -37,20 +55,34 @@ const RecentProductCard = ({ product }) => {
         tabIndex={0}
       >
         <div className="relative w-full h-56 overflow-hidden rounded-t-2xl bg-violet-50">
+          {/* Wishlist Heart Icon (toggleable) */}
+          {wishlist && (
+            <button
+              onClick={handleWishlistToggle}
+              className="absolute top-2 right-2 bg-white bg-opacity-80 p-1 rounded-full shadow-md z-10"
+              aria-label="Toggle Wishlist"
+            >
+              <FaHeart
+                className={`w-5 h-5 transition-colors duration-300 ${
+                  isWishlisted ? "text-red-600" : "text-gray-400 hover:text-red-400"
+                }`}
+              />
+            </button>
+          )}
+
           {images.map((imgObj, idx) => (
             <img
               key={idx}
               src={imgObj?.url}
               alt={`${title} ${idx + 1}`}
               className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ease-in-out ${
-                idx === currentIndex
-                  ? "opacity-100"
-                  : "opacity-0 pointer-events-none"
+                idx === currentIndex ? "opacity-100" : "opacity-0 pointer-events-none"
               }`}
               loading="lazy"
               draggable={false}
             />
           ))}
+
           {images.length === 0 && (
             <div className="flex items-center justify-center h-full text-violet-200 select-none">
               No Image
@@ -59,10 +91,7 @@ const RecentProductCard = ({ product }) => {
         </div>
 
         <div className="p-4 flex flex-col space-y-1 text-xs">
-          <h3
-            className="text-lg font-semibold text-violet-800 truncate"
-            title={title}
-          >
+          <h3 className="text-lg font-semibold text-violet-800 truncate" title={title}>
             {title}
           </h3>
           <div className=" flex-row sm:flex gap-1 mt-3 flex-wrap text-xs">
@@ -70,18 +99,11 @@ const RecentProductCard = ({ product }) => {
               <FaTag className="mr-1" /> {category}
             </span>
             <span
-              className={`flex items-center bg-green-100 text-green-700 px-3 py-1 rounded-full font-medium
-                              ${
-                                condition == "Poor"
-                                  ? "text-red-600 bg-red-300"
-                                  : ""
-                              }
-                              ${
-                                condition == "Fair"
-                                  ? "text-yellow-700 bg-yellow-100"
-                                  : ""
-                              }
-                              `}
+              className={`flex items-center px-3 py-1 rounded-full font-medium
+                ${condition === "Poor" ? "text-red-600 bg-red-300" : ""}
+                ${condition === "Fair" ? "text-yellow-700 bg-yellow-100" : ""}
+                ${["Good", "Excellent"].includes(condition) ? "text-green-700 bg-green-100" : ""}
+              `}
             >
               <FaCheckCircle className="mr-1" /> {condition}
             </span>
