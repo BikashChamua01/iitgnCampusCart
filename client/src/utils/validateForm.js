@@ -20,7 +20,7 @@ export function validateForm(
     }
 
     if (!phoneNumber?.trim()) {
-      errors.phoneNumber = "Phone number is required";
+      errors.phoneNumber = "";
     } else if (
       !/^(\+91[\-\s]?|91[\-\s]?|0)?[6-9]\d{9}$/.test(phoneNumber.trim())
     ) {

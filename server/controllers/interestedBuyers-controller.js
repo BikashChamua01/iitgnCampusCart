@@ -21,43 +21,38 @@ const markInterested = async (req, res) => {
     const sellerId = product.seller;
 
     // Fetch or create InterestedBuyers document for the seller
-    let interestedBuyers = await InterestedBuyers.findOne({ sellerId });
+    let interestedBuyers = await InterestedBuyers.findOne({ productId });
     if (!interestedBuyers) {
       interestedBuyers = new InterestedBuyers({
-        sellerId,
-        products: [],
-      });
-    }
-
-    // Check if product is already tracked in this document
-    const productIndex = interestedBuyers.products.findIndex((p) =>
-      p.productId.equals(productId)
-    );
-
-    if (productIndex === -1) {
-      // First time product interest — add product and buyer
-      interestedBuyers.products.push({
         productId,
-        buyers: [{ buyerId, buyerMessage }],
+        buyers: [],
       });
-    } else {
-      // Product already exists, check if buyer is already marked
-      const existingBuyers = interestedBuyers.products[productIndex].buyers;
-
-      const buyerIndex = existingBuyers.findIndex(
-        (buyer) => buyer.buyerId.toString() === buyerId.toString()
-      );
-
-      if (buyerIndex !== -1) {
-        return res.status(StatusCodes.CONFLICT).json({
-          success: false,
-          msg: "Already marked interested",
-        });
-      }
-
-      // Add new buyer to the existing product
-      existingBuyers.push({ buyerId, buyerMessage });
     }
+
+//check if it is seller 
+     if(sellerId.toString()===buyerId.toString()){
+      return res.status(StatusCodes.OK).json({
+        success: false,
+        msg: "You are seller of this Product!",
+        data: interestedBuyers,
+      });
+
+     }
+
+
+    const buyerIndex = interestedBuyers.buyers.findIndex(
+      (buyer) => buyer.buyerId.toString() === buyerId.toString()
+    );
+    
+    if (buyerIndex !== -1) {
+      return res.status(StatusCodes.OK).json({
+        success: false,
+        msg: "Product already marked as interested",
+        data: interestedBuyers,
+      });
+    }
+
+    interestedBuyers.buyers.push({ buyerId, buyerMessage });
 
     await interestedBuyers.save();
 
@@ -78,13 +73,18 @@ const markInterested = async (req, res) => {
 const getBuyRequests = async (req, res) => {
   try {
     const { userId, isAdmin } = req.user;
-    const { productId, sellerId } = req.body;
-    if (userId.toString() != sellerId.toString() && !isAdmin)
-      return res.status(StatusCodes.UNAUTHORIZED).json({
-        success: false,
-        msg: "You are not authorized to access this ",
-      });
+    const { productId, sellerId } = req.query;
+    console.log(req.user);
+    console.log(req.query);
+    
+    
+    // if (userId.toString() != sellerId.toString() && !isAdmin)
+    //   return res.status(StatusCodes.UNAUTHORIZED).json({
+    //     success: false,
+    //     msg: "You are not authorized to access this ",
+    //   });
 
+    // Check for the product
     const product = await Product.findById(productId);
     if (!product) {
       return res.status(StatusCodes.BAD_REQUEST).json({
@@ -93,23 +93,18 @@ const getBuyRequests = async (req, res) => {
       });
     }
 
-    const requests = await InterestedBuyers.findOne({ sellerId });
-    //     Now find that particular product in the requests
-    const productIndex = requests.products.findIndex(
-      (product) => product.productId.toString() === productId.toString()
-    );
+    const product_of_interest = await InterestedBuyers.findOne({ productId });
 
-    if (productIndex === -1 || requests.products.length === 0)
+    if (!product_of_interest || product_of_interest?.buyers.length == 0) {
       return res.status(StatusCodes.OK).json({
         success: true,
-        msg: "No users has shown interested for this product",
-        buyRequests: [],
+        msg: "No interested Users currently",
       });
-
+    }
     return res.status(StatusCodes.OK).json({
       success: true,
-      msg: `${requests.products[productIndex].buyers.length} user(s) have shown interest to your product`,
-      buyRequests: [...requests.products[productIndex].buyers],
+      msg: `${product_of_interest.buyers.length} user(s) have shown interest to your product`,
+      buyRequests: [...product_of_interest.buyers],
     });
   } catch (error) {
     console.error("Error in markInterested:", error);
