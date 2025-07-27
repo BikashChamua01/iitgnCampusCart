@@ -2,24 +2,24 @@ const mongoose = require("mongoose");
 
 const interestedBuyerSchema = mongoose.Schema(
   {
-        productId: {
+    productId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Product",
+      required: true,
+    },
+    buyers: [
+      {
+        buyer: {
           type: mongoose.Schema.Types.ObjectId,
-          ref: "Product",
+          ref: "User",
           required: true,
         },
-        buyers: [
-          {
-            buyerId: {
-              type: mongoose.Schema.Types.ObjectId,
-              ref: "User",
-              required: true,
-            },
-            buyerMessage: {
-              type: String,
-            },
-          },
-        ],
+        buyerMessage: {
+          type: String,
+        },
       },
+    ],
+  },
   { timestamps: true }
 );
 

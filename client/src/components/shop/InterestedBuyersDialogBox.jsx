@@ -95,9 +95,13 @@ const InterestedBuyersDialogBox = ({ productId }) => {
                     className="border border-gray-300 rounded-lg p-3 bg-gray-50 text-sm shadow-sm"
                   >
                     <p className="font-semibold text-violet-700">
-                      {buyer.name || "Unknown Buyer"}
+                      {buyer.buyer.userName || "Unknown Buyer"}
                     </p>
-                    <p className="text-gray-600 text-xs">{buyer.email}</p>
+                    <p className="text-gray-600 text-xs">{buyer.buyer.email}</p>
+                    <p className="text-gray-600 text-xs">
+                      {buyer.buyer.phoneNumber}
+                    </p>
+
                     <p className="mt-2 text-gray-800">{buyer.buyerMessage}</p>
                   </div>
                 ))

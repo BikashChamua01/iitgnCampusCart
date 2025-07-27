@@ -55,7 +55,7 @@ const ProductCard = ({ product, isWishlisted }) => {
   };
 
   return (
-    <div className="group block bg-white rounded-xl  p-1  overflow-hidden shadow-lg hover:shadow-lg transition duration-300 w-full max-w-xs mx-auto">
+    <div className="group block bg-white rounded-xl  p-1  overflow-hidden  w-full max-w-xs mx-auto transition-shadow duration-300 shadow hover:shadow-[0_4px_20px_0_rgba(138,43,226,0.4)]">
       <Link to={`/shop/products/${_id}`}>
         {/* Image */}
         <div className="relative overflow-hidden">

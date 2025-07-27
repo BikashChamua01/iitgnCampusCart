@@ -38,7 +38,7 @@ const markInterested = async (req, res) => {
     }
 
     const buyerIndex = interestedBuyers.buyers.findIndex(
-      (buyer) => buyer.buyerId.toString() === buyerId.toString()
+      (buyer) => buyer.buyer.toString() === buyerId.toString()
     );
 
     if (buyerIndex !== -1) {
@@ -49,7 +49,7 @@ const markInterested = async (req, res) => {
       });
     }
 
-    interestedBuyers.buyers.push({ buyerId, buyerMessage });
+    interestedBuyers.buyers.push({ buyer: buyerId, buyerMessage });
 
     await interestedBuyers.save();
 
@@ -71,8 +71,6 @@ const getBuyRequests = async (req, res) => {
   try {
     const { userId, isAdmin } = req.user;
     const { productId, sellerId } = req.query;
-    // console.log(req.user);
-    console.log("The query is : ", req.query);
 
     if (userId.toString() != sellerId.toString() && !isAdmin)
       return res.status(StatusCodes.UNAUTHORIZED).json({
@@ -89,7 +87,10 @@ const getBuyRequests = async (req, res) => {
       });
     }
 
-    const product_of_interest = await InterestedBuyers.findOne({ productId });
+    const product_of_interest = await InterestedBuyers.findOne({
+      productId,
+    }).populate("buyers.buyer", "userName email profilePicture phoneNumber");
+    console.log(product_of_interest, " THE BUY REQUEST ARE **********");
 
     if (!product_of_interest || product_of_interest?.buyers.length == 0) {
       return res.status(StatusCodes.OK).json({
