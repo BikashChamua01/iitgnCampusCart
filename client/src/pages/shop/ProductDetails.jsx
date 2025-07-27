@@ -11,12 +11,14 @@ import {
   FaEnvelope,
   FaPhone,
   FaHeart,
+  FaWhatsapp,
 } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllProducts } from "../../store/product-slice";
 import ProductCard from "../../components/shop/ProductCard";
 import BuyRequestDialogBox from "@/components/shop/BuyRequestDialogBox";
 import { addToWishlist, deleteFromWishlist } from "@/store/wishlist-slice";
+
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -226,25 +228,35 @@ const ProductDetail = () => {
                       "/images/user-avatar.png"
                     }
                     alt={seller.name}
-                    className="w-14 h-14 rounded-full object-cover border-2 border-purple-300"
+                    className="w-14 h-14 rounded-full object-cover border-2 border-purple-300 hidden md:block"
                   />
                   <div>
                     <div className="text-base sm:text-lg font-semibold text-purple-800 flex items-center gap-2">
                       <FaUserCircle /> {seller.userName}
                     </div>
                     <div className="text-gray-500 flex items-center gap-2 text-sm mt-1">
-                      <FaEnvelope /> {seller.email}
+                      <FaEnvelope /><a href={`mailto:${seller.email}`}>{seller.email}</a> 
                     </div>
+                    <div className="flex gap-4">
+
                     <div className="text-gray-500 flex items-center gap-2 text-sm mt-1">
                       <FaPhone />{" "}
                       {seller.phoneNumber
-                        ? seller.phoneNumber
+                        ? <a href={`tel:+91${seller.phoneNumber}`}>{seller.phoneNumber}</a>
+
                         : "Not Available"}
+                    </div>
+                    <div className="text-gray-500 flex items-center gap-2 text-sm mt-1">
+                      
+                      {seller.phoneNumber
+                        ? <a href={`https://wa.me/91${seller.phoneNumber}`} className="flex items-center"><FaWhatsapp className="mr-1" /> WhatsApp</a>
+                        : "Not Available"}
+                    </div>
                     </div>
                     <Link
                       to={`/user/${seller._id}`}
                       className="inline-block mt-1 text-purple-600 font-semibold hover:underline text-sm"
-                    >
+                      >
                       View Profile
                     </Link>
                   </div>
