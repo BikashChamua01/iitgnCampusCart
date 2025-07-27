@@ -26,15 +26,15 @@ const ProductDetail = () => {
   const [seller, setSeller] = useState(null);
   const [sellerLoading, setSellerLoading] = useState(false);
   const { wishlist } = useSelector((state) => state.wishlist);
+  const { products } = useSelector((state) => state.shopProducts);
+  const dispatch = useDispatch();
 
   // convet the wishlist to set
   const wishlistSet = new Set(wishlist.map((p) => p._id));
 
-  const dispatch = useDispatch();
-  const { products } = useSelector((state) => state.shopProducts);
-
   useEffect(() => {
     const fetchProduct = async () => {
+      console.log(product);
       try {
         const res = await axios.get(`/api/v1/products/${id}`);
         setProduct(res.data.product);
@@ -46,26 +46,6 @@ const ProductDetail = () => {
     };
     fetchProduct();
   }, [id]);
-
-  useEffect(() => {
-    if (!product) return;
-    const fetchSeller = async () => {
-      setSellerLoading(true);
-      try {
-        const res = await axios.get(
-          `/api/v1/users/userProfile/${product.seller}`
-        );
-        setSeller(res.data.user);
-        // console.log(seller);
-      } catch (error) {
-        console.error("Error fetching seller:", error);
-        setSeller(null);
-      } finally {
-        setSellerLoading(false);
-      }
-    };
-    fetchSeller();
-  }, [product]);
 
   useEffect(() => {
     dispatch(fetchAllProducts());
@@ -92,7 +72,7 @@ const ProductDetail = () => {
 
   let isWishlisted = false;
   if (product) {
-    isWishlisted = wishlistSet.has(product._id.toString());
+    isWishlisted = wishlistSet.has(product?._id.toString());
   }
 
   const handleWishlist = (event) => {
@@ -100,14 +80,14 @@ const ProductDetail = () => {
     event.stopPropagation();
 
     if (isWishlisted) {
-      dispatch(deleteFromWishlist(product._id));
+      dispatch(deleteFromWishlist(product?._id));
     } else {
-      dispatch(addToWishlist(product._id));
+      dispatch(addToWishlist(product?._id));
     }
   };
 
   const similarProducts = products.filter(
-    (p) => p.category === category && p._id !== product._id
+    (p) => p.category === category && p._id !== product?._id
   );
 
   return (
@@ -216,33 +196,34 @@ const ProductDetail = () => {
               </div>
 
               {/* Seller Info */}
-              {seller && !sellerLoading && (
+              {product?.seller && (
                 <div
                   className={`flex items-center gap-4 bg-white rounded-lg p-4 shadow-inner`}
                 >
                   <img
                     src={
-                      (seller.profilePicture && seller.profilePicture.url) ||
+                      (product?.seller?.profilePicture &&
+                        product?.seller?.profilePicture.url) ||
                       "/images/user-avatar.png"
                     }
-                    alt={seller.name}
+                    alt={product?.seller?.userName}
                     className="w-14 h-14 rounded-full object-cover border-2 border-purple-300"
                   />
                   <div>
                     <div className="text-base sm:text-lg font-semibold text-purple-800 flex items-center gap-2">
-                      <FaUserCircle /> {seller.userName}
+                      <FaUserCircle /> {product?.seller?.userName}
                     </div>
                     <div className="text-gray-500 flex items-center gap-2 text-sm mt-1">
-                      <FaEnvelope /> {seller.email}
+                      <FaEnvelope /> {product?.seller?.email}
                     </div>
                     <div className="text-gray-500 flex items-center gap-2 text-sm mt-1">
                       <FaPhone />{" "}
-                      {seller.phoneNumber
-                        ? seller.phoneNumber
+                      {product?.seller?.phoneNumber
+                        ? product?.seller?.phoneNumber
                         : "Not Available"}
                     </div>
                     <Link
-                      to={`/user/${seller._id}`}
+                      to={`/user/${seller?._id}`}
                       className="inline-block mt-1 text-purple-600 font-semibold hover:underline text-sm"
                     >
                       View Profile

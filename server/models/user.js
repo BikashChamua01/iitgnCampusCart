@@ -86,7 +86,7 @@ userSchema.methods.createJWT = function () {
       userName: this.userName,
       isAdmin: this.isAdmin,
       profilePicture: this.profilePicture.url,
-      gender : this.gender
+      gender: this.gender,
     },
     process.env.JWT_SECRET,
     {

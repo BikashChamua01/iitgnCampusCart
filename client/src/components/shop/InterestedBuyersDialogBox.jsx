@@ -43,7 +43,7 @@ const InterestedBuyersDialogBox = ({ productId }) => {
     };
 
     fetchBuyers();
-  }, [open, productId]);
+  }, [open, productId,user.userId]);
   console.log(buyers);
 
   return (
