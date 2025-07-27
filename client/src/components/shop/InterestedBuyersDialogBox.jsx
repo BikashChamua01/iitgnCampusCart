@@ -17,19 +17,19 @@ const InterestedBuyersDialogBox = ({ productId }) => {
   const [open, setOpen] = useState(false);
   const [buyers, setBuyers] = useState([]);
   const [loading, setLoading] = useState(false);
-  const user = useSelector((state) => state.auth);
+  const { user } = useSelector((state) => state.auth);
 
   useEffect(() => {
     const fetchBuyers = async () => {
       if (!open || !productId) return;
       setLoading(true);
       try {
+        console.log(user.userId);
         const res = await axios.get(`/api/v1/interested/get-buy-requests`, {
           params: { productId, sellerId: user.userId },
           withCredentials: true,
         });
         const data = res.data;
-        console.log("we recieved", data);
         if (data?.success) {
           setBuyers(data.buyRequests || []);
         } else {

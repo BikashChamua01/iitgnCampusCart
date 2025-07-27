@@ -55,14 +55,14 @@ const ProductCard = ({ product, isWishlisted }) => {
   };
 
   return (
-    <div className="group block bg-white rounded-xl border p-1 border-[#e2d3f3] overflow-hidden shadow-sm hover:shadow-md transition duration-300 w-full max-w-xs mx-auto">
+    <div className="group block bg-white rounded-xl  p-1  overflow-hidden shadow-lg hover:shadow-lg transition duration-300 w-full max-w-xs mx-auto">
       <Link to={`/shop/products/${_id}`}>
         {/* Image */}
         <div className="relative overflow-hidden">
           <img
             src={imageUrl}
             alt={title}
-            className="w-full h-[180px] object-cover transition-transform duration-300 group-hover:scale-105 rounded-xl"
+            className="w-full h-[180px] object-cover transition-transform duration-300 group-hover:scale-101 rounded-xl"
           />
           {/* wishlist button */}
           <button

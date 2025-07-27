@@ -52,7 +52,7 @@ const ShopListing = () => {
     }
   };
 
-  if (myListing.length === 0) return <MyListingsEmpty />;
+  if (myListing.length === 0 && !user.isAdmin) return <MyListingsEmpty />;
 
   return (
     <div className="block w-full min-h-screen">

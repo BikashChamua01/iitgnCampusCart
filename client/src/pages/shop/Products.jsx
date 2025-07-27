@@ -245,7 +245,7 @@ const ShopProducts = () => {
               sortedProducts.map((product) => (
                 <motion.div
                   key={product._id}
-                  whileHover={{ scale: 1.03 }}
+                  whileHover={{ scale: 1.01 }}
                   whileTap={{ scale: 0.98 }}
                   initial={{ opacity: 0, y: 40 }}
                   animate={{ opacity: 1, y: 0 }}

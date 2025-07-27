@@ -2,7 +2,6 @@ const { StatusCodes } = require("http-status-codes");
 const Product = require("../models/product");
 const User = require("../models/user");
 const InterestedBuyers = require("../models/interestedBuyers");
-const { request } = require("express");
 
 const markInterested = async (req, res) => {
   try {
@@ -29,21 +28,19 @@ const markInterested = async (req, res) => {
       });
     }
 
-//check if it is seller 
-     if(sellerId.toString()===buyerId.toString()){
+    //check if it is seller
+    if (sellerId.toString() === buyerId.toString()) {
       return res.status(StatusCodes.OK).json({
         success: false,
         msg: "You are seller of this Product!",
         data: interestedBuyers,
       });
-
-     }
-
+    }
 
     const buyerIndex = interestedBuyers.buyers.findIndex(
       (buyer) => buyer.buyerId.toString() === buyerId.toString()
     );
-    
+
     if (buyerIndex !== -1) {
       return res.status(StatusCodes.OK).json({
         success: false,
@@ -74,15 +71,14 @@ const getBuyRequests = async (req, res) => {
   try {
     const { userId, isAdmin } = req.user;
     const { productId, sellerId } = req.query;
-    console.log(req.user);
-    console.log(req.query);
-    
-    
-    // if (userId.toString() != sellerId.toString() && !isAdmin)
-    //   return res.status(StatusCodes.UNAUTHORIZED).json({
-    //     success: false,
-    //     msg: "You are not authorized to access this ",
-    //   });
+    // console.log(req.user);
+    console.log("The query is : ", req.query);
+
+    if (userId.toString() != sellerId.toString() && !isAdmin)
+      return res.status(StatusCodes.UNAUTHORIZED).json({
+        success: false,
+        msg: "You are not authorized to access this ",
+      });
 
     // Check for the product
     const product = await Product.findById(productId);
@@ -99,6 +95,7 @@ const getBuyRequests = async (req, res) => {
       return res.status(StatusCodes.OK).json({
         success: true,
         msg: "No interested Users currently",
+        buyRequests: [],
       });
     }
     return res.status(StatusCodes.OK).json({
