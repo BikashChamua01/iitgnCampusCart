@@ -230,7 +230,7 @@ const ProductDetail = () => {
                     </div>
                     <div className="text-gray-500 flex items-center gap-2 text-sm mt-1">
                       
-                      {seller.phoneNumber
+                      {product?.seller?.phoneNumber
                         ? <a href={`https://wa.me/91${product?.seller?.phoneNumber}?text=Hi%2C%20I%20hope%20you%27re%20doing%20well.%20I%20am%20interested%20in%20buying%20your%20${product.title}%20From%20IITgn%20CampusCart.%20Could%20you%20please%20share%20more%20details%3F`} className="flex items-center"><FaWhatsapp className="mr-1" /> WhatsApp</a>
                         : "Not Available"}
                     </div>
