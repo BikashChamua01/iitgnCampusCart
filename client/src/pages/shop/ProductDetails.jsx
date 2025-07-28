@@ -11,12 +11,14 @@ import {
   FaEnvelope,
   FaPhone,
   FaHeart,
+  FaWhatsapp,
 } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllProducts } from "../../store/product-slice";
 import ProductCard from "../../components/shop/ProductCard";
 import BuyRequestDialogBox from "@/components/shop/BuyRequestDialogBox";
 import { addToWishlist, deleteFromWishlist } from "@/store/wishlist-slice";
+
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -206,26 +208,37 @@ const ProductDetail = () => {
                         product?.seller?.profilePicture.url) ||
                       "/images/user-avatar.png"
                     }
+                    
                     alt={product?.seller?.userName}
-                    className="w-14 h-14 rounded-full object-cover border-2 border-purple-300"
+                    className="w-14 h-14 rounded-full object-cover border-2 border-purple-300 hidden md:block"
                   />
                   <div>
                     <div className="text-base sm:text-lg font-semibold text-purple-800 flex items-center gap-2">
                       <FaUserCircle /> {product?.seller?.userName}
                     </div>
                     <div className="text-gray-500 flex items-center gap-2 text-sm mt-1">
-                      <FaEnvelope /> {product?.seller?.email}
+                      <FaEnvelope /><a href={`mailto:${product?.seller?.email}`}>{product?.seller?.email}</a> 
                     </div>
+                    <div className="flex gap-4">
+
                     <div className="text-gray-500 flex items-center gap-2 text-sm mt-1">
                       <FaPhone />{" "}
                       {product?.seller?.phoneNumber
-                        ? product?.seller?.phoneNumber
+                        ? <a href={`tel:+91${product?.seller?.phoneNumber}`}>{product?.seller?.phoneNumber}</a>
+
                         : "Not Available"}
                     </div>
+                    <div className="text-gray-500 flex items-center gap-2 text-sm mt-1">
+                      
+                      {seller.phoneNumber
+                        ? <a href={`https://wa.me/91${product?.seller?.phoneNumber}?text=Hi%2C%20I%20hope%20you%27re%20doing%20well.%20I%20am%20interested%20in%20buying%20your%20${product.title}%20From%20IITgn%20CampusCart.%20Could%20you%20please%20share%20more%20details%3F`} className="flex items-center"><FaWhatsapp className="mr-1" /> WhatsApp</a>
+                        : "Not Available"}
+                    </div>
+                    </div>
                     <Link
-                      to={`/user/${seller?._id}`}
+                      to={`/user/${product?.seller?._id}`}
                       className="inline-block mt-1 text-purple-600 font-semibold hover:underline text-sm"
-                    >
+                      >
                       View Profile
                     </Link>
                   </div>
