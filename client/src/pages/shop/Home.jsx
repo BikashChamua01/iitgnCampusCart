@@ -189,7 +189,7 @@ const Home = () => {
                 animate={{ x: [0, 4, 0] }}
                 transition={{
                   repeat: Infinity,
-                  duration: 1.2,
+                  duration: 0.5,
                   ease: "easeInOut",
                 }}
               >
