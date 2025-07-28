@@ -86,6 +86,7 @@ const ShopProducts = () => {
     setFilter([]);
     setSortOption("");
     setSearch("");
+    setShowFilters(false)
   };
 
   // Handle the filter click button in the header/ toolbar
