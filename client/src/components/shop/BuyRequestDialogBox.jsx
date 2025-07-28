@@ -12,11 +12,13 @@ import {
 } from "../ui/alert-dialog";
 import axios from "axios";
 import { toast } from "sonner";
+import { useSelector } from "react-redux";
 
 const BuyRequestDialogBox = ({ imageUrl, product }) => {
   const [message, setMessage] = useState("");
   const [open, setOpen] = useState(false);
   const [sending, setSending] = useState(false);
+  const { user } = useSelector((state) => state.auth);
 
   // Prevent background scroll and interaction when dialog open
   useEffect(() => {
@@ -38,6 +40,7 @@ const BuyRequestDialogBox = ({ imageUrl, product }) => {
   // We'll add pointer-events-auto on the dialog content wrapper
 
   const handleBuyRequest = async () => {
+    console.log("Hello");
     if (!message.trim()) {
       toast.error("Please add a message before sending.");
       return;
@@ -58,7 +61,9 @@ const BuyRequestDialogBox = ({ imageUrl, product }) => {
       if (data?.success) {
         setMessage("");
         setOpen(false);
-        toast.success(data.msg || data.message || "Your interest is sent to the seller");
+        toast.success(
+          data.msg || data.message || "Your interest is sent to the seller"
+        );
       } else {
         toast.error(data.msg || "Failed to send");
       }
@@ -71,9 +76,19 @@ const BuyRequestDialogBox = ({ imageUrl, product }) => {
   };
 
   return (
-    <AlertDialog open={open} onOpenChange={setOpen} className="mx-2 sm:mx-0">
+    <AlertDialog
+      open={open}
+      onOpenChange={setOpen}
+      product={product}
+      className="mx-2 sm:mx-0"
+    >
       <AlertDialogTrigger asChild>
-        <button className="custom-button mb-1 outline-none">Buy</button>
+        <button
+          className="custom-button mb-1 outline-none"
+          disabled={user.userId === product?.seller?._id}
+        >
+          {user.userId === product?.seller?._id ? "Your upload" : "Buy Request"}
+        </button>
       </AlertDialogTrigger>
 
       {open && (
@@ -104,7 +119,8 @@ const BuyRequestDialogBox = ({ imageUrl, product }) => {
                 Send a Buy Request
               </AlertDialogTitle>
               <AlertDialogDescription className="text-sm text-gray-500 text-center">
-                Add a short message for the seller. Mention your offer, payment method, or any specific instructions.
+                Add a short message for the seller. Mention your offer, payment
+                method, or any specific instructions.
               </AlertDialogDescription>
             </AlertDialogHeader>
 

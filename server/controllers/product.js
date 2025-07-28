@@ -76,7 +76,11 @@ const getAllProducts = async (req, res) => {
 const getSingleProduct = async (req, res) => {
   try {
     const { id } = req.params;
-    const product = await Product.findById(id);
+    const product = await Product.findById(id).populate(
+      "seller",
+      "userName email profilePicture phoneNumber"
+    );
+    console.log(product)
     if (!product) {
       return res.status(StatusCodes.NOT_FOUND).json({
         success: false,
