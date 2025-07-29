@@ -2,6 +2,7 @@ import React from "react";
 import ImageCarousel from "@/components/shop/CarouselHome";
 import { useNavigate } from "react-router-dom";
 import { categories } from "@/utils/formDatas";
+// eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
 import { FaArrowRight } from "react-icons/fa";
 import { useSelector } from "react-redux";

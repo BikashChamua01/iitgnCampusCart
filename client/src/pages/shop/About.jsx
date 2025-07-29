@@ -7,7 +7,7 @@ function GoogleMapIITGN() {
   return (
     <motion.div
       className="w-full rounded-2xl overflow-hidden shadow-lg mb-12 relative"
-      style={{ aspectRatio: "16/9" }}
+      style={{ aspectRatio: "16/7" }}
       initial={{ opacity: 0, scale: 0.95 }}
       whileInView={{ opacity: 1, scale: 1 }}
       viewport={{ once: false, amount: 0.3 }}
@@ -17,7 +17,7 @@ function GoogleMapIITGN() {
         title="IIT Gandhinagar Map"
         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3672.0594222881793!2d72.68580477528188!3d23.215635809397614!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x395c2bb4d9e61711%3A0xb050ef7b9cb5dc14!2sIIT%20Gandhinagar!5e0!3m2!1sen!2sin!4v1715541560511!5m2!1sen!2sin"
         width="100%"
-        height="80%"
+        height="100%"
         allowFullScreen=""
         loading="lazy"
         referrerPolicy="no-referrer-when-downgrade"
@@ -143,17 +143,23 @@ export default function AboutPage() {
         className="max-w-7xl w-full mx-auto px-6 md:px-12 mt-8 relative"
       >
         {/* Hero Section */}
-        <div className="text-center mb-16">
+        <div className="text-center mb-0">
           <motion.h1
-            className="text-3xl md:text-5xl font-bold bg-gradient-to-r from-violet-800 via-violet-700 to-violet-600 bg-clip-text text-transparent mb-6 tracking-tight leading-tight"
+            className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-violet-800 via-violet-700 to-violet-600 bg-clip-text text-transparent mb-6 tracking-tight leading-tight"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.8 }}
           >
-            About CampusMart
+            About CampusCart
           </motion.h1>
-          <motion.p
-            className="text-lg md:text-xl text-gray-600 leading-relaxed max-w-3xl mx-auto"
+          
+        </div>
+
+        {/* Map Section */}
+        <GoogleMapIITGN />
+
+        <motion.p
+            className="text-lg md:text-xl text-gray-600 leading-relaxed max-w-3xl mx-auto mb-8"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.8 }}
@@ -161,10 +167,6 @@ export default function AboutPage() {
             IIT Gandhinagar's trusted student marketplace — connecting students through
             secure, convenient commerce within our campus community.
           </motion.p>
-        </div>
-
-        {/* Map Section */}
-        <GoogleMapIITGN />
 
         {/* Mission Section */}
         <motion.section
@@ -205,7 +207,7 @@ export default function AboutPage() {
           transition={{ duration: 0.8 }}
         >
           <motion.h2
-            className="text-2xl md:text-3xl font-bold text-gray-800 mb-12 text-center"
+            className="text-2xl md:text-3xl font-bold text-gray-800 mb-1 text-center"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: false }}
