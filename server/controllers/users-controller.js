@@ -5,7 +5,6 @@ const mongoose = require("mongoose");
 const Tempmail = require("../models/tempemail");
 // const bcrypt = require("bcryptjs");
 
-
 const fetchAllUsers = async (req, res) => {
   try {
     const limit = parseInt(req.query.limit) || 10;
@@ -116,7 +115,7 @@ const changePassword = async (req, res) => {
     }
 
     // 5. Validate old password
-     const isMatch = await user.verifyPassword(oldPassword);
+    const isMatch = await user.verifyPassword(oldPassword);
     if (!isMatch) {
       return res.status(StatusCodes.UNAUTHORIZED).json({
         success: false,
@@ -158,7 +157,6 @@ const changePassword = async (req, res) => {
         email: updatedUser.email,
       },
     });
-
   } catch (err) {
     console.error("Error in changePassword:", err);
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
@@ -167,7 +165,6 @@ const changePassword = async (req, res) => {
     });
   }
 };
-
 
 const userProfile = async (req, res) => {
   try {
@@ -192,6 +189,7 @@ const userProfile = async (req, res) => {
     });
   }
 };
+
 const editProfile = async (req, res) => {
   try {
     const { id } = req.params;

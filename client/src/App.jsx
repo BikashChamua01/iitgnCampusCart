@@ -12,9 +12,10 @@ import AdminLayout from "./components/admin/Layout";
 import AdminDashboard from "./pages/admin/Dashboard";
 import AdminProducts from "./pages/admin/Products";
 import AdminUsers from "./pages/admin/Users";
+import AdminUserListing from "./components/admin/UserListing";
 
 // Import the common pages
-import About from "./pages/common/About";
+import AboutPage from "./pages/shop/About";
 import Sell from "./pages/common/Sell";
 import UnauthPage from "./pages/common/Unauth-page";
 import Loader from "./components/common/Loader";
@@ -79,7 +80,7 @@ const App = () => {
           >
             <Route path="" element={<ShopHome />} />
             <Route path="products" element={<ShopProducts />} />
-            <Route path="about" element={<About />} />
+            <Route path="about" element={<AboutPage />} />
             <Route path="listings" element={<ShopListing />} />
             <Route path="sell" element={<Sell />} />
             <Route path="products/:id" element={<ProductDetails />} />
@@ -109,7 +110,11 @@ const App = () => {
             <Route path="products" element={<AdminProducts />} />
             <Route path="users" element={<AdminUsers />} />
             <Route path="products/:id" element={<ProductDetails />} />
-            <Route path="about" element={<About />} />
+            <Route
+              path="user/listings/:userId"
+              element={<AdminUserListing />}
+            />
+            <Route path="about" element={<AboutPage />} />
           </Route>
 
           {/* Auth Pages */}

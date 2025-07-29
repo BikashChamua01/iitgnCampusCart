@@ -96,7 +96,7 @@ const ShopProducts = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white to-purple-50 py-4  px-4 w-full relative">
+    <div className="min-h-screen  py-4  px-4 w-full relative">
       <div className="max-w-7xl mx-auto ">
         {/* Toolbar */}
         <div className="flex  items-center  bg-white  py-2 px-4 md:px-10 mb-8 border-b-1 border-violet-100 md:gap-6 z-50">

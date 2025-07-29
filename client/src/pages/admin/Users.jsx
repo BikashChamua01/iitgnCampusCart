@@ -6,6 +6,7 @@ import axios from "axios";
 import Loader from "@/components/common/Loader";
 import { toast } from "sonner";
 import DeleteUserButton from "@/components/admin/DeleteUserDialogbox";
+import { useNavigate } from "react-router-dom";
 
 const AdminUsers = () => {
   const dispatch = useDispatch();
@@ -15,6 +16,7 @@ const AdminUsers = () => {
   );
   const [limit] = useState(15);
   const [pageNumber, setPageNumber] = useState(1);
+  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(fetchAllUsers({ pageNumber, limit }));
@@ -58,7 +60,10 @@ const AdminUsers = () => {
           className="w-14 h-14 rounded-full border-2 border-violet-200 shadow-inner object-cover"
         />
         <div>
-          <div className="font-semibold text-lg text-violet-700">
+          <div
+            className="font-semibold text-lg text-violet-700 cursor-pointer"
+            onClick={() => navigate(`/admin/user/listings/${user._id}`, { state: { user } })}
+          >
             {user.userName}
           </div>
           <div className="text-xs text-gray-500">{user.email}</div>
@@ -94,7 +99,14 @@ const AdminUsers = () => {
           className="w-10 h-10 rounded-full border-2 border-violet-200 shadow-inner object-cover"
         />
       </td>
-      <td className="font-semibold text-violet-700">{user.userName}</td>
+      <td
+        className="font-semibold text-violet-700 cursor-pointer"
+        onClick={() =>
+          navigate(`/admin/user/listings/${user._id}`, { state: { user } })
+        }
+      >
+        {user.userName}
+      </td>
       <td>{user.email}</td>
       <td>{user.phoneNumber}</td>
       <td>{user.gender}</td>
