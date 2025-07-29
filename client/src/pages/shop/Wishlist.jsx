@@ -11,7 +11,7 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const Wishlist = ({ user }) => {
   const dispatch = useDispatch();
-  const { wishlist, loading, error } = useSelector((state) => state.wishlist);
+  const { wishlist, loading, } = useSelector((state) => state.wishlist);
 
   useEffect(() => {
     if (user?._id) {
