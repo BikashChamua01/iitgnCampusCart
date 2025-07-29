@@ -1,6 +1,7 @@
 import { Outlet } from "react-router-dom";
 import ShopHeader from "./Header";
 import ShopFooter from "./Footer";
+import PageFooter from "../common/PageFooter";
 import useScreenSize from "../../hooks/useScreenSize";
 
 const ShopLayout = () => {
@@ -19,6 +20,9 @@ const ShopLayout = () => {
       {(screenSize === "md" || screenSize === "xs" || screenSize === "sm") && (
         <ShopFooter />
       )}
+      <div>
+        <PageFooter/>
+      </div>
     </div>
   );
 };

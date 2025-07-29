@@ -80,7 +80,7 @@ const getSingleProduct = async (req, res) => {
       "seller",
       "userName email profilePicture phoneNumber"
     );
-    console.log(product)
+    console.log(product);
     if (!product) {
       return res.status(StatusCodes.NOT_FOUND).json({
         success: false,
@@ -230,6 +230,14 @@ const myListings = async (req, res) => {
     const loggedInId = req.user.userId;
     const isAdmin = req.user.isAdmin;
 
+    // 3️⃣ Authorization: only the user themself or an admin can view
+    if (userId !== loggedInId && !isAdmin) {
+      return res.status(StatusCodes.FORBIDDEN).json({
+        success: false,
+        msg: "You are not authorized to view this user's listings",
+      });
+    }
+
     // 1️⃣ Validate userId param
     if (!userId || !mongoose.isValidObjectId(userId)) {
       return res.status(StatusCodes.BAD_REQUEST).json({
@@ -244,14 +252,6 @@ const myListings = async (req, res) => {
       return res.status(StatusCodes.NOT_FOUND).json({
         success: false,
         msg: `No user found with ID ${userId}`,
-      });
-    }
-
-    // 3️⃣ Authorization: only the user themself or an admin can view
-    if (userId !== loggedInId && !isAdmin) {
-      return res.status(StatusCodes.FORBIDDEN).json({
-        success: false,
-        msg: "You are not authorized to view this user's listings",
       });
     }
 
