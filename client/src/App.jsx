@@ -35,6 +35,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 
+
 // reducers
 import { fetchWishlist } from "./store/wishlist-slice";
 import { fetchAllProducts } from "./store/product-slice";
