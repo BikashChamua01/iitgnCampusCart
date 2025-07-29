@@ -12,6 +12,7 @@ import AdminLayout from "./components/admin/Layout";
 import AdminDashboard from "./pages/admin/Dashboard";
 import AdminProducts from "./pages/admin/Products";
 import AdminUsers from "./pages/admin/Users";
+import AdminUserListing from "./components/admin/UserListing";
 
 // Import the common pages
 import AboutPage from "./pages/shop/About";
@@ -34,7 +35,6 @@ import React, { useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-
 
 // reducers
 import { fetchWishlist } from "./store/wishlist-slice";
@@ -110,6 +110,10 @@ const App = () => {
             <Route path="products" element={<AdminProducts />} />
             <Route path="users" element={<AdminUsers />} />
             <Route path="products/:id" element={<ProductDetails />} />
+            <Route
+              path="user/listings/:userId"
+              element={<AdminUserListing />}
+            />
             <Route path="about" element={<AboutPage />} />
           </Route>
 

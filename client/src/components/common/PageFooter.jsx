@@ -83,7 +83,7 @@ const PageFooter = () => (
             className="flex items-center"
           >
             <span className="font-medium text-gray-100 mr-1">Email:</span>
-            <a href="mailto:support@campusmarket.com">support@campusmarket.com</a>
+            <a href="mailto:iitgncampuscart.com">iitgncampuscart.com</a>
           </motion.li>
           <motion.li
             initial="hidden"
