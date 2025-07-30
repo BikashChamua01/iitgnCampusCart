@@ -19,14 +19,13 @@ import ProductCard from "../../components/shop/ProductCard";
 import BuyRequestDialogBox from "@/components/shop/BuyRequestDialogBox";
 import { addToWishlist, deleteFromWishlist } from "@/store/wishlist-slice";
 
-
 const ProductDetail = () => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [currentImageUrl, setImage] = useState(null);
-  const [seller, setSeller] = useState(null);
-  const [sellerLoading, setSellerLoading] = useState(false);
+  // const [seller, setSeller] = useState(null);
+  // const [sellerLoading, setSellerLoading] = useState(false);
   const { wishlist } = useSelector((state) => state.wishlist);
   const { products } = useSelector((state) => state.shopProducts);
   const dispatch = useDispatch();
@@ -208,7 +207,6 @@ const ProductDetail = () => {
                         product?.seller?.profilePicture.url) ||
                       "/images/user-avatar.png"
                     }
-                    
                     alt={product?.seller?.userName}
                     className="w-14 h-14 rounded-full object-cover border-2 border-purple-300 hidden md:block"
                   />
@@ -217,7 +215,10 @@ const ProductDetail = () => {
                       <FaUserCircle /> {product?.seller?.userName}
                     </div>
                     <div className="text-gray-500 flex items-center gap-2 text-sm mt-1">
-                      <FaEnvelope /><a href={`mailto:${product?.seller?.email}`}><p>{product?.seller?.email}</p></a> 
+                      <FaEnvelope />
+                      <a href={`mailto:${product?.seller?.email}`}>
+                        {product?.seller?.email}
+                      </a>
                     </div>
                     <div className="flex gap-4">
 
@@ -238,7 +239,7 @@ const ProductDetail = () => {
                     <Link
                       to={`/user/${product?.seller?._id}`}
                       className="inline-block mt-1 text-purple-600 font-semibold hover:underline text-sm"
-                      >
+                    >
                       View Profile
                     </Link>
                   </div>
