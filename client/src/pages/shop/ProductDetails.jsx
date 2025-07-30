@@ -237,7 +237,7 @@ const ProductDetail = () => {
                     </div>
                     </div>
                     <Link
-                      to={`/user/${product?.seller?._id}`}
+                      to={`/user/userProfile/${product?.seller?._id}`}
                       className="inline-block mt-1 text-purple-600 font-semibold hover:underline text-sm"
                     >
                       View Profile
