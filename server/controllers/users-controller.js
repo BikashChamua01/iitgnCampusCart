@@ -168,21 +168,26 @@ const changePassword = async (req, res) => {
 
 const userProfile = async (req, res) => {
   try {
+    console.log("profile access");
     const { id } = req.params;
+    console.log(id);
     const user = await User.findById(id);
+    
     if (!user) {
+      console.log("no profile found");
       return res.status(StatusCodes.NOT_FOUND).json({
         succcess: false,
         msg: "User not found",
       });
     }
-    // console.log(user);
+    console.log("checking profile of " ,user);
     return res.status(StatusCodes.OK).json({
       succcess: true,
       msg: "User found",
       user,
     });
   } catch (error) {
+     console.log("error checking profile of ");
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
       success: false,
       msg: "failed to get the user",

@@ -6,6 +6,7 @@ import ProductDetails from "./pages/shop/ProductDetails";
 import ShopListing from "./pages/shop/Listing";
 // import user pages
 import UserAccount from "./pages/user/UserAccount";
+import UserProfile from "./pages/user/UserProfile";
 
 // import the admin pages
 import AdminLayout from "./components/admin/Layout";
@@ -95,6 +96,7 @@ const App = () => {
             }
           >
             <Route path="userAccount" element={<UserAccount />} />
+            <Route path="userProfile/:id" element={<UserProfile />} />
           </Route>
 
           {/* Admin pages */}
