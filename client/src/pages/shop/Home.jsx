@@ -81,7 +81,12 @@ const Home = () => {
   const recentlyAddedProducts = products.slice(0, 10);
 
   const handleCategoryClick = (cat) => {
-    localStorage.setItem(storage_name, JSON.stringify([cat]));
+    const overAllFilter = {
+      showBuyRequests: false,
+      filter: [cat],
+    };
+    localStorage.setItem(storage_name, JSON.stringify(overAllFilter));
+    // localStorage.setItem(storage_name, JSON.stringify([cat]));
     navigate("/shop/products");
   };
 
