@@ -138,4 +138,41 @@ const fetchWishList = async (req, res) => {
   }
 };
 
-module.exports = { addToWishList, deleteFromWishList, fetchWishList };
+const fetchBuyRequests = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const wishlist = await Wishlist.findOne({ userId });
+    if (!wishlist)
+      return res.status(StatusCodes.BAD_REQUEST).json({
+        msg: "Failed to get the wishlist",
+        success: false,
+      });
+
+    const buyRequests = wishlist.interests;
+    if (!buyRequests || buyRequests.length === 0) {
+      return res.status(StatusCodes.BAD_REQUEST).json({
+        msg: "You have not given any requests",
+        success: true,
+      });
+    }
+
+    return res.status(StatusCodes.OK).json({
+      msg: `You have requested for ${buyRequests.length} products`,
+      success: true,
+      buyRequests,
+    });
+  } catch (error) {
+    console.lg(error);
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      success: false,
+      msg: "Failed to get the buy requests",
+    });
+  }
+};
+
+module.exports = {
+  addToWishList,
+  deleteFromWishList,
+  fetchWishList,
+  fetchBuyRequests,
+};

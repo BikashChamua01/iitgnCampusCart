@@ -7,10 +7,22 @@ import FilterSidebar from "@/utils/FilterSidebar";
 import { motion } from "framer-motion";
 import { FaBoxOpen, FaFilter, FaSearch } from "react-icons/fa";
 import Loader from "@/components/common/Loader";
-import { LayoutGrid, Rows3, List, ChevronDown, X } from "lucide-react";
+import {
+  LayoutGrid,
+  Rows3,
+  List,
+  ChevronDown,
+  X,
+  AwardIcon,
+} from "lucide-react";
 import { Filter } from "@/components/shop/Filter";
 import { Button } from "@/components/ui/button";
 import { SortDropDown } from "@/components/shop/Filter";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@radix-ui/react-dropdown-menu";
+import { useFetcher } from "react-router-dom";
+import axios from "axios";
+import { toast } from "sonner";
 
 const ShopProducts = () => {
   const dispatch = useDispatch();
@@ -24,6 +36,8 @@ const ShopProducts = () => {
   const [showFilters, setShowFilters] = useState(false); //to open clode the sidebar
   const [filter, setFilter] = useState([]); //category filter
   const [isFiltered, setIsFiltered] = useState(false); //this is used to toggle between the filter and the clear filter button in the header of the product
+  const [showBuyRequests, setShowBuyRequests] = useState(true);
+  const [buyRequests, setBuyRequests] = useState(new Set([]));
 
   // conver the wishlist array to set
   const wishlistSet = new Set(wishlist.map((product) => product._id));
@@ -51,6 +65,27 @@ const ShopProducts = () => {
     } else setIsFiltered(true);
   }, [search, filter, sortOption]);
 
+  // Buy requests
+  useEffect(() => {
+    const fetchBuyRequests = async () => {
+      try {
+        const response = await axios.get(
+          `/api/v1/wishlist/get-buy-requests/${user.userId}`
+        );
+
+        if (response.data.success === false)
+          return toast.error("Error i gettting the products");
+        setBuyRequests(new Set(response.data.buyRequests));
+      } catch (error) {
+        return toast.error(
+          error.msg | error.message | "can't find the by requests"
+        );
+      }
+    };
+
+    fetchBuyRequests();
+  }, [user.userId]);
+
   const filteredProducts =
     filter.length === 0
       ? products.filter((product) =>
@@ -64,7 +99,7 @@ const ShopProducts = () => {
           );
         });
 
-  const sortedProducts = [...filteredProducts].sort((a, b) => {
+  let sortedProducts = [...filteredProducts].sort((a, b) => {
     switch (sortOption) {
       case "priceLowHigh":
         return a.price - b.price;
@@ -81,18 +116,34 @@ const ShopProducts = () => {
     }
   });
 
+  if (showBuyRequests) {
+    sortedProducts = sortedProducts.filter((p) =>
+      buyRequests?.has(p._id.toString())
+    );
+  }
+
   // Clear filter function
   const clearFilter = () => {
     setFilter([]);
     setSortOption("");
     setSearch("");
-    setShowFilters(false)
+    setShowFilters(false);
+    setShowBuyRequests(false);
   };
 
   // Handle the filter click button in the header/ toolbar
   const handleFilterClick = () => {
     if (isFiltered) return clearFilter();
     setShowFilters(true);
+  };
+
+  //  const [buyRequests, setBuyRequests] = useState([]);
+  // Create the backend to get the buyrequests of a user then call it here
+  const handleShowBuyRequests = () => {
+    if (showBuyRequests) setShowBuyRequests(false);
+    else {
+      setShowBuyRequests(true);
+    }
   };
 
   return (
@@ -149,6 +200,25 @@ const ShopProducts = () => {
 
               {/* Filters */}
               <div className="space-y-3 md:space-y-8 flex-1">
+                {/* my buy requests */}
+                <div>
+                  <Label
+                    htmlFor="buy-requests"
+                    className="flex items-center gap-3 rounded-md  transition cursor-pointer group w-fit "
+                  >
+                    <span className="mb-2 text-md font-medium text-violet-700">
+                      Show Buy Requests
+                    </span>
+                    <Checkbox
+                      checked={showBuyRequests}
+                      onCheckedChange={() => handleShowBuyRequests()}
+                      className="
+                accent-violet-600 w-5 h-5 min-w-[20px] min-h-[20px] rounded-md border-gray-300 group-hover:border-violet-500 shadow-sm focus:ring-2 focus:ring-violet-200 transition cursor-pointer "
+                      // id={category}
+                      // name={category}
+                    />
+                  </Label>
+                </div>
                 {/* Search */}
                 <div>
                   <label

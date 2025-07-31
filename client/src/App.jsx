@@ -59,7 +59,7 @@ const App = () => {
 
   return (
     <>
-      <Toaster position="top-right" richColors />
+      <Toaster position="bottom-right" className="p-100"richColors />
       <BrowserRouter>
         <Routes>
           {/* Define default path */}

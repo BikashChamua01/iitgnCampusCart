@@ -13,9 +13,9 @@ const wishListSchema = mongoose.Schema({
       ref: "Product",
     },
   ],
-  interests: [ 
+  interests: [
     {
-      type: mongoose.Schema.Types.ObjectId,  //product id 
+      type: mongoose.Schema.Types.ObjectId, //product id
       ref: "Product",
     },
   ],
