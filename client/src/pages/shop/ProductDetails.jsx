@@ -18,6 +18,7 @@ import { fetchAllProducts } from "../../store/product-slice";
 import ProductCard from "../../components/shop/ProductCard";
 import BuyRequestDialogBox from "@/components/shop/BuyRequestDialogBox";
 import { addToWishlist, deleteFromWishlist } from "@/store/wishlist-slice";
+import InterestedBuyersDialogBox from "@/components/shop/InterestedBuyersDialogBox";
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -29,6 +30,8 @@ const ProductDetail = () => {
   const { wishlist } = useSelector((state) => state.wishlist);
   const { products } = useSelector((state) => state.shopProducts);
   const dispatch = useDispatch();
+
+  const { user } = useSelector((state) => state.auth);
 
   // convet the wishlist to set
   const wishlistSet = new Set(wishlist.map((p) => p._id));
@@ -90,7 +93,7 @@ const ProductDetail = () => {
   const similarProducts = products.filter(
     (p) => p.category === category && p._id !== product?._id
   );
-
+// console.log("ids are",product?.seller?._id,user.userId);
   return (
     <div className="min-h-screen  py-6 px-3 sm:px-4">
       <div className="max-w-7xl mx-auto space-y-12">
@@ -247,10 +250,16 @@ const ProductDetail = () => {
               )}
             </motion.div>
 
-            <BuyRequestDialogBox
+            {product?.seller?._id !== user.userId &&(<BuyRequestDialogBox
               product={product}
               imageUrl={product?.images[0]?.url}
-            />
+            />)}
+            {
+product?.seller?._id === user.userId &&
+(<InterestedBuyersDialogBox productId={product._id} />)
+
+            }
+            
           </div>
         </div>
 

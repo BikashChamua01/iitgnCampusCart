@@ -3,7 +3,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import DeleteConfirmDialog from "./DeleteProductDialogButton";
 import { Link } from "react-router-dom";
-import InterestedBuyersDialogBox from "./InterestedBuyersDialogBox";
+// import InterestedBuyersDialogBox from "./InterestedBuyersDialogBox";
 import { User } from "lucide-react";
 
 const MyListingCard = ({ product, onEdit, onDelete, isAdmin }) => {
@@ -30,7 +30,7 @@ const MyListingCard = ({ product, onEdit, onDelete, isAdmin }) => {
         scale: 1.01,
         boxShadow: "0 2px 20px 0 rgba(168, 85, 247, 0.25)",
       }}
-      className="relative bg-white rounded-xl shadow-lg p-4 sm:p-5 overflow-visible mt-16 sm:mt-20 self-center mx-7 lg:mx-0 transition-all duration-300 ease-in-out hover:shadow-purple-400/40 cursor-pointer h-80"
+      className="relative bg-white rounded-xl shadow-lg p-4 sm:p-5 overflow-visible mt-16 sm:mt-20 self-center mx-7 lg:mx-0 transition-all duration-300 ease-in-out hover:shadow-purple-400/40 cursor-pointer h-70"
     >
       {/* Image and content  inside Link */}
       <Link
@@ -95,7 +95,7 @@ const MyListingCard = ({ product, onEdit, onDelete, isAdmin }) => {
           </motion.button>
           <DeleteConfirmDialog onConfirm={() => onDelete(productId)} />
         </div>
-        <InterestedBuyersDialogBox productId={product._id} />
+        
       </div>
     </motion.div>
   );

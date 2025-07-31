@@ -36,7 +36,7 @@ const ShopProducts = () => {
   const [showFilters, setShowFilters] = useState(false); //to open clode the sidebar
   const [filter, setFilter] = useState([]); //category filter
   const [isFiltered, setIsFiltered] = useState(false); //this is used to toggle between the filter and the clear filter button in the header of the product
-  const [showBuyRequests, setShowBuyRequests] = useState(true);
+  const [showBuyRequests, setShowBuyRequests] = useState(false);
   const [buyRequests, setBuyRequests] = useState(new Set([]));
 
   // conver the wishlist array to set
