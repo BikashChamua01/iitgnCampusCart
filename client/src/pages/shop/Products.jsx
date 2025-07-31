@@ -60,10 +60,10 @@ const ShopProducts = () => {
   }, [filter]);
 
   useEffect(() => {
-    if (filter.length === 0 && sortOption === "") {
+    if (filter.length === 0 && sortOption === "" && !showBuyRequests) {
       setIsFiltered(false);
     } else setIsFiltered(true);
-  }, [search, filter, sortOption]);
+  }, [search, filter, sortOption, showBuyRequests]);
 
   // Buy requests
   useEffect(() => {
@@ -162,7 +162,7 @@ const ShopProducts = () => {
           <div className="flex flex-1/2 justify-end">
             <button
               onClick={() => handleFilterClick()}
-              className={`flex items-center text-sm  border ${
+              className={`flex items-center text-sm cursor-pointer  border ${
                 !isFiltered
                   ? "border-violet-600 text-violet-700"
                   : "  border-red-600 text-red-700"
