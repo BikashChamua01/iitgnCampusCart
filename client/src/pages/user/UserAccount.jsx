@@ -14,17 +14,12 @@ import ChangePassword from "@/components/common/ChangePassword";
 import Wishlist from "../shop/Wishlist";
 import { User, Lock, Pencil, Heart } from "lucide-react";
 
-
 const UserAccount = () => {
   const [user, setUser] = useState(null);
 
   const dispatch = useDispatch();
 
-  const {
-    isAuthenticated,
-    user: userDetails,
-    isLoading,
-  } = useSelector((state) => state.auth);
+  const { user: userDetails } = useSelector((state) => state.auth);
 
   useEffect(() => {
     axios
@@ -47,43 +42,51 @@ const UserAccount = () => {
         <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 gap-4 mb-16 md:mb-6 ">
           <TabsTrigger
             value="profile"
-            className="relative data-[state=active]:after:content-[''] data-[state=active]:after:absolute data-[state=active]:after:bottom-0 data-[state=active]:after:left-0 data-[state=active]:after:w-full data-[state=active]:after:h-[3px] data-[state=active]:after:rounded-2xl data-[state=active]:after:bg-gray-relative 
-after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-[3px] after:w-full after:rounded-2xl 
-after:bg-gray-700 after:scale-x-0 after:origin-left after:transition-transform after:duration-300 
-data-[state=active]:after:scale-x-100  shadow-sm"
+            className={`relative
+              after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-[3px] after:w-full after:rounded-2xl 
+              after:bg-gradient-to-r after:from-purple-500 after:to-pink-300
+              after:scale-x-0 after:origin-left after:transition-transform after:duration-300
+              data-[state=active]:after:scale-x-100 
+              data-[state=active]:shadow-none`}
           >
             <User className="w-4 h-4" />
             Profile
           </TabsTrigger>
           <TabsTrigger
             value="password"
-            className="relative data-[state=active]:after:content-[''] data-[state=active]:after:absolute data-[state=active]:after:bottom-0 data-[state=active]:after:left-0 data-[state=active]:after:w-full data-[state=active]:after:h-[3px] data-[state=active]:after:rounded-2xl data-[state=active]:after:bg-gray-relative 
-after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-[3px] after:w-full after:rounded-2xl 
-after:bg-gray-700 after:scale-x-0 after:origin-left after:transition-transform after:duration-300 
-data-[state=active]:after:scale-x-100 shadow-sm"
+            className={`relative
+              after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-[3px] after:w-full after:rounded-2xl 
+              after:bg-gradient-to-r after:from-purple-500 after:to-pink-300
+              after:scale-x-0 after:origin-left after:transition-transform after:duration-300
+              data-[state=active]:after:scale-x-100 
+              data-[state=active]:shadow-none`}
           >
-             <Lock className="w-4 h-4" />
+            <Lock className="w-4 h-4" />
             Change Password
           </TabsTrigger>
           <TabsTrigger
             value="edit"
-            className="relative data-[state=active]:after:content-[''] data-[state=active]:after:absolute data-[state=active]:after:bottom-0 data-[state=active]:after:left-0 data-[state=active]:after:w-full data-[state=active]:after:h-[3px] data-[state=active]:after:rounded-2xl data-[state=active]:after:bg-gray-relative 
-after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-[3px] after:w-full after:rounded-2xl 
-after:bg-gray-700 after:scale-x-0 after:origin-left after:transition-transform after:duration-300 
-data-[state=active]:after:scale-x-100 shadow-sm"
+            className={`relative
+              after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-[3px] after:w-full after:rounded-2xl 
+              after:bg-gradient-to-r after:from-purple-500 after:to-pink-300
+              after:scale-x-0 after:origin-left after:transition-transform after:duration-300
+              data-[state=active]:after:scale-x-100 
+              data-[state=active]:shadow-none`}
           >
             <Pencil className="w-4 h-4" />
             Edit Profile
           </TabsTrigger>
           <TabsTrigger
             value="wishlist"
-            className="relative data-[state=active]:after:content-[''] data-[state=active]:after:absolute data-[state=active]:after:bottom-0 data-[state=active]:after:left-0 data-[state=active]:after:w-full data-[state=active]:after:h-[3px] data-[state=active]:after:rounded-2xl data-[state=active]:after:bg-gray-relative 
-after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-[3px] after:w-full after:rounded-2xl 
-after:bg-gray-700 after:scale-x-0 after:origin-left after:transition-transform after:duration-300 
-data-[state=active]:after:scale-x-100 shadow-sm"
+            className={`relative
+              after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-[3px] after:w-full after:rounded-2xl 
+              after:bg-gradient-to-r after:from-purple-500 after:to-pink-300
+              after:scale-x-0 after:origin-left after:transition-transform after:duration-300
+              data-[state=active]:after:scale-x-100 
+              data-[state=active]:shadow-none`}
           >
             <Heart className="w-4 h-4" />
-           Wishlist
+            Wishlist
           </TabsTrigger>
         </TabsList>
 
@@ -139,9 +142,8 @@ data-[state=active]:after:scale-x-100 shadow-sm"
         {/* Edit Profile Tab */}
         <EditProfile user={user} />
 
-        {/* users Wishlist
-         */}
-         <Wishlist user={user}/>
+        {/* users Wishlist */}
+        <Wishlist user={user} />
       </Tabs>
     </div>
   );

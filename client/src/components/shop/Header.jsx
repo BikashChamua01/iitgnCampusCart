@@ -34,14 +34,14 @@ const ShopHeader = () => {
 
       <div className="w-1/3">
         <Link to="/shop" className="flex items-center w-1/3">
-          <span className="text-2xl font-extrabold tracking-wide text-violet-700">
+          <span className=" lg:text-2xl font-extrabold tracking-wide text-violet-700">
             CampusCart
           </span>
         </Link>
       </div>
 
       {/* Center: Menu */}
-      <div className="hidden md:flex justify-center items-center gap-8 w-1/3">
+      <div className="hidden md:flex justify-center items-center md:gap-6 lg:gap-8 w-1/3 md:text-xs lg:text-2xl">
         {menuItems.map(({ to, label, icon }) => {
           const isActive = pathname === to;
           return (
@@ -59,8 +59,8 @@ const ShopHeader = () => {
                   : console.log("");
               }}
             >
-              <span className="text-lg">{icon}</span>
-              <span>{label}</span>
+              <span className="md:text-sm lg:text-lg">{icon}</span>
+              <span className="md:text-xs lg:text-lg">{label}</span>
             </Link>
           );
         })}

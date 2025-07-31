@@ -105,7 +105,7 @@ const Home = () => {
         </motion.h3>
 
         <motion.div
-          className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-6 md:gap-8"
+          className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-6 md:gap-8"
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"

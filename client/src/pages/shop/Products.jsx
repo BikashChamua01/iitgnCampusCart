@@ -20,7 +20,6 @@ import { Button } from "@/components/ui/button";
 import { SortDropDown } from "@/components/shop/Filter";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@radix-ui/react-dropdown-menu";
-import { useFetcher } from "react-router-dom";
 import axios from "axios";
 import { toast } from "sonner";
 
@@ -60,10 +59,10 @@ const ShopProducts = () => {
   }, [filter]);
 
   useEffect(() => {
-    if (filter.length === 0 && sortOption === "") {
+    if (filter.length === 0 && sortOption === "" && !showBuyRequests) {
       setIsFiltered(false);
     } else setIsFiltered(true);
-  }, [search, filter, sortOption]);
+  }, [search, filter, sortOption, showBuyRequests]);
 
   // Buy requests
   useEffect(() => {
@@ -147,7 +146,7 @@ const ShopProducts = () => {
   };
 
   return (
-    <div className="min-h-screen  py-4  px-4 w-full relative">
+    <div className="pt-4  px-4 w-full relative">
       <div className="max-w-7xl mx-auto ">
         {/* Toolbar */}
         <div className="flex  items-center  bg-white  py-2 px-4 md:px-10 mb-8 border-b-1 border-violet-100 md:gap-6 z-50">
@@ -162,7 +161,7 @@ const ShopProducts = () => {
           <div className="flex flex-1/2 justify-end">
             <button
               onClick={() => handleFilterClick()}
-              className={`flex items-center text-sm  border ${
+              className={`flex items-center text-sm cursor-pointer  border ${
                 !isFiltered
                   ? "border-violet-600 text-violet-700"
                   : "  border-red-600 text-red-700"
