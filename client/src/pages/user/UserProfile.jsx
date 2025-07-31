@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { motion } from "framer-motion";
+import { FaWhatsapp } from "react-icons/fa";
+
 
 const UserProfile = () => {
   const { id } = useParams();
@@ -50,7 +52,7 @@ const UserProfile = () => {
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="bg-white shadow-xl rounded-2xl p-6 sm:p-8  w-full flex flex-col sm:flex-row gap-6"
+        className="bg-white  p-6 md:p-18 sm:p-8  w-full flex flex-col sm:flex-row gap-6 md:gap-20"
       >
         {/* Profile Picture */}
         <div className="relative group flex-shrink-0 mx-auto sm:mx-0">
@@ -69,7 +71,7 @@ const UserProfile = () => {
         </div>
 
         {/* User Info */}
-        <div className="flex flex-col justify-center text-center sm:text-left space-y-3">
+        <div className="flex flex-col  text-center sm:text-left space-y-3">
           <h2 className="text-3xl font-extrabold text-purple-700 tracking-wide">
             {user.userName}
           </h2>
@@ -77,8 +79,12 @@ const UserProfile = () => {
             📧 <span className="font-medium">{user.email}</span>
           </p>
           <p className="text-lg text-gray-700">
-            📱 <span className="font-medium">{user.phoneNumber || "N/A"}</span>
+            📱 <span className="font-medium"><a href={`tel:+91${user.phoneNumber}`}>{user.phoneNumber}</a></span>
           </p>
+          <p className="text-lg text-gray-700 ">
+            🟩<span className="font-medium"> <a href={`https://wa.me/91${user.phoneNumber}`} > WhatsApp</a></span>
+          </p>
+          
           <p className="text-lg text-gray-700">
             ⚥ <span className="font-medium">{user.gender || "Not specified"}</span>
           </p>
