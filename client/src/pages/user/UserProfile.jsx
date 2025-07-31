@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { motion } from "framer-motion";
-import { FaWhatsapp } from "react-icons/fa";
+import { FaWhatsapp, FaPhone} from "react-icons/fa";
 
 
 const UserProfile = () => {
@@ -78,12 +78,20 @@ const UserProfile = () => {
           <p className="text-lg text-gray-700">
             📧 <span className="font-medium">{user.email}</span>
           </p>
-          <p className="text-lg text-gray-700">
-            📱 <span className="font-medium"><a href={`tel:+91${user.phoneNumber}`}>{user.phoneNumber}</a></span>
-          </p>
-          <p className="text-lg text-gray-700 ">
-            🟩<span className="font-medium"> <a href={`https://wa.me/91${user.phoneNumber}`} > WhatsApp</a></span>
-          </p>
+          
+          <div className="text-gray-500 flex items-center gap-2 text-sm mt-1">
+                                <FaPhone />{" "}
+                                {user.phoneNumber
+                                  ? <a href={`tel:+91${user.phoneNumber}`}>{user.phoneNumber}</a>
+          
+                                  : "Not Available"}
+                              </div>
+         <div className="text-gray-500 flex items-center gap-2 text-sm mt-1">
+                               
+                               {user.phoneNumber
+                                 ? <a href={`https://wa.me/91${user.phoneNumber}`} className="flex items-center"><FaWhatsapp className="mr-1" /> WhatsApp</a>
+                                 :<div className="flex  items-center"><FaWhatsapp className="mr-1" /><p> Not Available</p></div>}
+                             </div>
           
           <p className="text-lg text-gray-700">
             ⚥ <span className="font-medium">{user.gender || "Not specified"}</span>
