@@ -79,14 +79,14 @@ const UserProfile = () => {
             📧 <span className="font-medium">{user.email}</span>
           </p>
           
-          <div className="text-gray-500 flex items-center gap-2 text-sm mt-1">
+          <div className="text-gray-500 flex items-center justify-center md:justify-start gap-2 text-sm mt-1">
                                 <FaPhone />{" "}
                                 {user.phoneNumber
                                   ? <a href={`tel:+91${user.phoneNumber}`}>{user.phoneNumber}</a>
           
                                   : "Not Available"}
                               </div>
-         <div className="text-gray-500 flex items-center gap-2 text-sm mt-1">
+         <div className="text-gray-500 flex items-center justify-center md:justify-start gap-2 text-sm mt-1">
                                
                                {user.phoneNumber
                                  ? <a href={`https://wa.me/91${user.phoneNumber}`} className="flex items-center"><FaWhatsapp className="mr-1" /> WhatsApp</a>
