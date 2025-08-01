@@ -89,7 +89,7 @@ const UserProfile = () => {
          <div className="text-gray-700 flex items-center justify-center md:justify-start gap-2 text-sm mt-1">
                                
                                {user.phoneNumber
-                                 ? <a  href={`https://wa.me/91${user.phoneNumber}`} className="flex items-center font-medium"><FaWhatsapp className="mr-1" /> WhatsApp</a>
+                                 ? <a  href={`https://wa.me/91${user.phoneNumber}`} target="_blank" className="flex items-center font-medium"><FaWhatsapp className="mr-1" /> WhatsApp</a>
                                  :<div className="flex  items-center"><FaWhatsapp className="mr-1" /><p> Not Available</p></div>}
                              </div>
           
