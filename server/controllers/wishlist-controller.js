@@ -138,6 +138,8 @@ const fetchWishList = async (req, res) => {
   }
 };
 
+
+// for the user not the seller
 const fetchBuyRequests = async (req, res) => {
   try {
     const { userId } = req.params;

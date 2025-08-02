@@ -6,6 +6,8 @@ const mongoose = require("mongoose");
 const User = require("../models/user");
 const InterestedBuyers = require("../models/interestedBuyers");
 const Wishlist = require("../models/wishlist");
+const ProductHistory = require("../models/productHistory");
+const product = require("../models/product");
 
 const createProduct = async (req, res) => {
   try {
@@ -129,10 +131,16 @@ const deleteProduct = async (req, res) => {
       });
     }
 
-    // Step 3: Delete product from Product collection
+    // Step 3: Save the product to ProductHistory
+    const plainProduct = product.toObject();
+    delete plainProduct._id;
+    const productHistory = new ProductHistory(plainProduct);
+    await productHistory.save({ session });
+
+    // Step 4: Delete product
     await Product.findByIdAndDelete(id).session(session);
 
-    // Step 4: Remove product from all user wishlists and interests
+    // Step 5: Remove from Wishlist
     await Wishlist.updateMany(
       { products: id },
       { $pull: { products: id } }
@@ -143,12 +151,11 @@ const deleteProduct = async (req, res) => {
       { $pull: { interests: id } }
     ).session(session);
 
-    // Step 5: Delete from InterestedBuyers collection
+    // Step 6: Remove from InterestedBuyers
     await InterestedBuyers.findOneAndDelete({ productId: id }).session(session);
 
-    // Commit transaction
+    // Step 7: Commit
     await session.commitTransaction();
-
     return res.status(StatusCodes.OK).json({
       success: true,
       msg: "Product and related references deleted successfully",
@@ -313,11 +320,82 @@ const myListings = async (req, res) => {
   }
 };
 
+const soldOut = async (req, res) => {
+  try {
+    const { buyerId, productId, sellerId } = req.params;
+    const { userId } = req.user;
+
+    // the user must be the seller to do this
+    if (sellerId.toString() != userId.toString())
+      return res.status(StatusCodes.UNAUTHORIZED).json({
+        success: false,
+        msg: "Unauthorized user",
+      });
+
+    // The product must exists
+    const product = await Product.findById(productId);
+    if (!product) {
+      return res.status(StatusCodes.BAD_REQUEST).json({
+        success: false,
+        msg: "the product is not found in the product database",
+      });
+    }
+
+    // Verify if the buyer id is in the interested database of the product
+    const interestedBuyers = await InterestedBuyers.findOne({ productId });
+    const indexOfBuyer = interestedBuyers?.buyers?.findIndex(
+      (buyer) => buyer.buyer.toString() === buyerId.toString()
+    );
+
+    if (indexOfBuyer === -1)
+      return res.status(StatusCodes.BAD_REQUEST).json({
+        success: false,
+        msg: "This buyer is not in the interested buyers of this product",
+      });
+
+    // check the buyer
+    const buyer = await User.findById(buyerId);
+    if (!buyer)
+      return res.status(StatusCodes.BAD_REQUEST).json({
+        msg: "The buyer is not valid",
+        success: false,
+      });
+
+    // check the seller
+    const seller = await User.findById(sellerId);
+    if (!seller)
+      return res.status(StatusCodes.BAD_REQUEST).json({
+        msg: "The seller is not valid",
+        success: false,
+      });
+
+    // Now its time to sell
+    product.soldOut = true;
+    product.buyer = { email: buyer.email, userName: buyer.userName };
+
+    // it will persists in the interested products of the
+
+    await product.save();
+    return res.status(StatusCodes.OK).json({
+      success: true,
+      msg: "Successfully sold out",
+    });
+  } catch (error) {
+    console.error("Error in myListings:", error);
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      success: false,
+      msg: "Server encountered an error while connfirming the sell",
+    });
+  }
+};
+
 module.exports = {
   createProduct,
   getAllProducts,
   getSingleProduct,
   deleteProduct,
+  
   editProduct,
   myListings,
+  soldOut,
 };
