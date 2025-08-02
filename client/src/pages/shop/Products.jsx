@@ -52,11 +52,20 @@ const ShopProducts = () => {
   // to store the filter in the localestorage
   useEffect(() => {
     const data = localStorage.getItem(storage_name);
-    data ? setFilter([...JSON.parse(data)]) : setFilter([]);
+    const overAllFilter = JSON.parse(data);
+    overAllFilter ? setFilter([...overAllFilter.filter]) : setFilter([]);
+    overAllFilter
+      ? setShowBuyRequests(overAllFilter.showBuyRequests)
+      : setShowBuyRequests(false);
   }, []);
+
   useEffect(() => {
-    localStorage.setItem(storage_name, JSON.stringify(filter));
-  }, [filter]);
+    const overAllFilter = {
+      showBuyRequests,
+      filter,
+    };
+    localStorage.setItem(storage_name, JSON.stringify(overAllFilter));
+  }, [filter, showBuyRequests]);
 
   useEffect(() => {
     if (filter.length === 0 && sortOption === "" && !showBuyRequests) {
@@ -73,12 +82,10 @@ const ShopProducts = () => {
         );
 
         if (response.data.success === false)
-          return toast.error("Error i gettting the products");
+          return toast.error("Error in gettting the products");
         setBuyRequests(new Set(response.data.buyRequests));
       } catch (error) {
-        return toast.error(
-          error.msg | error.message | "can't find the by requests"
-        );
+        console.log(error);
       }
     };
 
@@ -146,7 +153,7 @@ const ShopProducts = () => {
   };
 
   return (
-    <div className="pt-4  px-4 w-full relative">
+    <div className="min-h-screen  py-4  px-4 w-full relative">
       <div className="max-w-7xl mx-auto ">
         {/* Toolbar */}
         <div className="flex  items-center  bg-white  py-2 px-4 md:px-10 mb-8 border-b-1 border-violet-100 md:gap-6 z-50">
