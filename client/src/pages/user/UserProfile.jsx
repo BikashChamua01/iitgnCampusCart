@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { motion } from "framer-motion";
-import { FaWhatsapp, FaPhone} from "react-icons/fa";
-
+import { FaWhatsapp, FaPhone } from "react-icons/fa";
 
 const UserProfile = () => {
   const { id } = useParams();
@@ -78,28 +77,42 @@ const UserProfile = () => {
           <p className="text-lg text-gray-700">
             📧 <span className="font-medium">{user.email}</span>
           </p>
-          
+
           <div className="text-gray-700 flex items-center justify-center md:justify-start gap-2 text-sm mt-1">
-                                <FaPhone />{" "}
-                                {user.phoneNumber
-                                  ? <a className="font-medium"  href={`tel:+91${user.phoneNumber}`}>{user.phoneNumber}</a>
-          
-                                  : "Not Available"}
-                              </div>
-         <div className="text-gray-700 flex items-center justify-center md:justify-start gap-2 text-sm mt-1">
-                               
-                               {user.phoneNumber
-                                 ? <a  href={`https://wa.me/91${user.phoneNumber}`} className="flex items-center font-medium"><FaWhatsapp className="mr-1" /> WhatsApp</a>
-                                 :<div className="flex  items-center"><FaWhatsapp className="mr-1" /><p> Not Available</p></div>}
-                             </div>
-          
+            <FaPhone />{" "}
+            {user.phoneNumber ? (
+              <a className="font-medium" href={`tel:+91${user.phoneNumber}`}>
+                {user.phoneNumber}
+              </a>
+            ) : (
+              "Not Available"
+            )}
+          </div>
+          <div className="text-gray-700 flex items-center justify-center md:justify-start gap-2 text-sm mt-1">
+            {user.phoneNumber ? (
+              <a
+                href={`https://wa.me/91${user.phoneNumber}`}
+                className="flex items-center font-medium"
+              >
+                <FaWhatsapp className="mr-1" /> WhatsApp
+              </a>
+            ) : (
+              <div className="flex  items-center">
+                <FaWhatsapp className="mr-1" />
+                <p> Not Available</p>
+              </div>
+            )}
+          </div>
+
           <p className="text-lg text-gray-700">
-            ⚥ <span className="font-medium">{user.gender || "Not specified"}</span>
+            ⚥{" "}
+            <span className="font-medium">
+              {user.gender || "Not specified"}
+            </span>
           </p>
           <p className="text-sm text-gray-500 italic">
             👤 Member since {new Date(user.createdAt).toLocaleDateString()}
           </p>
-         
         </div>
       </motion.div>
     </div>

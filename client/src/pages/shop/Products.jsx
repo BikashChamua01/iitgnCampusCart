@@ -82,12 +82,10 @@ const ShopProducts = () => {
         );
 
         if (response.data.success === false)
-          return toast.error("Error i gettting the products");
+          return toast.error("Error in gettting the products");
         setBuyRequests(new Set(response.data.buyRequests));
       } catch (error) {
-        return toast.error(
-          error.msg | error.message | "can't find the by requests"
-        );
+        console.log(error);
       }
     };
 

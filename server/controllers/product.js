@@ -4,6 +4,8 @@ const { StatusCodes } = require("http-status-codes");
 const uploadToCloudinary = require("../utils/uploadHelper");
 const mongoose = require("mongoose");
 const User = require("../models/user");
+const InterestedBuyers = require("../models/interestedBuyers");
+const Wishlist = require("../models/wishlist");
 
 const createProduct = async (req, res) => {
   try {
@@ -102,37 +104,64 @@ const getSingleProduct = async (req, res) => {
 };
 
 const deleteProduct = async (req, res) => {
+  const session = await Product.startSession();
   try {
+    session.startTransaction();
+
     const { id } = req.params;
-    // Check if product exists
-    const product = await Product.findById(id);
-    console.log("hello");
+
+    // Step 1: Check if product exists
+    const product = await Product.findById(id).session(session);
     if (!product) {
+      await session.abortTransaction();
       return res.status(StatusCodes.NOT_FOUND).json({
         success: false,
         msg: "Product not found",
       });
     }
-    //If the current person is the selller or the admin then only he can do it
-    if (product.seller != req.user.userId && !req.user.isAdmin) {
+
+    // Step 2: Authorization check
+    if (product.seller.toString() !== req.user.userId && !req.user.isAdmin) {
+      await session.abortTransaction();
       return res.status(StatusCodes.UNAUTHORIZED).json({
         success: false,
-        msg: "You are Not authorized to delete this product",
+        msg: "You are not authorized to delete this product",
       });
     }
-    // Delete the product
-    await Product.findByIdAndDelete(id);
+
+    // Step 3: Delete product from Product collection
+    await Product.findByIdAndDelete(id).session(session);
+
+    // Step 4: Remove product from all user wishlists and interests
+    await Wishlist.updateMany(
+      { products: id },
+      { $pull: { products: id } }
+    ).session(session);
+
+    await Wishlist.updateMany(
+      { interests: id },
+      { $pull: { interests: id } }
+    ).session(session);
+
+    // Step 5: Delete from InterestedBuyers collection
+    await InterestedBuyers.findOneAndDelete({ productId: id }).session(session);
+
+    // Commit transaction
+    await session.commitTransaction();
 
     return res.status(StatusCodes.OK).json({
       success: true,
-      msg: "Product deleted successfully",
+      msg: "Product and related references deleted successfully",
     });
   } catch (error) {
+    await session.abortTransaction();
     console.error("Delete Product Error:", error.message);
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
       success: false,
       msg: "Failed to delete the product",
     });
+  } finally {
+    session.endSession();
   }
 };
 
