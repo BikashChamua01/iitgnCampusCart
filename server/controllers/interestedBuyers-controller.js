@@ -111,7 +111,7 @@ const getBuyRequests = async (req, res) => {
     const product_of_interest = await InterestedBuyers.findOne({
       productId,
     }).populate("buyers.buyer", "userName email profilePicture phoneNumber");
-    console.log(product_of_interest, " THE BUY REQUEST ARE **********");
+    // console.log(product_of_interest, " THE BUY REQUEST ARE **********");
 
     if (!product_of_interest || product_of_interest?.buyers.length == 0) {
       return res.status(StatusCodes.OK).json({

@@ -11,7 +11,7 @@ const product = require("../models/product");
 
 const createProduct = async (req, res) => {
   try {
-    console.log(req.body, "In the server side ,create product");
+    // console.log(req.body, "In the server side ,create product");
     const {
       title,
       description,
@@ -84,7 +84,7 @@ const getSingleProduct = async (req, res) => {
       "seller",
       "userName email profilePicture phoneNumber"
     );
-    console.log(product);
+    // console.log(product);
     if (!product) {
       return res.status(StatusCodes.NOT_FOUND).json({
         success: false,
@@ -206,7 +206,7 @@ const editProduct = async (req, res) => {
 
     // Step 1: Validate total image count
     const retainedImages = JSON.parse(existingImages);
-    console.log(retainedImages);
+    // console.log(retainedImages);
 
     const newFiles = req.files || [];
     const totalImagesCount = retainedImages.length + newFiles.length;
@@ -322,9 +322,9 @@ const myListings = async (req, res) => {
 
 const soldOut = async (req, res) => {
   try {
-    const { buyerId, productId, sellerId } = req.params;
+    const { buyerId, productId, sellerId } = req.body;
     const { userId } = req.user;
-
+    //  console.log("selling",req.user,req.params);
     // the user must be the seller to do this
     if (sellerId.toString() != userId.toString())
       return res.status(StatusCodes.UNAUTHORIZED).json({
