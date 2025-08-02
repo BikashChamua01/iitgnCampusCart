@@ -12,7 +12,7 @@ const ShopLayout = () => {
       <ShopHeader />
       <div className="flex  flex-1 pt-13">
         <main
-          className={`w-full flex-1 transition-all duration-300  pb-10 md:pb-1 mt-2 flex items-center justify-center`}
+          className={`w-full flex-1 transition-all duration-300 mt-2 flex items-center justify-center`}
         >
           <Outlet />
         </main>

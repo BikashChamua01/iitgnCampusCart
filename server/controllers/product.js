@@ -7,7 +7,6 @@ const User = require("../models/user");
 const InterestedBuyers = require("../models/interestedBuyers");
 const Wishlist = require("../models/wishlist");
 const ProductHistory = require("../models/productHistory");
-const product = require("../models/product");
 
 const createProduct = async (req, res) => {
   try {
@@ -394,7 +393,6 @@ module.exports = {
   getAllProducts,
   getSingleProduct,
   deleteProduct,
-  
   editProduct,
   myListings,
   soldOut,

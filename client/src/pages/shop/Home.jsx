@@ -180,7 +180,7 @@ const Home = () => {
           )}
         </motion.div>
 
-        <div className="flex justify-center mt-6">
+        <div className="flex justify-center mt-6 lg:mt-15">
           <Link
             to={"/shop/products"}
             className="inline-flex items-center space-x-3 rounded-full bg-violet-600 hover:bg-violet-700 px-3 py-2 text-white font-semibold shadow-lg transition-colors select-none"
