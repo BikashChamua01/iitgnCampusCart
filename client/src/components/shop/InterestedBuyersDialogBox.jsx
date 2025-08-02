@@ -12,6 +12,7 @@ import {
 } from "../ui/alert-dialog";
 import axios from "axios";
 import { toast } from "sonner";
+import ConfirmDialog from "./ConfirmDialogButton";
 
 const InterestedBuyersDialogBox = ({ productId }) => {
   const [open, setOpen] = useState(false);
@@ -43,7 +44,7 @@ const InterestedBuyersDialogBox = ({ productId }) => {
     };
 
     fetchBuyers();
-  }, [open, productId,user.userId]);
+  }, [open, productId, user.userId]);
   console.log(buyers);
 
   return (
@@ -92,17 +93,46 @@ const InterestedBuyersDialogBox = ({ productId }) => {
                 buyers.map((buyer, index) => (
                   <div
                     key={index}
-                    className="border border-gray-300 rounded-lg p-3 bg-gray-50 text-sm shadow-sm"
+                    className="border  border-gray-300 rounded-lg p-3 bg-gray-50 text-sm shadow-sm"
                   >
-                    <p className="font-semibold text-violet-700">
-                      {buyer.buyer.userName || "Unknown Buyer"}
-                    </p>
-                    <p className="text-gray-600 text-xs">{buyer.buyer.email}</p>
-                    <p className="text-gray-600 text-xs">
-                      {buyer.buyer.phoneNumber}
-                    </p>
+                    <div className="flex justify-between m-4">
+                      <div>
+                        <p className="font-semibold text-violet-700">
+                          {buyer.buyer.userName || "Unknown Buyer"}
+                        </p>
+                        
+                        
+                      </div>
+                      
+                      <div>
+                        <p className="text-gray-600 ">
+                          {buyer.buyer.email}</p>
+                        <p className="text-gray-600 ">
+                          {buyer.buyer.phoneNumber}
+                        </p>
+                        
+                      </div>
+                      
+                    </div>
+                    <p className="mt-3 text-gray-800  mb-6 px-2 pt-1  pb-2 border">
+                          
+                          {buyer.buyerMessage}
 
-                    <p className="mt-2 text-gray-800">{buyer.buyerMessage}</p>
+                          
+                        </p>
+                    {/* Buttons */}
+                    <div className="flex flex-row justify-between gap-3">
+                      <ConfirmDialog
+                        onConfirm={console.log("Accepted Fe")}
+                        msg="You are Accepting the buy request and cannot be undone!!!!!"
+                        title="Accept"
+                      />
+                      <ConfirmDialog
+                        onConfirm={console.log("Rejected Fe")}
+                        msg="You are Rejecting the your Buyer !!!!!"
+                        title="Reject"
+                      />
+                    </div>
                   </div>
                 ))
               )}

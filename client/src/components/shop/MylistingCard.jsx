@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React from "react";
 import { motion } from "framer-motion";
-import DeleteConfirmDialog from "./DeleteProductDialogButton";
+import ConfirmDialog from "./ConfirmDialogButton";
 import { Link } from "react-router-dom";
 // import InterestedBuyersDialogBox from "./InterestedBuyersDialogBox";
 import { User } from "lucide-react";
@@ -93,7 +93,7 @@ const MyListingCard = ({ product, onEdit, onDelete, isAdmin }) => {
           >
             Edit
           </motion.button>
-          <DeleteConfirmDialog onConfirm={() => onDelete(productId)} />
+          <ConfirmDialog onConfirm={() => onDelete(productId)} msg="This action cannot be undone. This will permanently delete your product." title="Delete" />
         </div>
         
       </div>
