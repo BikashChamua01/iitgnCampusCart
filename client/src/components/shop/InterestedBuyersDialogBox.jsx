@@ -47,6 +47,37 @@ const InterestedBuyersDialogBox = ({ productId }) => {
   }, [open, productId, user.userId]);
   console.log(buyers);
 
+  
+const handleAccept = async (buyerId, productId, sellerId) => {
+  // console.log("buyer",buyerId);
+  // console.log("seller",sellerId);
+  // console.log("product",productId);
+
+  try {
+    const response = await axios.post(
+      `/api/v1/products/sold-out`,
+      { buyerId, productId, sellerId },  // request body (empty if not needed)
+      {
+        // headers: {
+        //   Authorization: `Bearer ${localStorage.getItem("token")}`, // if using JWT
+        // },
+      }
+    );
+
+    if (response.data.success) {
+      alert("✅ Successfully marked as sold out!");
+    } else {
+      alert("⚠️ " + response.data.msg);
+    }
+  } catch (error) {
+    console.error("Error selling product:", error);
+    alert("❌ Failed to mark as sold out");
+  }
+};
+  function handleReject(){
+    alert("rejected from FE");
+  }
+
   return (
     <AlertDialog open={open} onOpenChange={setOpen} className="mx-2 sm:mx-0">
       <AlertDialogTrigger asChild>
@@ -123,12 +154,12 @@ const InterestedBuyersDialogBox = ({ productId }) => {
                     {/* Buttons */}
                     <div className="flex flex-row justify-between gap-3">
                       <ConfirmDialog
-                        onConfirm={console.log("Accepted Fe")}
+                        onConfirm={() => handleAccept(buyer.buyer._id, productId, user.userId)}
                         msg="You are Accepting the buy request and cannot be undone!!!!!"
                         title="Accept"
                       />
                       <ConfirmDialog
-                        onConfirm={console.log("Rejected Fe")}
+                        onConfirm={handleReject}
                         msg="You are Rejecting the your Buyer !!!!!"
                         title="Reject"
                       />

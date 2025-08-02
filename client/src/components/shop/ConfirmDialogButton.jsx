@@ -59,13 +59,14 @@ const ConfirmDialog = ({ onConfirm, msg,title }) => {
           </AlertDialogCancel>
           <AlertDialogAction
             onClick={onConfirm}
-            className="
+            className={`not-first:
               px-4 py-2 text-sm font-medium rounded-md
               bg-red-600 text-white hover:bg-red-700
               transition cursor-pointer
-            "
+              ${title=="Accept" && 'bg-green-600 text-white hover:bg-green-700' }
+            `}
           >
-            Yes, Delete
+            Yes, {title}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
