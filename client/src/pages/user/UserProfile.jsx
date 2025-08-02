@@ -52,7 +52,7 @@ const UserProfile = () => {
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="bg-white  p-6 md:p-18 sm:p-8  w-full flex flex-col sm:flex-row gap-6 md:gap-20"
+        className="bg-white justify-center p-6 md:p-18 sm:p-8  w-full flex flex-col sm:flex-row gap-6 md:gap-26"
       >
         {/* Profile Picture */}
         <div className="relative group flex-shrink-0 mx-auto sm:mx-0">
