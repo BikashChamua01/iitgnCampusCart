@@ -51,7 +51,7 @@ const UserProfile = () => {
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="bg-white  p-6 md:p-18 sm:p-8  w-full flex flex-col sm:flex-row gap-6 md:gap-20"
+        className="bg-white justify-center p-6 md:p-18 sm:p-8  w-full flex flex-col sm:flex-row gap-6 md:gap-26"
       >
         {/* Profile Picture */}
         <div className="relative group flex-shrink-0 mx-auto sm:mx-0">
@@ -79,31 +79,19 @@ const UserProfile = () => {
           </p>
 
           <div className="text-gray-700 flex items-center justify-center md:justify-start gap-2 text-sm mt-1">
-            <FaPhone />{" "}
-            {user.phoneNumber ? (
-              <a className="font-medium" href={`tel:+91${user.phoneNumber}`}>
-                {user.phoneNumber}
-              </a>
-            ) : (
-              "Not Available"
-            )}
-          </div>
-          <div className="text-gray-700 flex items-center justify-center md:justify-start gap-2 text-sm mt-1">
-            {user.phoneNumber ? (
-              <a
-                href={`https://wa.me/91${user.phoneNumber}`}
-                className="flex items-center font-medium"
-              >
-                <FaWhatsapp className="mr-1" /> WhatsApp
-              </a>
-            ) : (
-              <div className="flex  items-center">
-                <FaWhatsapp className="mr-1" />
-                <p> Not Available</p>
-              </div>
-            )}
-          </div>
-
+                                <FaPhone />{" "}
+                                {user.phoneNumber
+                                  ? <a className="font-medium"  href={`tel:+91${user.phoneNumber}`}>{user.phoneNumber}</a>
+          
+                                  : "Not Available"}
+                              </div>
+         <div className="text-gray-700 flex items-center justify-center md:justify-start gap-2 text-sm mt-1">
+                               
+                               {user.phoneNumber
+                                 ? <a  href={`https://wa.me/91${user.phoneNumber}`} target="_blank" className="flex items-center font-medium"><FaWhatsapp className="mr-1" /> WhatsApp</a>
+                                 :<div className="flex  items-center"><FaWhatsapp className="mr-1" /><p> Not Available</p></div>}
+                             </div>
+          
           <p className="text-lg text-gray-700">
             ⚥{" "}
             <span className="font-medium">

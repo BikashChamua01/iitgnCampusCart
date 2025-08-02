@@ -33,7 +33,7 @@ export default function ShopFooter() {
               transition-all duration-200
               ${
                 isActive
-                  ? "text-violet-700"
+                  ? "text-violet-900"
                   : "text-violet-500 hover:text-violet-700"
               }
             `}
@@ -41,6 +41,9 @@ export default function ShopFooter() {
           >
             <span className="text-lg mb-[1px]">{icon}</span>
             <span className="text-[11px]">{label}</span>
+            
+              { isActive && <hr className=" bg-blue-900 w-[120%]  min-h-0.5 rounded-4xl p-0 mt-1"></hr>}
+            
           </Link>
         );
       })}
