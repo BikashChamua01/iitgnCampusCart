@@ -87,6 +87,7 @@ const markInterested = async (req, res) => {
   }
 };
 
+// for the seller not the normal user
 const getBuyRequests = async (req, res) => {
   try {
     const { userId, isAdmin } = req.user;

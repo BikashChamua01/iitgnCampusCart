@@ -14,7 +14,6 @@ export const fetchWishlist = createAsyncThunk(
       const response = await axios.get(`/api/v1/wishlist/get-wishlist`, {
         withCredentials: true,
       });
-
       return response.data;
     } catch (error) {
       console.log("Error in fetchWishlist", error);

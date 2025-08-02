@@ -6,6 +6,7 @@ const mongoose = require("mongoose");
 const User = require("../models/user");
 const InterestedBuyers = require("../models/interestedBuyers");
 const Wishlist = require("../models/wishlist");
+const ProductHistory = require("../models/productHistory");
 
 const createProduct = async (req, res) => {
   try {
@@ -129,10 +130,16 @@ const deleteProduct = async (req, res) => {
       });
     }
 
-    // Step 3: Delete product from Product collection
+    // Step 3: Save the product to ProductHistory
+    const plainProduct = product.toObject();
+    delete plainProduct._id;
+    const productHistory = new ProductHistory(plainProduct);
+    await productHistory.save({ session });
+
+    // Step 4: Delete product
     await Product.findByIdAndDelete(id).session(session);
 
-    // Step 4: Remove product from all user wishlists and interests
+    // Step 5: Remove from Wishlist
     await Wishlist.updateMany(
       { products: id },
       { $pull: { products: id } }
@@ -143,12 +150,11 @@ const deleteProduct = async (req, res) => {
       { $pull: { interests: id } }
     ).session(session);
 
-    // Step 5: Delete from InterestedBuyers collection
+    // Step 6: Remove from InterestedBuyers
     await InterestedBuyers.findOneAndDelete({ productId: id }).session(session);
 
-    // Commit transaction
+    // Step 7: Commit
     await session.commitTransaction();
-
     return res.status(StatusCodes.OK).json({
       success: true,
       msg: "Product and related references deleted successfully",
@@ -312,6 +318,8 @@ const myListings = async (req, res) => {
     });
   }
 };
+
+
 
 module.exports = {
   createProduct,
