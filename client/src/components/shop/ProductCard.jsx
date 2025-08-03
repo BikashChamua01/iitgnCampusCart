@@ -18,7 +18,6 @@ const ProductCard = ({ product, isWishlisted }) => {
     soldOut,
     buyer,
   } = product;
- console.log(buyer);
  
   const dispatch = useDispatch();
   const imageUrl = images[0]?.url || "/placeholder.png";
