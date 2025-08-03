@@ -62,7 +62,7 @@ const RecentProductCard = ({ product, wishlist = false }) => {
       <div className={soldOut ? "pointer-events-none" : ""}>
         <Link to={`/shop/products/${_id}`}>
           <div
-            className="max-w-xs bg-white rounded-2xl shadow-lg overflow-hidden cursor-pointer select-none"
+            className="max-w-xs bg-white rounded-sm sm:rounded-2xl shadow-lg overflow-hidden cursor-pointer select-none"
             onMouseEnter={() => setHovering(true)}
             onMouseLeave={() => setHovering(false)}
             tabIndex={0}

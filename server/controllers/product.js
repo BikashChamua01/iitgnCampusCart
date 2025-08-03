@@ -7,7 +7,7 @@ const User = require("../models/user");
 const InterestedBuyers = require("../models/interestedBuyers");
 const Wishlist = require("../models/wishlist");
 const ProductHistory = require("../models/productHistory");
-const product = require("../models/product");
+const { sendOrderConfirmation } = require("./emailcontroller");
 
 const createProduct = async (req, res) => {
   try {
@@ -324,9 +324,8 @@ const soldOut = async (req, res) => {
   try {
     const { buyerId, productId, sellerId } = req.body;
     const { userId } = req.user;
-    //  console.log("selling",req.user,req.params);
     // the user must be the seller to do this
-    if (sellerId.toString() != userId.toString())
+    if (sellerId.toString() !== userId.toString())
       return res.status(StatusCodes.UNAUTHORIZED).json({
         success: false,
         msg: "Unauthorized user",
@@ -376,6 +375,10 @@ const soldOut = async (req, res) => {
     // it will persists in the interested products of the
 
     await product.save();
+
+    // Send confirmation mail to the buyer
+    await sendOrderConfirmation({ buyer, seller, product });
+    console.log(product);
     return res.status(StatusCodes.OK).json({
       success: true,
       msg: "Successfully sold out",
@@ -394,7 +397,6 @@ module.exports = {
   getAllProducts,
   getSingleProduct,
   deleteProduct,
-  
   editProduct,
   myListings,
   soldOut,

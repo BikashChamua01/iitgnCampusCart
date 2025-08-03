@@ -19,6 +19,12 @@ const markInterested = async (req, res) => {
     }
 
     const sellerId = product.seller;
+    if (product.soldOut)
+      return res.status(StatusCodes.NOT_ACCEPTABLE).json({
+        success: false,
+        msg: "Already soldout. refresh your browser",
+        error : {message : "Already soldout. refresh your browser"}
+      });
 
     // Fetch or create InterestedBuyers document for the seller
     let interestedBuyers = await InterestedBuyers.findOne({ productId });
