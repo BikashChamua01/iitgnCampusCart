@@ -13,12 +13,15 @@ import {
 import axios from "axios";
 import { toast } from "sonner";
 import ConfirmDialog from "./ConfirmDialogButton";
+import { fetchAllProducts, fetchMyListing } from "@/store/product-slice";
+import { useDispatch } from "react-redux";
 
 const InterestedBuyersDialogBox = ({ productId }) => {
   const [open, setOpen] = useState(false);
   const [buyers, setBuyers] = useState([]);
   const [loading, setLoading] = useState(false);
   const { user } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchBuyers = async () => {
@@ -47,35 +50,33 @@ const InterestedBuyersDialogBox = ({ productId }) => {
   }, [open, productId, user.userId]);
   console.log(buyers);
 
-  
-const handleAccept = async (buyerId, productId, sellerId) => {
-  // console.log("buyer",buyerId);
-  // console.log("seller",sellerId);
-  // console.log("product",productId);
+  const handleAccept = async (buyerId, productId, sellerId) => {
+    // console.log("buyer",buyerId);
+    // console.log("seller",sellerId);
+    // console.log("product",productId);
 
-  try {
-    const response = await axios.post(
-      `/api/v1/products/sold-out`,
-      { buyerId, productId, sellerId },  // request body (empty if not needed)
-      {
-        // headers: {
-        //   Authorization: `Bearer ${localStorage.getItem("token")}`, // if using JWT
-        // },
+    try {
+      const response = await axios.post(
+        `/api/v1/products/sold-out`,
+        { buyerId, productId, sellerId },
+        {
+          withCredentials: true,
+        }
+      );
+      if (response.data.success) {
+        dispatch(fetchAllProducts());
+        dispatch(fetchMyListing(sellerId));
+        toast.success("Successfully marked as sold out!");
+      } else {
+        toast.error(response.data.msg);
       }
-    );
-
-    if (response.data.success) {
-      alert("✅ Successfully marked as sold out!");
-    } else {
-      alert("⚠️ " + response.data.msg);
+    } catch (error) {
+      console.error("Error selling product:", error);
+      toast.error("Failed to sell");
     }
-  } catch (error) {
-    console.error("Error selling product:", error);
-    alert("❌ Failed to mark as sold out");
-  }
-};
-  function handleReject(){
-    alert("rejected from FE");
+  };
+  function handleReject() {
+    toast.error("rejected from FE");
   }
 
   return (
@@ -131,30 +132,24 @@ const handleAccept = async (buyerId, productId, sellerId) => {
                         <p className="font-semibold text-violet-700">
                           {buyer.buyer.userName || "Unknown Buyer"}
                         </p>
-                        
-                        
                       </div>
-                      
+
                       <div>
-                        <p className="text-gray-600 ">
-                          {buyer.buyer.email}</p>
+                        <p className="text-gray-600 ">{buyer.buyer.email}</p>
                         <p className="text-gray-600 ">
                           {buyer.buyer.phoneNumber}
                         </p>
-                        
                       </div>
-                      
                     </div>
                     <p className="mt-3 text-gray-800  mb-6 px-2 pt-1  pb-2 border">
-                          
-                          {buyer.buyerMessage}
-
-                          
-                        </p>
+                      {buyer.buyerMessage}
+                    </p>
                     {/* Buttons */}
                     <div className="flex flex-row justify-between gap-3">
                       <ConfirmDialog
-                        onConfirm={() => handleAccept(buyer.buyer._id, productId, user.userId)}
+                        onConfirm={() =>
+                          handleAccept(buyer.buyer._id, productId, user.userId)
+                        }
                         msg="You are Accepting the buy request and cannot be undone!!!!!"
                         title="Accept"
                       />

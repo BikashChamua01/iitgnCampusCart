@@ -323,9 +323,8 @@ const soldOut = async (req, res) => {
   try {
     const { buyerId, productId, sellerId } = req.body;
     const { userId } = req.user;
-    //  console.log("selling",req.user,req.params);
     // the user must be the seller to do this
-    if (sellerId.toString() != userId.toString())
+    if (sellerId.toString() !== userId.toString())
       return res.status(StatusCodes.UNAUTHORIZED).json({
         success: false,
         msg: "Unauthorized user",
@@ -375,6 +374,7 @@ const soldOut = async (req, res) => {
     // it will persists in the interested products of the
 
     await product.save();
+    console.log(product);
     return res.status(StatusCodes.OK).json({
       success: true,
       msg: "Successfully sold out",
