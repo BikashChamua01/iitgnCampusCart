@@ -157,7 +157,7 @@ const Home = () => {
         </motion.h3>
 
         <motion.div
-          className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8"
+          className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 md:gap-8 gap-2"
           variants={recentContainerVariants}
           initial="hidden"
           whileInView="visible"
@@ -172,7 +172,7 @@ const Home = () => {
               <motion.div
                 key={product._id}
                 variants={recentCardVariants}
-                className="bg-white rounded-2xl shadow-md hover:shadow-xl transition-shadow duration-300"
+                className="bg-white rounded-sm sm:rounded-2xl shadow-md hover:shadow-xl transition-shadow duration-300 mt-3"
               >
                 <RecentProductCard product={product} />
               </motion.div>

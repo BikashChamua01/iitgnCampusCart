@@ -7,6 +7,7 @@ const User = require("../models/user");
 const InterestedBuyers = require("../models/interestedBuyers");
 const Wishlist = require("../models/wishlist");
 const ProductHistory = require("../models/productHistory");
+const { sendOrderConfirmation } = require("./emailcontroller");
 
 const createProduct = async (req, res) => {
   try {
@@ -374,6 +375,9 @@ const soldOut = async (req, res) => {
     // it will persists in the interested products of the
 
     await product.save();
+
+    // Send confirmation mail to the buyer
+    await sendOrderConfirmation({ buyer, seller, product });
     console.log(product);
     return res.status(StatusCodes.OK).json({
       success: true,
