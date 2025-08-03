@@ -22,7 +22,7 @@ const ConfirmDialog = ({ onConfirm, msg,title }) => {
           hover:bg-red-200 hover:shadow-lg hover:shadow-red-200
           transition-all duration-200
           focus:outline-none focus:ring-2 focus:ring-red-300
-          cursor-pointer flex items-center justify-center gap-1"
+          cursor-pointer flex items-center justify-center gap-1 w-full"
         >
           <FaTrash className="text-xs" /> Delete
         </button>:<button className="custom-button outline-none">
