@@ -16,8 +16,10 @@ const ProductCard = ({ product, isWishlisted }) => {
     rating = 0,
     numReviews = 0,
     soldOut,
+    buyer,
   } = product;
-
+ console.log(buyer);
+ 
   const dispatch = useDispatch();
   const imageUrl = images[0]?.url || "/placeholder.png";
 
@@ -59,9 +61,15 @@ const ProductCard = ({ product, isWishlisted }) => {
       {/* Watermark Overlay for Sold Out */}
       {soldOut && (
         <div className="absolute inset-0 z-30 bg-transparent flex items-center justify-center pointer-events-none">
+          <div>
           <span className="transform -rotate-45  w-full text-5xl font-extrabold text-red-900 opacity-50 flex justify-around items-center gap-2 ">
             SOLD OUT<FaBan className="mt-2 -mb-1" />
+            
           </span>
+          {buyer && <p className="transform -rotate-45  w-full  font-extrabold text-red-900 opacity-50 flex justify-center items-center ">bought by {buyer.userName}</p>}
+          {buyer && <p className="transform -rotate-45  w-full  font-extrabold text-red-900 opacity-50 flex justify-center items-center  "> {buyer.email}</p>}
+          </div>
+          
         </div>
       )}
 
@@ -115,6 +123,10 @@ const ProductCard = ({ product, isWishlisted }) => {
                 ({numReviews})
               </span>
             </div>
+            {/* <div className="flex items-center gap-1 text-yellow-500 text-sm">
+               { buyer && <p>Buyer : <br/>{buyer.userName}<br/>{buyer.email}</p>}
+           
+            </div> */}
             <div className="flex flex-wrap gap-2 text-xs font-medium">
               <span className="px-2.5 py-1 bg-purple-100 text-purple-700 rounded-full">
                 {category}
@@ -146,6 +158,7 @@ const ProductCard = ({ product, isWishlisted }) => {
           <BuyRequestDialogBox imageUrl={imageUrl} product={product} />
         </div>
       </div>
+      
     </div>
   );
 };

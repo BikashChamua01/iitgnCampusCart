@@ -72,7 +72,7 @@ const RecentProductCard = ({ product, wishlist = false }) => {
               {wishlist && (
                 <button
                   onClick={handleWishlistToggle}
-                  className="absolute top-2 right-2 bg-white bg-opacity-80 p-1 rounded-full shadow-md z-10"
+                  className="absolute top-2 right-2 bg-white bg-opacity-80 p-1 rounded-full shadow-md z-10 pointer-events-auto"
                   aria-label="Toggle Wishlist"
                 >
                   <FaHeart
