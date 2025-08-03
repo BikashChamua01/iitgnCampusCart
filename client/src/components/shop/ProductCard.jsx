@@ -1,4 +1,4 @@
-import { FaRupeeSign, FaStar,FaHeart, FaBan } from "react-icons/fa";
+import { FaRupeeSign, FaStar, FaHeart, FaBan } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addToWishlist, deleteFromWishlist } from "@/store/wishlist-slice";
@@ -18,8 +18,8 @@ const ProductCard = ({ product, isWishlisted }) => {
     soldOut,
     buyer,
   } = product;
- console.log(buyer);
- 
+  // console.log(buyer);
+
   const dispatch = useDispatch();
   const imageUrl = images[0]?.url || "/placeholder.png";
 
@@ -61,15 +61,14 @@ const ProductCard = ({ product, isWishlisted }) => {
       {/* Watermark Overlay for Sold Out */}
       {soldOut && (
         <div className="absolute inset-0 z-30 bg-transparent flex items-center justify-center pointer-events-none">
-          <div>
           <span className="transform -rotate-45  w-full text-5xl font-extrabold text-red-900 opacity-50 flex justify-around items-center gap-2 ">
-            SOLD OUT<FaBan className="mt-2 -mb-1" />
-            
+            SOLD OUT
+            <FaBan className="mt-2 -mb-1" />
           </span>
-          {buyer && <p className="transform -rotate-45  w-full  font-extrabold text-red-900 opacity-50 flex justify-center items-center ">bought by {buyer.userName}</p>}
-          {buyer && <p className="transform -rotate-45  w-full  font-extrabold text-red-900 opacity-50 flex justify-center items-center  "> {buyer.email}</p>}
-          </div>
-          
+          {/* <div> */}
+          {/* {buyer && <p className="transform -rotate-45  w-full  font-extrabold text-red-900 opacity-50 flex justify-center items-center ">bought by {buyer.userName}</p>}
+          {buyer && <p className="transform -rotate-45  w-full  font-extrabold text-red-900 opacity-50 flex justify-center items-center  "> {buyer.email}</p>} */}
+          {/* </div> */}
         </div>
       )}
 
@@ -119,9 +118,7 @@ const ProductCard = ({ product, isWishlisted }) => {
                   className={idx < rating ? "" : "text-gray-300"}
                 />
               ))}
-              <span className="text-xs text-gray-500 ml-1">
-                ({numReviews})
-              </span>
+              <span className="text-xs text-gray-500 ml-1">({numReviews})</span>
             </div>
             {/* <div className="flex items-center gap-1 text-yellow-500 text-sm">
                { buyer && <p>Buyer : <br/>{buyer.userName}<br/>{buyer.email}</p>}
@@ -158,7 +155,6 @@ const ProductCard = ({ product, isWishlisted }) => {
           <BuyRequestDialogBox imageUrl={imageUrl} product={product} />
         </div>
       </div>
-      
     </div>
   );
 };

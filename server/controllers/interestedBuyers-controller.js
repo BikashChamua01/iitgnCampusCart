@@ -140,4 +140,6 @@ const getBuyRequests = async (req, res) => {
   }
 };
 
+//reject buy request
+
 module.exports = { markInterested, getBuyRequests };
