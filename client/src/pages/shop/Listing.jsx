@@ -13,7 +13,7 @@ const ShopListing = () => {
 
   const { user } = useSelector((state) => state.auth);
   const { products, myListing } = useSelector((state) => state.shopProducts);
-  console.log(products);
+  // console.log(products);
 
   useEffect(() => {
     dispatch(fetchMyListing(user.userId));
