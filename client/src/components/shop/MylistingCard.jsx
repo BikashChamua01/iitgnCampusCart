@@ -1,10 +1,11 @@
 /* eslint-disable no-unused-vars */
 import React from "react";
 import { motion } from "framer-motion";
-import DeleteConfirmDialog from "./DeleteProductDialogButton";
+import ConfirmDialog from "./ConfirmDialogButton";
 import { Link } from "react-router-dom";
 // import InterestedBuyersDialogBox from "./InterestedBuyersDialogBox";
 import { User } from "lucide-react";
+import { toast } from "sonner";
 
 const MyListingCard = ({ product, onEdit, onDelete, isAdmin }) => {
   const {
@@ -16,6 +17,7 @@ const MyListingCard = ({ product, onEdit, onDelete, isAdmin }) => {
     originalPrice,
     category,
     condition,
+    soldOut,
   } = product;
 
   const truncateText = (text, maxLength) => {
@@ -80,7 +82,7 @@ const MyListingCard = ({ product, onEdit, onDelete, isAdmin }) => {
       {/* Action buttons (Edit & Delete) outside the Link */}
       <div>
         <div className=" bottom-3 right-3 left-3 flex gap-2 mt-2 mb-5">
-          <motion.button
+          {!soldOut && <motion.button
             whileHover={{
               scale: 1.06,
               boxShadow: "0 2px 12px 0 rgba(168, 85, 247, 0.25)",
@@ -92,8 +94,21 @@ const MyListingCard = ({ product, onEdit, onDelete, isAdmin }) => {
             } flex-1 py-1 text-xs font-medium rounded-full bg-purple-200 text-purple-800 hover:bg-purple-300 hover:shadow-lg hover:shadow-purple-300 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-400 cursor-pointer`}
           >
             Edit
-          </motion.button>
-          <DeleteConfirmDialog onConfirm={() => onDelete(productId)} />
+          </motion.button>}
+          {soldOut && <motion.button
+            whileHover={{
+              scale: 1.06,
+              boxShadow: "0 2px 12px 0 rgba(168, 85, 247, 0.25)",
+            }}
+            whileTap={{ scale: 0.96 }}
+            onClick={() => toast.warning("You Sold this Product successfully!") }
+            className={`${
+              isAdmin ? "hidden" : "block"
+            } flex-1 py-1 text-xs font-medium rounded-full bg-purple-200 text-purple-800 hover:bg-purple-300 hover:shadow-lg hover:shadow-purple-300 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-400 cursor-pointer`}
+          >
+            Sold Out
+          </motion.button>}
+          <ConfirmDialog onConfirm={() => onDelete(productId)} msg="This action cannot be undone. This will permanently delete your product." title="Delete" />
         </div>
         
       </div>

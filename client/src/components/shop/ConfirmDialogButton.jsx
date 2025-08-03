@@ -11,10 +11,11 @@ import {
 } from "../ui/alert-dialog";
 import { FaTrash } from "react-icons/fa";
 
-const DeleteConfirmDialog = ({ onConfirm }) => {
+const ConfirmDialog = ({ onConfirm, msg,title }) => {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
+       { title=="Delete"?
         <button
           className="flex-1 py-1 text-xs font-medium rounded-full
           bg-red-100 text-red-600
@@ -24,7 +25,10 @@ const DeleteConfirmDialog = ({ onConfirm }) => {
           cursor-pointer flex items-center justify-center gap-1"
         >
           <FaTrash className="text-xs" /> Delete
-        </button>
+        </button>:<button className="custom-button outline-none">
+                        {title}
+                      </button>
+        }
       </AlertDialogTrigger>
 
       <AlertDialogContent
@@ -40,8 +44,7 @@ const DeleteConfirmDialog = ({ onConfirm }) => {
             Are you absolutely sure?
           </AlertDialogTitle>
           <AlertDialogDescription className="text-sm text-gray-500">
-            This action cannot be undone. This will permanently delete your
-            product.
+            {msg}
           </AlertDialogDescription>
         </AlertDialogHeader>
 
@@ -56,13 +59,14 @@ const DeleteConfirmDialog = ({ onConfirm }) => {
           </AlertDialogCancel>
           <AlertDialogAction
             onClick={onConfirm}
-            className="
+            className={`not-first:
               px-4 py-2 text-sm font-medium rounded-md
               bg-red-600 text-white hover:bg-red-700
               transition cursor-pointer
-            "
+              ${title=="Accept" && 'bg-green-600 text-white hover:bg-green-700' }
+            `}
           >
-            Yes, Delete
+            Yes, {title}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
@@ -70,4 +74,4 @@ const DeleteConfirmDialog = ({ onConfirm }) => {
   );
 };
 
-export default DeleteConfirmDialog;
+export default ConfirmDialog;
