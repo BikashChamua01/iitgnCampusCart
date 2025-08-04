@@ -340,6 +340,15 @@ const soldOut = async (req, res) => {
       });
     }
 
+    // product already sold out
+    if(product.soldOut){
+      return res.status(StatusCodes.BAD_REQUEST).json({
+        success: false,
+        msg: "the product is Already Sold out",
+      });
+
+    }
+
     // Verify if the buyer id is in the interested database of the product
     const interestedBuyers = await InterestedBuyers.findOne({ productId });
     const indexOfBuyer = interestedBuyers?.buyers?.findIndex(
@@ -367,7 +376,7 @@ const soldOut = async (req, res) => {
         msg: "The seller is not valid",
         success: false,
       });
-
+    
     // Now its time to sell
     product.soldOut = true;
     product.buyer = { email: buyer.email, userName: buyer.userName };
