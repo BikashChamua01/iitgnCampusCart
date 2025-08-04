@@ -22,9 +22,7 @@ const InterestedBuyersDialogBox = ({ productId }) => {
   const [loading, setLoading] = useState(false);
   const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    const fetchBuyers = async () => {
+ const fetchBuyers = async () => {
       if (!open || !productId) return;
       setLoading(true);
       try {
@@ -45,7 +43,8 @@ const InterestedBuyersDialogBox = ({ productId }) => {
         setLoading(false);
       }
     };
-
+  useEffect(() => {
+   
     fetchBuyers();
   }, [open, productId, user.userId]);
   console.log(buyers);
@@ -67,12 +66,13 @@ const InterestedBuyersDialogBox = ({ productId }) => {
         dispatch(fetchAllProducts());
         dispatch(fetchMyListing(sellerId));
         toast.success("Successfully marked as sold out!");
+        fetchBuyers();
       } else {
         toast.error(response.data.msg);
       }
     } catch (error) {
       console.error("Error selling product:", error);
-      toast.error("Failed to sell");
+      toast.error("Failed to sell",error);
     }
   };
   const handleReject =
@@ -92,6 +92,7 @@ const InterestedBuyersDialogBox = ({ productId }) => {
         dispatch(fetchAllProducts());
         dispatch(fetchMyListing(sellerId));
         toast.success("Successfully Rejected Buy Request!");
+        fetchBuyers();
       } else {
         toast.error(response.data.msg);
       }

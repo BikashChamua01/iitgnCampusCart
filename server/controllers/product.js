@@ -350,16 +350,27 @@ const soldOut = async (req, res) => {
     }
 
     // Verify if the buyer id is in the interested database of the product
-    const interestedBuyers = await InterestedBuyers.findOne({ productId });
-    const indexOfBuyer = interestedBuyers?.buyers?.findIndex(
-      (buyer) => buyer.buyer.toString() === buyerId.toString()
-    );
+   
+const interestedBuyers = await InterestedBuyers.findOne({ productId });
 
-    if (indexOfBuyer === -1)
-      return res.status(StatusCodes.BAD_REQUEST).json({
-        success: false,
-        msg: "This buyer is not in the interested buyers of this product",
-      });
+if (!interestedBuyers) {
+  return res.status(StatusCodes.NOT_FOUND).json({
+    success: false,
+    msg: "No interested buyers found for this product",
+  });
+}
+
+const indexOfBuyer = interestedBuyers.buyers.findIndex(
+  (buyer) => buyer.buyer.toString() === buyerId.toString()
+);
+
+if (indexOfBuyer === -1) {
+  return res.status(StatusCodes.BAD_REQUEST).json({
+    success: false,
+    msg: "This buyer is not in the interested buyers of this product",
+  });
+}
+
 
     // check the buyer
     const buyer = await User.findById(buyerId);
