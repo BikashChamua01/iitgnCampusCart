@@ -222,9 +222,73 @@ const sendOrderConfirmation = async ({ buyer, seller, product }) => {
   await transport.sendMail(mailOptions);
 };
 
+//reject buy  request mail
+const sendRejectBuyRequest = async ({ buyer, seller, product }) => {
+  const productImageUrl = product?.images?.[0]?.url || "";
+
+  const mailOptions = {
+    from: `"CampusCart" <${process.env.EMAIL_USER}>`,
+    to: buyer.email,
+    subject: `Order Rejected for ${product.title}`,
+    html: `
+  <div style="max-width:550px;margin:30px auto;background:#f9f9fb;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.1);font-family:'Segoe UI', sans-serif;padding:24px 32px;">
+    <div style="text-align:center;margin-bottom:18px; ">
+      <img src="https://iitgn.ac.in/assets/img/lectures/ifdls/iitgn_logo.png" alt="IITGN Logo" style="height:60px;margin-bottom:8px;">
+      <h2 style="color:#204ba6;margin:12px 0 6px 0;font-size:1.6em;letter-spacing:0.5px;">Campus Cart at IITGN</h2>
+    </div>
+
+    <hr style="border:none;border-top:1px solid #e1e4ed;margin:16px 0 24px 0;">
+
+    <p style="font-size:1.07em;color:#2d2d4f;">Hi <strong>${
+      buyer.userName
+    }</strong>,</p>
+    <p style="font-size:1em;color:#2d2d4f;margin:10px 0 24px 0;">
+      Your request to buy the product <strong style="color:#204ba6;">"${
+        product.title
+      }"</strong> has been <span style="color:red;font-weight:bold;">Rejected</span> by the seller.
+    </p>
+
+    <div style="display:flex;gap:16px;align-items:flex-start;background:#ffffff;border:1px solid #ddd;padding:16px;border-radius:8px;margin-bottom:24px; ">
+      <img src="${productImageUrl}" alt="Product Image" style="width:110px;height:auto;border-radius:6px;border:1px solid #ccc;">
+      <div style="margin:18px;">
+        <h3 style="margin:0 0 6px 0;color:#204ba6;">${product.title}</h3>
+        <p style="margin:4px 0;font-size:0.95em;color:#333;"><strong>Price:</strong> ₹${
+          product.price
+        }</p>
+        <p style="margin:4px 0;font-size:0.95em;color:#333;"><strong>Category:</strong> ${
+          product.category
+        }</p>
+        <p style="margin:4px 0;font-size:0.95em;color:#333;"><strong>Condition:</strong> ${
+          product.condition
+        }</p>
+      </div>
+    </div>
+
+    <div style="background:#e9f0ff;padding:16px;border-radius:8px;margin-bottom:20px;">
+      <h3 style="margin-bottom:10px;color:#204ba6;">Seller Contact Info:</h3>
+      <ul style="list-style:none;padding-left:0;font-size:0.95em;color:#333;">
+        <li><strong>Name:</strong> ${seller.userName}</li>
+        <li><strong>Email:</strong> <a href="mailto:${
+          seller.email
+        }" style="color:#1852a1;text-decoration:none;">${seller.email}</a></li>
+        <li><strong>Phone:</strong> ${seller.phoneNumber || "Not provided"}</li>
+      </ul>
+    </div>
+
+    <p style="font-size:0.95em;color:#444;">Sorry for any inconvenience.</p>
+    <p style="font-size:0.95em;color:#888eaa;margin-top:36px;">Thank you for using <strong>Campus Cart</strong>!<br>
+    <span style="font-size:0.9em">© ${new Date().getFullYear()} IIT Gandhinagar</span></p>
+  </div>
+  `,
+  };
+
+  await transport.sendMail(mailOptions);
+};
+
 module.exports = {
   sendVerificationCode,
   verifyCode,
   sendUserDeleteMessage,
   sendOrderConfirmation,
+  sendRejectBuyRequest,
 };

@@ -38,7 +38,7 @@ const ProductDetail = () => {
 
   useEffect(() => {
     const fetchProduct = async () => {
-      console.log(product);
+      // console.log(product);
       try {
         const res = await axios.get(`/api/v1/products/${id}`);
         setProduct(res.data.product);
