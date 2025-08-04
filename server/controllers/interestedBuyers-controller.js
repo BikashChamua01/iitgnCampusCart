@@ -152,48 +152,67 @@ const rejectBuyRequest = async (req, res) => {
     const { productId, buyerId, sellerId } = req.body;
 
     if (!productId || !buyerId || !sellerId) {
-      return res
-        .status(StatusCodes.BAD_REQUEST)
-        .json({ success: false, message: "Product ID, Buyer ID, and Seller ID are required" });
+      return res.status(StatusCodes.BAD_REQUEST).json({
+        success: false,
+        message: "Product ID, Buyer ID, and Seller ID are required",
+      });
     }
 
+    let product, buyer, seller;
+
     await session.withTransaction(async () => {
-      // ✅ Check product
-      const product = await Product.findById(productId).session(session);
+      // ✅ Validate product
+      product = await Product.findById(productId).session(session);
       if (!product) {
-        throw { status: StatusCodes.NOT_FOUND, message: "Product not found" };
+        const err = new Error("Product not found");
+        err.status = StatusCodes.NOT_FOUND;
+        throw err;
       }
 
-      // ✅ Check buyer
-      const buyer = await User.findById(buyerId).session(session);
+      // product already sold out
+          if(product.soldOut){
+            return res.status(StatusCodes.BAD_REQUEST).json({
+              success: false,
+              msg: "the product is Already Sold out",
+            });
+      
+          }
+
+      // ✅ Validate buyer
+      buyer = await User.findById(buyerId).session(session);
       if (!buyer) {
-        throw { status: StatusCodes.NOT_FOUND, message: "Buyer not found" };
+        const err = new Error("Buyer not found");
+        err.status = StatusCodes.NOT_FOUND;
+        throw err;
       }
 
-      // ✅ Check seller
-      const seller = await User.findById(sellerId).session(session);
+      // ✅ Validate seller
+      seller = await User.findById(sellerId).session(session);
       if (!seller) {
-        throw { status: StatusCodes.NOT_FOUND, message: "Seller not found" };
+        const err = new Error("Seller not found");
+        err.status = StatusCodes.NOT_FOUND;
+        throw err;
       }
 
-      // ✅ Interested buyers doc
+      // ✅ Validate interested buyers list
       const interestedDoc = await InterestedBuyers.findOne({ productId }).session(session);
       if (!interestedDoc) {
-        throw { status: StatusCodes.NOT_FOUND, message: "No interested buyers found for this product" };
+        const err = new Error("No interested buyers found for this product");
+        err.status = StatusCodes.NOT_FOUND;
+        throw err;
       }
-
-      // ✅ Ensure buyer exists
       if (!interestedDoc.buyers.some((b) => b.buyer.toString() === buyerId)) {
-        throw { status: StatusCodes.NOT_FOUND, message: "Buyer not found in interested list" };
+        const err = new Error("Buyer not found in interested list");
+        err.status = StatusCodes.NOT_FOUND;
+        throw err;
       }
 
-      // ✅ Check buyer's wishlist
+      // ✅ Validate wishlist
       const wishlistDoc = await Wishlist.findOne({ userId: buyerId }).session(session);
-      if (!wishlistDoc) {
-        throw { status: StatusCodes.NOT_FOUND, message: "Wishlist not found for this buyer" };
-      }
-      if (!wishlistDoc.interests.some((p) => p.toString() === productId)) {
-        throw { status: StatusCodes.NOT_FOUND, message: "Product not found in buyer's wishlist interests" };
+      if (!wishlistDoc || !wishlistDoc.interests.includes(productId)) {
+        const err = new Error("Product not found in buyer's wishlist interests");
+        err.status = StatusCodes.NOT_FOUND;
+        throw err;
       }
 
       // 1️⃣ Remove buyer from interested list
@@ -210,15 +229,19 @@ const rejectBuyRequest = async (req, res) => {
         { session }
       );
 
-      // 3️⃣ Delete interested buyers doc if empty
-      const updatedDoc = await InterestedBuyers.findOne({ productId }).session(session);
-      if (updatedDoc && updatedDoc.buyers.length === 0) {
-        await InterestedBuyers.deleteOne({ productId }, { session });
-      }
-
-      // 4️⃣ Send notification/email
-      await sendRejectBuyRequest({ buyer, seller, product });
+      // 3️⃣ Delete doc if empty
+      await InterestedBuyers.deleteOne(
+        { productId, buyers: { $size: 0 } },
+        { session }
+      );
     });
+
+    // ✅ Send notification after commit
+    try {
+      await sendRejectBuyRequest({ buyer, seller, product });
+    } catch (err) {
+      console.error("Notification failed:", err.message);
+    }
 
     return res.status(StatusCodes.OK).json({
       success: true,
@@ -227,8 +250,7 @@ const rejectBuyRequest = async (req, res) => {
 
   } catch (error) {
     console.error("Transaction failed:", error);
-    const status = error.status || StatusCodes.INTERNAL_SERVER_ERROR;
-    return res.status(status).json({
+    return res.status(error.status || StatusCodes.INTERNAL_SERVER_ERROR).json({
       success: false,
       message: error.message || "Server error while removing buyer interest",
     });
