@@ -75,9 +75,31 @@ const InterestedBuyersDialogBox = ({ productId }) => {
       toast.error("Failed to sell");
     }
   };
-  function handleReject() {
-    toast.error("rejected from FE");
-  }
+  const handleReject =
+    async (buyerId, productId,sellerId) => {
+  ;
+    
+
+    try {
+      const response = await axios.post(
+        `/api/v1/interested/reject-buy-request`,
+        { buyerId, productId,sellerId},
+        {
+          withCredentials: true,
+        }
+      );
+      if (response.data.success) {
+        dispatch(fetchAllProducts());
+        dispatch(fetchMyListing(sellerId));
+        toast.success("Successfully Rejected Buy Request!");
+      } else {
+        toast.error(response.data.msg);
+      }
+    } catch (error) {
+      console.error("Error Rejecting Request:", error);
+      toast.error("Failed to reject request!!");
+    }
+  };
 
   return (
     <AlertDialog open={open} onOpenChange={setOpen} className="mx-2 sm:mx-0">
@@ -154,8 +176,10 @@ const InterestedBuyersDialogBox = ({ productId }) => {
                         title="Accept"
                       />
                       <ConfirmDialog
-                        onConfirm={handleReject}
-                        msg="You are Rejecting the your Buyer !!!!!"
+                        onConfirm={() =>
+                          handleReject(buyer.buyer._id, productId,user.userId)
+                        }
+                        msg="You are Rejecting  Buy Request and cannot be reverted !!!!!"
                         title="Reject"
                       />
                     </div>
