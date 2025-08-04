@@ -143,8 +143,6 @@ const getBuyRequests = async (req, res) => {
 };
 
 //reject buy request
-
-
 const rejectBuyRequest = async (req, res) => {
   const session = await mongoose.startSession();
   try {

@@ -341,36 +341,34 @@ const soldOut = async (req, res) => {
     }
 
     // product already sold out
-    if(product.soldOut){
+    if (product.soldOut) {
       return res.status(StatusCodes.BAD_REQUEST).json({
         success: false,
         msg: "the product is Already Sold out",
       });
-
     }
 
     // Verify if the buyer id is in the interested database of the product
-   
-const interestedBuyers = await InterestedBuyers.findOne({ productId });
 
-if (!interestedBuyers) {
-  return res.status(StatusCodes.NOT_FOUND).json({
-    success: false,
-    msg: "No interested buyers found for this product",
-  });
-}
+    const interestedBuyers = await InterestedBuyers.findOne({ productId });
 
-const indexOfBuyer = interestedBuyers.buyers.findIndex(
-  (buyer) => buyer.buyer.toString() === buyerId.toString()
-);
+    if (!interestedBuyers) {
+      return res.status(StatusCodes.NOT_FOUND).json({
+        success: false,
+        msg: "No interested buyers found for this product",
+      });
+    }
 
-if (indexOfBuyer === -1) {
-  return res.status(StatusCodes.BAD_REQUEST).json({
-    success: false,
-    msg: "This buyer is not in the interested buyers of this product",
-  });
-}
+    const indexOfBuyer = interestedBuyers.buyers.findIndex(
+      (buyer) => buyer.buyer.toString() === buyerId.toString()
+    );
 
+    if (indexOfBuyer === -1) {
+      return res.status(StatusCodes.BAD_REQUEST).json({
+        success: false,
+        msg: "This buyer is not in the interested buyers of this product",
+      });
+    }
 
     // check the buyer
     const buyer = await User.findById(buyerId);
@@ -387,7 +385,7 @@ if (indexOfBuyer === -1) {
         msg: "The seller is not valid",
         success: false,
       });
-    
+
     // Now its time to sell
     product.soldOut = true;
     product.buyer = { email: buyer.email, userName: buyer.userName };
@@ -395,6 +393,8 @@ if (indexOfBuyer === -1) {
     // it will persists in the interested products of the
 
     await product.save();
+    // delete the interested buyers from the database
+    await InterestedBuyers.findByIdAndDelete(interestedBuyers._id);
 
     // Send confirmation mail to the buyer
     await sendOrderConfirmation({ buyer, seller, product });
