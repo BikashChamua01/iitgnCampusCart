@@ -72,7 +72,7 @@ const InterestedBuyersDialogBox = ({ productId }) => {
       }
     } catch (error) {
       console.error("Error selling product:", error);
-      toast.error("Failed to sell",error);
+      toast.error("Failed to sell");
     }
   };
   const handleReject =

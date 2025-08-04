@@ -147,117 +147,124 @@ const getBuyRequests = async (req, res) => {
 
 const rejectBuyRequest = async (req, res) => {
   const session = await mongoose.startSession();
-
   try {
-    const { productId, buyerId, sellerId } = req.body;
+    const { buyerId, productId, sellerId } = req.body;
+    const { userId } = req.user;
 
-    if (!productId || !buyerId || !sellerId) {
-      return res.status(StatusCodes.BAD_REQUEST).json({
+    // ✅ Ensure only the seller can perform this action
+    if (sellerId.toString() !== userId.toString()) {
+      return res.status(StatusCodes.UNAUTHORIZED).json({
         success: false,
-        message: "Product ID, Buyer ID, and Seller ID are required",
+        msg: "Unauthorized user",
       });
     }
 
-    let product, buyer, seller;
+    // ✅ Validate product
+    const product = await Product.findById(productId);
+    if (!product) {
+      return res.status(StatusCodes.BAD_REQUEST).json({
+        success: false,
+        msg: "Product not found in database",
+      });
+    }
 
-    await session.withTransaction(async () => {
-      // ✅ Validate product
-      product = await Product.findById(productId).session(session);
-      if (!product) {
-        const err = new Error("Product not found");
-        err.status = StatusCodes.NOT_FOUND;
-        throw err;
-      }
+    // ✅ Product already sold
+    if (product.soldOut) {
+      return res.status(StatusCodes.BAD_REQUEST).json({
+        success: false,
+        msg: "The product is already sold out",
+      });
+    }
 
-      // product already sold out
-          if(product.soldOut){
-            return res.status(StatusCodes.BAD_REQUEST).json({
-              success: false,
-              msg: "the product is Already Sold out",
-            });
-      
-          }
+    // ✅ Validate buyer and seller
+    const buyer = await User.findById(buyerId);
+    if (!buyer) {
+      return res.status(StatusCodes.BAD_REQUEST).json({
+        success: false,
+        msg: "The buyer is not valid",
+      });
+    }
 
-      // ✅ Validate buyer
-      buyer = await User.findById(buyerId).session(session);
-      if (!buyer) {
-        const err = new Error("Buyer not found");
-        err.status = StatusCodes.NOT_FOUND;
-        throw err;
-      }
+    const seller = await User.findById(sellerId);
+    if (!seller) {
+      return res.status(StatusCodes.BAD_REQUEST).json({
+        success: false,
+        msg: "The seller is not valid",
+      });
+    }
 
-      // ✅ Validate seller
-      seller = await User.findById(sellerId).session(session);
-      if (!seller) {
-        const err = new Error("Seller not found");
-        err.status = StatusCodes.NOT_FOUND;
-        throw err;
-      }
+    // ✅ Check if buyer is in interested list
+    const interestedBuyers = await InterestedBuyers.findOne({ productId });
+    if (!interestedBuyers) {
+      return res.status(StatusCodes.NOT_FOUND).json({
+        success: false,
+        msg: "No interested buyers found for this product",
+      });
+    }
 
-      // ✅ Validate interested buyers list
-      const interestedDoc = await InterestedBuyers.findOne({ productId }).session(session);
-      if (!interestedDoc) {
-        const err = new Error("No interested buyers found for this product");
-        err.status = StatusCodes.NOT_FOUND;
-        throw err;
-      }
-      if (!interestedDoc.buyers.some((b) => b.buyer.toString() === buyerId)) {
-        const err = new Error("Buyer not found in interested list");
-        err.status = StatusCodes.NOT_FOUND;
-        throw err;
-      }
+    const buyerIndex = interestedBuyers.buyers.findIndex(
+      (entry) => entry.buyer.toString() === buyerId.toString()
+    );
 
-      // ✅ Validate wishlist
-      const wishlistDoc = await Wishlist.findOne({ userId: buyerId }).session(session);
-      if (!wishlistDoc || !wishlistDoc.interests.includes(productId)) {
-        const err = new Error("Product not found in buyer's wishlist interests");
-        err.status = StatusCodes.NOT_FOUND;
-        throw err;
-      }
+    if (buyerIndex === -1) {
+      return res.status(StatusCodes.BAD_REQUEST).json({
+        success: false,
+        msg: "This buyer is not in the interested buyers list",
+      });
+    }
 
-      // 1️⃣ Remove buyer from interested list
-      await InterestedBuyers.updateOne(
-        { productId },
-        { $pull: { buyers: { buyer: buyerId } } },
-        { session }
-      );
+    // ✅ Begin lightweight transaction
+    session.startTransaction();
 
-      // 2️⃣ Remove product from buyer's wishlist
-      await Wishlist.updateOne(
-        { userId: buyerId },
-        { $pull: { interests: productId } },
-        { session }
-      );
+    // 1️⃣ Remove buyer from interested list
+    await InterestedBuyers.updateOne(
+      { productId },
+      { $pull: { buyers: { buyer: buyerId } } },
+      { session }
+    );
 
-      // 3️⃣ Delete doc if empty
-      await InterestedBuyers.deleteOne(
-        { productId, buyers: { $size: 0 } },
-        { session }
-      );
-    });
+    // 2️⃣ Remove product from buyer's wishlist
+    await Wishlist.updateOne(
+      { userId: buyerId },
+      { $pull: { interests: productId } },
+      { session }
+    );
 
-    // ✅ Send notification after commit
+    // 3️⃣ Delete doc if empty
+    const updatedDoc = await InterestedBuyers.findOne({ productId }).session(session);
+    if (updatedDoc && updatedDoc.buyers.length === 0) {
+      await InterestedBuyers.deleteOne({ productId }, { session });
+    }
+
+    await session.commitTransaction();
+
+    // ✅ Send notification
     try {
       await sendRejectBuyRequest({ buyer, seller, product });
-    } catch (err) {
-      console.error("Notification failed:", err.message);
+    } catch (notifErr) {
+      console.warn("Notification sending failed:", notifErr.message);
     }
 
     return res.status(StatusCodes.OK).json({
       success: true,
-      message: "Buyer successfully removed from interested list and wishlist",
+      msg: "Buyer successfully removed from interested list and wishlist",
     });
 
   } catch (error) {
-    console.error("Transaction failed:", error);
+    console.error("[RejectBuyRequest Error]:", error);
+    if (session.inTransaction()) {
+      await session.abortTransaction();
+    }
     return res.status(error.status || StatusCodes.INTERNAL_SERVER_ERROR).json({
       success: false,
-      message: error.message || "Server error while removing buyer interest",
+      msg: error.message || "Server encountered an error while rejecting buyer request",
     });
   } finally {
     session.endSession();
   }
 };
+
+
 
 
 
