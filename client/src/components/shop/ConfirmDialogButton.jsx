@@ -11,7 +11,7 @@ import {
 } from "../ui/alert-dialog";
 import { FaTrash } from "react-icons/fa";
 
-const ConfirmDialog = ({ onConfirm, msg,title }) => {
+const ConfirmDialog = ({ onConfirm, msg,title, loading, setLoading }) => {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
@@ -49,26 +49,34 @@ const ConfirmDialog = ({ onConfirm, msg,title }) => {
         </AlertDialogHeader>
 
         <AlertDialogFooter className="mt-4 flex justify-end gap-2">
-          <AlertDialogCancel
-            className="
-              px-4 py-2 text-sm font-medium rounded-md border border-gray-300
-              text-gray-700 hover:bg-gray-100 transition cursor-pointer
-            "
-          >
-            Cancel
-          </AlertDialogCancel>
-          <AlertDialogAction
-            onClick={onConfirm}
-            className={`not-first:
-              px-4 py-2 text-sm font-medium rounded-md
-              bg-red-600 text-white hover:bg-red-700
-              transition cursor-pointer
-              ${title=="Accept" && 'bg-green-600 text-white hover:bg-green-700' }
-            `}
-          >
-            Yes, {title}
-          </AlertDialogAction>
-        </AlertDialogFooter>
+  <AlertDialogCancel
+    disabled={loading}
+    className={`
+      px-4 py-2 text-sm font-medium rounded-md border border-gray-300
+      text-gray-700 transition cursor-pointer
+      ${loading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-100'}
+    `}
+  >
+    Cancel
+  </AlertDialogCancel>
+
+  <AlertDialogAction
+    disabled={loading}
+    onClick={onConfirm}
+    className={`
+      not-first:px-4 py-2 text-sm font-medium rounded-md
+      transition cursor-pointer
+      ${title === "Accept" 
+        ? 'bg-green-600 text-white hover:bg-green-700' 
+        : 'bg-red-600 text-white hover:bg-red-700'}
+      ${loading ? 'opacity-50 cursor-not-allowed' : ''}
+    `}
+  >
+    {loading ? "Processing..." : `Yes, ${title}`}
+  </AlertDialogAction>
+</AlertDialogFooter>
+
+
       </AlertDialogContent>
     </AlertDialog>
   );

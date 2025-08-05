@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import MylistingCard from "../../components/shop/MylistingCard";
 import { fetchMyListing, fetchAllProducts } from "../../store/product-slice";
@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 const ShopListing = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const { user } = useSelector((state) => state.auth);
   const { products, myListing } = useSelector((state) => state.shopProducts);
@@ -34,6 +35,7 @@ const ShopListing = () => {
   };
 
   const onDelete = async (productId) => {
+    setLoading(true);
     try {
       const response = await axios.delete(
         `/api/v1/products/delete/${productId}`,
@@ -49,6 +51,8 @@ const ShopListing = () => {
     } catch (error) {
       console.log(error);
       toast.error("Failed to delete product", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -74,6 +78,8 @@ const ShopListing = () => {
                 key={product._id}
                 onEdit={onEdit}
                 onDelete={onDelete}
+                loading={loading}
+                setLoading={setLoading}
               />
             ))
           : products.map((product) => (
@@ -83,6 +89,8 @@ const ShopListing = () => {
                 key={product._id}
                 onEdit={onEdit}
                 onDelete={onDelete}
+                loading={loading}
+                setLoading={setLoading}
               />
             ))}
       </div>

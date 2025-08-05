@@ -72,6 +72,8 @@ const ProductDetail = () => {
     category,
     condition,
     images = [],
+    soldOut,
+    seller,
   } = product;
 
   let isWishlisted = false;
@@ -108,13 +110,14 @@ const ProductDetail = () => {
           >
             <div className="relative w-full max-w-md mx-auto">
               {/* wishlist button */}
-              <button
-                onClick={handleWishlist}
-                className="group absolute top-3 right-4 outline-none cursor-pointer z-10 bg-transparent border-none w-fit"
-                aria-label="Toggle wishlist"
-              >
-                <FaHeart
-                  className={`
+              {seller?._id !== user.userId && (
+                <button
+                  onClick={handleWishlist}
+                  className="group absolute top-3 right-4 outline-none cursor-pointer z-10 bg-transparent border-none w-fit"
+                  aria-label="Toggle wishlist"
+                >
+                  <FaHeart
+                    className={`
                         heart-icon w-6 h-6 transition-all duration-300
                         ${
                           isWishlisted
@@ -122,8 +125,9 @@ const ProductDetail = () => {
                             : "text-white not-wishlisted hover:text-red-100 heart-outline"
                         }
                       `}
-                />
-              </button>
+                  />
+                </button>
+              )}
               <img
                 src={currentImageUrl || images[0]?.url || "/placeholder.png"}
                 alt={title}
@@ -261,15 +265,13 @@ const ProductDetail = () => {
                 </div>
               )}
             </motion.div>
-
-            {product?.seller?._id !== user.userId && (
+            {product?.seller?._id === user.userId ? (
+              <InterestedBuyersDialogBox productId={product._id} />
+            ) : (
               <BuyRequestDialogBox
                 product={product}
                 imageUrl={product?.images[0]?.url}
               />
-            )}
-            {product?.seller?._id === user.userId && (
-              <InterestedBuyersDialogBox productId={product._id} />
             )}
           </div>
         </div>

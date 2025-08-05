@@ -7,7 +7,14 @@ import { Link } from "react-router-dom";
 import { User } from "lucide-react";
 import { toast } from "sonner";
 
-const MyListingCard = ({ product, onEdit, onDelete, isAdmin }) => {
+const MyListingCard = ({
+  product,
+  onEdit,
+  onDelete,
+  isAdmin,
+  loading,
+  setLoading,
+}) => {
   const {
     _id: productId,
     title,
@@ -23,6 +30,7 @@ const MyListingCard = ({ product, onEdit, onDelete, isAdmin }) => {
   const truncateText = (text, maxLength) => {
     return text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
   };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -104,9 +112,7 @@ const MyListingCard = ({ product, onEdit, onDelete, isAdmin }) => {
                 boxShadow: "0 2px 12px 0 rgba(168, 85, 247, 0.25)",
               }}
               whileTap={{ scale: 0.96 }}
-              onClick={() =>
-                toast.info("You have already sold this product!")
-              }
+              onClick={() => toast.info("You have already sold this product!")}
               className={`${
                 isAdmin ? "hidden" : "block"
               } flex-1 py-1 text-xs font-medium rounded-full bg-purple-200 text-purple-800 hover:bg-purple-300 hover:shadow-lg hover:shadow-purple-300 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-400 cursor-pointer`}
@@ -115,11 +121,19 @@ const MyListingCard = ({ product, onEdit, onDelete, isAdmin }) => {
             </motion.button>
           )}
           {/* Delete Button - wrap in animated div */}
-          <div className={`flex-1 ${soldOut ? "animate-pulse ring-2 ring-red-400 shadow-lg shadow-red-300" : ""} rounded-full`}>
+          <div
+            className={`flex-1 ${
+              soldOut
+                ? "animate-pulse ring-2 ring-red-400 shadow-lg shadow-red-300"
+                : ""
+            } rounded-full`}
+          >
             <ConfirmDialog
               onConfirm={() => onDelete(productId)}
               msg="This action cannot be undone. This will permanently delete your product."
               title="Delete"
+              loading={loading}
+              setLoading={setLoading}
             />
           </div>
         </div>
