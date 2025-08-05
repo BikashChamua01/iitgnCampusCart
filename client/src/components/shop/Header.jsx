@@ -17,8 +17,8 @@ const ShopHeader = () => {
   const menuItems = [
     { to: "/shop", label: "Home", icon: <FaHome /> },
     { to: "/shop/products", label: "Products", icon: <FaProductHunt /> },
-    { to: "/shop/sell", label: "Sell", icon: <FaCartPlus /> }, // Center
-    { to: "/shop/listings", label: "Listings", icon: <FaList /> },
+    { to: "/shop/sell", label: "Sell", icon: <FaCartPlus /> },
+    { to: "/shop/listings", label: "My Listings", icon: <FaList /> },
     { to: "/shop/about", label: "About", icon: <FaInfoCircle /> },
   ];
 
@@ -41,7 +41,7 @@ const ShopHeader = () => {
       </div>
 
       {/* Center: Menu */}
-      <div className="hidden md:flex justify-center items-center md:gap-6 lg:gap-8 w-1/3 md:text-xs lg:text-2xl">
+      <div className="hidden md:flex justify-center items-center md:gap-6 lg:gap-8 w-1/2 md:text-xs lg:text-2xl">
         {menuItems.map(({ to, label, icon }) => {
           const isActive = pathname === to;
           return (

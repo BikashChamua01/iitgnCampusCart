@@ -1,4 +1,4 @@
-import { FaHome, FaProductHunt, FaList, FaInfoCircle } from "react-icons/fa";
+import { FaHome, FaProductHunt, FaList, FaInfoCircle, FaCartPlus } from "react-icons/fa";
 import { Link, useLocation } from "react-router-dom";
 
 export default function ShopFooter() {
@@ -7,7 +7,8 @@ export default function ShopFooter() {
   const menu = [
     { to: "/shop", icon: <FaHome />, label: "Home" },
     { to: "/shop/products", icon: <FaProductHunt />, label: "Products" },
-    { to: "/shop/listings", icon: <FaList />, label: "Listings" },
+    { to: "/shop/sell", icon: <FaCartPlus />, label: "Sell" },
+    { to: "/shop/listings", icon: <FaList />, label: "My Listings" },
     { to: "/shop/about", icon: <FaInfoCircle />, label: "About" },
   ];
 
@@ -41,9 +42,10 @@ export default function ShopFooter() {
           >
             <span className="text-lg mb-[1px]">{icon}</span>
             <span className="text-[11px]">{label}</span>
-            
-              { isActive && <hr className=" bg-blue-900 w-[120%]  min-h-0.5 rounded-4xl p-0 mt-1"></hr>}
-            
+
+            {isActive && (
+              <hr className=" bg-blue-900 w-[120%]  min-h-0.5 rounded-4xl p-0 mt-1"></hr>
+            )}
           </Link>
         );
       })}
