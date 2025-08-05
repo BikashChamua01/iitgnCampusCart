@@ -186,7 +186,7 @@ const sendOrderConfirmation = async ({ buyer, seller, product }) => {
     </p>
 
     <div style="display:flex;gap:16px;align-items:flex-start;background:#ffffff;border:1px solid #ddd;padding:16px;border-radius:8px;margin-bottom:24px;">
-      <img src="${productImageUrl}" alt="Product Image" style="width:110px;height:auto;border-radius:6px;border:1px solid #ccc;">
+      <img src="${productImageUrl}" alt="Product Image" style="width:110px;height:auto;border-radius:6px;border:1px solid #ccc; margin:2px">
       <div>
         <h3 style="margin:0 0 6px 0;color:#204ba6;">${product.title}</h3>
         <p style="margin:4px 0;font-size:0.95em;color:#333;"><strong>Price:</strong> ₹${

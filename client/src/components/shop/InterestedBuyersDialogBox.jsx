@@ -22,39 +22,41 @@ const InterestedBuyersDialogBox = ({ productId }) => {
   const [loading, setLoading] = useState(false);
   const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
- const fetchBuyers = async () => {
-      if (!open || !productId) return;
-      setLoading(true);
-      try {
-        console.log(user.userId);
-        const res = await axios.get(`/api/v1/interested/get-buy-requests`, {
-          params: { productId, sellerId: user.userId },
-          withCredentials: true,
-        });
-        const data = res.data;
-        if (data?.success) {
-          setBuyers(data.buyRequests || []);
-        } else {
-          toast.error(data.msg || "Failed to load interested buyers.");
-        }
-      } catch (error) {
-        toast.error(error?.msg || error?.message || "Error fetching buyers.");
-      } finally {
-        setLoading(false);
+
+  const fetchBuyers = async () => {
+    if (!open || !productId) return;
+    setLoading(true);
+    try {
+      console.log(user.userId);
+      const res = await axios.get(`/api/v1/interested/get-buy-requests`, {
+        params: { productId, sellerId: user.userId },
+        withCredentials: true,
+      });
+      const data = res.data;
+      if (data?.success) {
+        setBuyers(data.buyRequests || []);
+      } else {
+        toast.error(data.msg || "Failed to load interested buyers.");
       }
-    };
+    } catch (error) {
+      toast.error(error?.msg || error?.message || "Error fetching buyers.");
+    } finally {
+      setLoading(false);
+    }
+  };
   useEffect(() => {
-   
     fetchBuyers();
   }, [open, productId, user.userId]);
   console.log(buyers);
 
+  // hANDLE ACCEPT
   const handleAccept = async (buyerId, productId, sellerId) => {
     // console.log("buyer",buyerId);
     // console.log("seller",sellerId);
     // console.log("product",productId);
 
     try {
+      setLoading(true);
       const response = await axios.post(
         `/api/v1/products/sold-out`,
         { buyerId, productId, sellerId },
@@ -73,17 +75,19 @@ const InterestedBuyersDialogBox = ({ productId }) => {
     } catch (error) {
       console.error("Error selling product:", error);
       toast.error("Failed to sell");
+    } finally {
+      setOpen(false);
+      setLoading(false);
     }
   };
-  const handleReject =
-    async (buyerId, productId,sellerId) => {
-  ;
-    
 
+  // HANDLE REJECT
+  const handleReject = async (buyerId, productId, sellerId) => {
+    setLoading(true);
     try {
       const response = await axios.post(
         `/api/v1/interested/reject-buy-request`,
-        { buyerId, productId,sellerId},
+        { buyerId, productId, sellerId },
         {
           withCredentials: true,
         }
@@ -99,6 +103,8 @@ const InterestedBuyersDialogBox = ({ productId }) => {
     } catch (error) {
       console.error("Error Rejecting Request:", error);
       toast.error("Failed to reject request!!");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -175,13 +181,17 @@ const InterestedBuyersDialogBox = ({ productId }) => {
                         }
                         msg="You are Accepting the buy request and cannot be undone!!!!!"
                         title="Accept"
+                        loading={loading}
+                        setLoading={setLoading}
                       />
                       <ConfirmDialog
                         onConfirm={() =>
-                          handleReject(buyer.buyer._id, productId,user.userId)
+                          handleReject(buyer.buyer._id, productId, user.userId)
                         }
                         msg="You are Rejecting  Buy Request and cannot be reverted !!!!!"
                         title="Reject"
+                        loading={loading}
+                        setLoading={setLoading}
                       />
                     </div>
                   </div>
