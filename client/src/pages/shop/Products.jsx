@@ -30,11 +30,12 @@ const ShopProducts = () => {
   const { wishlist } = useSelector((state) => state.wishlist);
   const storage_name = "CAMPUSCART-FILTER";
 
-  const [search, setSearch] = useState(""); //for the search
-  const [sortOption, setSortOption] = useState(""); //for the sorting
-  const [showFilters, setShowFilters] = useState(false); //to open clode the sidebar
-  const [filter, setFilter] = useState([]); //category filter
-  const [isFiltered, setIsFiltered] = useState(false); //this is used to toggle between the filter and the clear filter button in the header of the product
+  const [search, setSearch] = useState(""); // raw search input
+  const [debouncedSearch, setDebouncedSearch] = useState(search); // debounced value
+  const [sortOption, setSortOption] = useState("");
+  const [showFilters, setShowFilters] = useState(false);
+  const [filter, setFilter] = useState([]);
+  const [isFiltered, setIsFiltered] = useState(false);
   const [showBuyRequests, setShowBuyRequests] = useState(false);
   const [buyRequests, setBuyRequests] = useState(new Set([]));
 
@@ -49,16 +50,20 @@ const ShopProducts = () => {
     dispatch(fetchWishlist());
   }, [dispatch, user.userId]);
 
-  // to store the filter in the localestorage
+  // Load saved filters from localStorage
   useEffect(() => {
     const data = localStorage.getItem(storage_name);
     const overAllFilter = JSON.parse(data);
-    overAllFilter ? setFilter([...overAllFilter.filter]) : setFilter([]);
-    overAllFilter
-      ? setShowBuyRequests(overAllFilter.showBuyRequests)
-      : setShowBuyRequests(false);
+    if (overAllFilter) {
+      setFilter([...overAllFilter.filter]);
+      setShowBuyRequests(overAllFilter.showBuyRequests);
+    } else {
+      setFilter([]);
+      setShowBuyRequests(false);
+    }
   }, []);
 
+  // Save filters to localStorage
   useEffect(() => {
     const overAllFilter = {
       showBuyRequests,
@@ -67,44 +72,57 @@ const ShopProducts = () => {
     localStorage.setItem(storage_name, JSON.stringify(overAllFilter));
   }, [filter, showBuyRequests]);
 
+  // Toggle isFiltered flag
   useEffect(() => {
     if (filter.length === 0 && sortOption === "" && !showBuyRequests) {
       setIsFiltered(false);
-    } else setIsFiltered(true);
-  }, [search, filter, sortOption, showBuyRequests]);
+    } else {
+      setIsFiltered(true);
+    }
+  }, [filter, sortOption, showBuyRequests]);
 
-  // Buy requests
+  // Fetch buy requests
   useEffect(() => {
     const fetchBuyRequests = async () => {
       try {
         const response = await axios.get(
           `/api/v1/wishlist/get-buy-requests/${user.userId}`
         );
-
-        if (response.data.success === false)
-          return toast.error("Error in gettting the products");
+        if (response.data.success === false) {
+          toast.error("Error in getting the products");
+          return;
+        }
         setBuyRequests(new Set(response.data.buyRequests));
       } catch (error) {
         console.log(error);
       }
     };
-
     fetchBuyRequests();
   }, [user.userId]);
 
+  // Debounce the search input by 300ms
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearch(search);
+    }, 300);
+    return () => clearTimeout(handler);
+  }, [search]);
+
+  // Filter products by debouncedSearch, category filter, and buy requests
   const filteredProducts =
     filter.length === 0
       ? products.filter((product) =>
-          product.title.toLowerCase().includes(search.toLowerCase())
+          product.title.toLowerCase().includes(debouncedSearch.toLowerCase())
         )
       : products.filter((product) => {
           const cat = product.category;
           return (
-            (filter.indexOf("All") != -1 || filter.indexOf(cat) != -1) &&
-            product.title.toLowerCase().includes(search.toLowerCase())
+            (filter.includes("All") || filter.includes(cat)) &&
+            product.title.toLowerCase().includes(debouncedSearch.toLowerCase())
           );
         });
 
+  // Sort the filtered products
   let sortedProducts = [...filteredProducts].sort((a, b) => {
     switch (sortOption) {
       case "priceLowHigh":
@@ -122,13 +140,14 @@ const ShopProducts = () => {
     }
   });
 
+  // Apply buyRequests filter if enabled
   if (showBuyRequests) {
     sortedProducts = sortedProducts.filter((p) =>
       buyRequests?.has(p._id.toString())
     );
   }
 
-  // Clear filter function
+  // Clear all filters
   const clearFilter = () => {
     setFilter([]);
     setSortOption("");
@@ -137,41 +156,37 @@ const ShopProducts = () => {
     setShowBuyRequests(false);
   };
 
-  // Handle the filter click button in the header/ toolbar
+  // Handle filter/clear button click
   const handleFilterClick = () => {
     if (isFiltered) return clearFilter();
     setShowFilters(true);
   };
 
-  //  const [buyRequests, setBuyRequests] = useState([]);
-  // Create the backend to get the buyrequests of a user then call it here
+  // Toggle buy requests filter
   const handleShowBuyRequests = () => {
-    if (showBuyRequests) setShowBuyRequests(false);
-    else {
-      setShowBuyRequests(true);
-    }
+    setShowBuyRequests((prev) => !prev);
   };
 
   return (
-    <div className="min-h-screen  py-4  px-4 w-full relative">
-      <div className="max-w-7xl mx-auto ">
+    <div className="min-h-screen py-4 px-4 w-full relative">
+      <div className="max-w-7xl mx-auto">
         {/* Toolbar */}
-        <div className="flex  items-center  bg-white  py-2 px-4 md:px-10 mb-8 border-b-1 border-violet-100 md:gap-6 z-50">
+        <div className="flex items-center bg-white py-2 px-4 md:px-10 mb-8 border-b border-violet-100 md:gap-6 z-50">
           {/* Product Count */}
-          <div className="flex-1/2 flex justify-start">
+          <div className="flex-1 flex justify-start">
             <div className="text-sm font-semibold text-violet-700 bg-violet-100/60 rounded-full px-5 py-1 shadow-inner select-none tracking-wide">
               {sortedProducts.length} PRODUCTS
             </div>
           </div>
 
           {/* Filter Button */}
-          <div className="flex flex-1/2 justify-end">
+          <div className="flex-1 flex justify-end">
             <button
-              onClick={() => handleFilterClick()}
-              className={`flex items-center text-sm cursor-pointer  border ${
+              onClick={handleFilterClick}
+              className={`flex items-center text-sm cursor-pointer border ${
                 !isFiltered
                   ? "border-violet-600 text-violet-700"
-                  : "  border-red-600 text-red-700"
+                  : "border-red-600 text-red-700"
               } px-3 py-1 rounded-md shadow-sm hover:bg-violet-50 transition`}
             >
               <FaFilter className="mr-2" />
@@ -197,7 +212,7 @@ const ShopProducts = () => {
                 </h2>
                 <button
                   onClick={() => setShowFilters(false)}
-                  className="text-violet-400 hover:text-violet-700  rounded-full p-2 bg-violet-50 hover:bg-violet-100 shadow focus:ring-2 focus:ring-violet-200 transition cursor-pointer"
+                  className="text-violet-400 hover:text-violet-700 rounded-full p-2 bg-violet-50 hover:bg-violet-100 shadow focus:ring-2 focus:ring-violet-200 transition cursor-pointer"
                   aria-label="Close filter sidebar"
                 >
                   <X size={26} />
@@ -206,25 +221,23 @@ const ShopProducts = () => {
 
               {/* Filters */}
               <div className="space-y-3 md:space-y-8 flex-1">
-                {/* my buy requests */}
+                {/* My Buy Requests */}
                 <div>
                   <Label
                     htmlFor="buy-requests"
-                    className="flex items-center gap-3 rounded-md  transition cursor-pointer group w-fit "
+                    className="flex items-center gap-3 rounded-md transition cursor-pointer group w-fit"
                   >
                     <span className="mb-2 text-md font-medium text-violet-700">
                       Show Buy Requests
                     </span>
                     <Checkbox
                       checked={showBuyRequests}
-                      onCheckedChange={() => handleShowBuyRequests()}
-                      className="
-                accent-violet-600 w-5 h-5 min-w-[20px] min-h-[20px] rounded-md border-gray-300 group-hover:border-violet-500 shadow-sm focus:ring-2 focus:ring-violet-200 transition cursor-pointer "
-                      // id={category}
-                      // name={category}
+                      onCheckedChange={handleShowBuyRequests}
+                      className="accent-violet-600 w-5 h-5 min-w-[20px] min-h-[20px] rounded-md border-gray-300 group-hover:border-violet-500 shadow-sm focus:ring-2 focus:ring-violet-200 transition cursor-pointer"
                     />
                   </Label>
                 </div>
+
                 {/* Search */}
                 <div>
                   <label
@@ -241,7 +254,7 @@ const ShopProducts = () => {
                       value={search}
                       onChange={(e) => setSearch(e.target.value)}
                       placeholder="Search products..."
-                      className="w-full bg-transparent outline-none border-none text-base text-gray-800 placeholder-gray-400 focus:placeholder-violet-300 transition "
+                      className="w-full bg-transparent outline-none border-none text-base text-gray-800 placeholder-gray-400 focus:placeholder-violet-300 transition"
                       autoComplete="off"
                       spellCheck={false}
                     />
@@ -273,12 +286,7 @@ const ShopProducts = () => {
                   </select>
                 </div>
 
-                {/* <SortDropDown
-                  sortOption={sortOption}
-                  setSortOption={setSortOption}
-                /> */}
-
-                {/* Category section */}
+                {/* Category Filter */}
                 <div>
                   <Filter
                     categories={categories}
@@ -289,7 +297,7 @@ const ShopProducts = () => {
               </div>
 
               {/* Clear Filter Button */}
-              <Button className="custom-button" onClick={() => clearFilter()}>
+              <Button className="custom-button" onClick={clearFilter}>
                 Clear Filter
               </Button>
             </div>
