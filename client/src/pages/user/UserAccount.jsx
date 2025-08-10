@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { logout } from "../../store/auth-slice";
@@ -16,9 +13,7 @@ import { User, Lock, Pencil, Heart } from "lucide-react";
 
 const UserAccount = () => {
   const [user, setUser] = useState(null);
-
   const dispatch = useDispatch();
-
   const { user: userDetails } = useSelector((state) => state.auth);
 
   useEffect(() => {
@@ -47,7 +42,7 @@ const UserAccount = () => {
               after:bg-gradient-to-r after:from-purple-500 after:to-pink-300
               after:scale-x-0 after:origin-left after:transition-transform after:duration-300
               data-[state=active]:after:scale-x-100 
-              data-[state=active]:shadow-none`}
+              data-[state=active]:shadow-none cursor-pointer`}
           >
             <User className="w-4 h-4" />
             Profile
@@ -59,7 +54,7 @@ const UserAccount = () => {
               after:bg-gradient-to-r after:from-purple-500 after:to-pink-300
               after:scale-x-0 after:origin-left after:transition-transform after:duration-300
               data-[state=active]:after:scale-x-100 
-              data-[state=active]:shadow-none`}
+              data-[state=active]:shadow-none cursor-pointer`}
           >
             <Lock className="w-4 h-4" />
             Change Password
@@ -71,7 +66,7 @@ const UserAccount = () => {
               after:bg-gradient-to-r after:from-purple-500 after:to-pink-300
               after:scale-x-0 after:origin-left after:transition-transform after:duration-300
               data-[state=active]:after:scale-x-100 
-              data-[state=active]:shadow-none`}
+              data-[state=active]:shadow-none cursor-pointer`}
           >
             <Pencil className="w-4 h-4" />
             Edit Profile
@@ -83,7 +78,7 @@ const UserAccount = () => {
               after:bg-gradient-to-r after:from-purple-500 after:to-pink-300
               after:scale-x-0 after:origin-left after:transition-transform after:duration-300
               data-[state=active]:after:scale-x-100 
-              data-[state=active]:shadow-none`}
+              data-[state=active]:shadow-none cursor-pointer`}
           >
             <Heart className="w-4 h-4" />
             Wishlist
