@@ -421,6 +421,85 @@ const soldOut = async (req, res) => {
   }
 };
 
+const deleteAllSoldOutProducts = async (req, res) => {
+  const session = await Product.startSession();
+
+  try {
+    session.startTransaction();
+
+    // Step 1: Authorization check (admin only)
+    if (!req.user.isAdmin) {
+      await session.abortTransaction();
+      return res.status(StatusCodes.UNAUTHORIZED).json({
+        success: false,
+        msg: "Only admin can delete all sold out products",
+      });
+    }
+
+    // Step 2: Find all sold out products
+    const soldOutProducts = await Product.find({ soldOut: true }).session(
+      session
+    );
+
+    if (soldOutProducts.length === 0) {
+      await session.abortTransaction();
+      return res.status(StatusCodes.NOT_FOUND).json({
+        success: false,
+        msg: "No sold out products found",
+      });
+    }
+
+    // Step 3: Move products to ProductHistory
+    const historyDocs = soldOutProducts.map((prod) => {
+      const plain = prod.toObject();
+      delete plain._id; // Avoid duplicate _id error
+      return plain;
+    });
+
+    await ProductHistory.insertMany(historyDocs, { session });
+
+    // Step 4: Collect all soldOut product IDs
+    const productIds = soldOutProducts.map((p) => p._id);
+
+    // Step 5: Delete sold out products from Product collection
+    await Product.deleteMany({ _id: { $in: productIds } }).session(session);
+
+    // Step 6: Remove from Wishlist (products & interests arrays)
+    await Wishlist.updateMany(
+      { products: { $in: productIds } },
+      { $pull: { products: { $in: productIds } } }
+    ).session(session);
+
+    await Wishlist.updateMany(
+      { interests: { $in: productIds } },
+      { $pull: { interests: { $in: productIds } } }
+    ).session(session);
+
+    // Step 7: Remove from InterestedBuyers
+    await InterestedBuyers.deleteMany({
+      productId: { $in: productIds },
+    }).session(session);
+
+    // Step 8: Commit
+    await session.commitTransaction();
+
+    return res.status(StatusCodes.OK).json({
+      success: true,
+      msg: `${soldOutProducts.length} sold out product(s) deleted and saved to history successfully`,
+    });
+  } catch (error) {
+    await session.abortTransaction();
+    console.error("Delete All Sold Out Products Error:", error.message);
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      success: false,
+      msg: "Failed to delete sold out products",
+    });
+  } finally {
+    session.endSession();
+  }
+};
+
+
 module.exports = {
   createProduct,
   getAllProducts,
@@ -429,4 +508,5 @@ module.exports = {
   editProduct,
   myListings,
   soldOut,
+  deleteAllSoldOutProducts,
 };
