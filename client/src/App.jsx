@@ -1,5 +1,6 @@
 // import the user shop pages
-import ShopLayout from "./components/shop/layout";
+// import ShopLayout from "./components/shop/layout";
+import ShopLayout from "./components/shop/Layout";
 import ShopHome from "./pages/shop/Home";
 import ShopProducts from "./pages/shop/Products";
 import ProductDetails from "./pages/shop/ProductDetails";
@@ -59,7 +60,7 @@ const App = () => {
 
   return (
     <>
-      <Toaster position="bottom-right" className="p-100"richColors />
+      <Toaster position="bottom-right" className="p-100" richColors />
       <BrowserRouter>
         <Routes>
           {/* Define default path */}
