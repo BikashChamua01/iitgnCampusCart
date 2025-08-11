@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
 import AdminHeader from "./Header";
-import AdminSidebar from "./sidebar";
+import AdminSidebar from "./Sidebar";
 import AdminFooter from "./Footer";
 import useScreenSize from "../../hooks/useScreenSize";
 
