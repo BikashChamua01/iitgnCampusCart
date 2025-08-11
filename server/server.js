@@ -13,7 +13,7 @@ app.use(express.json());
 
 app.use(
   cors({
-    origin: "http://localhost:5173", // ✅ Vite dev server
+    origin: process.env.FRONTEND_URL, // ✅ Vite dev server
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // ✅ Add OPTIONS (needed for preflight)
     credentials: true, // ✅ Required for cookies to be sent
     allowedHeaders: [
@@ -25,6 +25,9 @@ app.use(
     ],
   })
 );
+app.get("/", (req, res) => {
+  return res.send("<h1>Server is running</h1>");
+});
 
 // import the routers
 const authRouter = require("./routers/auth");
