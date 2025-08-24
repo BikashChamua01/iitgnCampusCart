@@ -22,6 +22,7 @@
     "mongoose": "^8.15.2",
     "multer": "^2.0.1",
     "nodemailer": "^7.0.3",
+    "serverless-http": "^3.2.0",
     "sharp": "^0.34.2",
     "streamifier": "^0.1.1",
     "validator": "^13.15.15"
