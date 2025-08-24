@@ -13,7 +13,7 @@ export const fetchAllUsers = createAsyncThunk(
   async ({ pageNumber, limit }, { rejectWithValue }) => {
     try {
       const response = await axios.get(
-        `/api/v1/users/fetch-users?page=${pageNumber}&limit=${limit}`,
+        `https://iitgn-campus-cart-backend.vercel.app/api/v1/users/fetch-users?page=${pageNumber}&limit=${limit}`,
         {
           withCredentials: true,
         }
@@ -25,8 +25,6 @@ export const fetchAllUsers = createAsyncThunk(
     }
   }
 );
-
-
 
 export const deleteUserAccount = createAsyncThunk(
   "/delete-account",

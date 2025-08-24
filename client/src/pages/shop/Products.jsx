@@ -86,7 +86,7 @@ const ShopProducts = () => {
     const fetchBuyRequests = async () => {
       try {
         const response = await axios.get(
-          `/api/v1/wishlist/get-buy-requests/${user.userId}`
+          `https://iitgn-campus-cart-backend.vercel.app/api/v1/wishlist/get-buy-requests/${user.userId}`
         );
         if (response.data.success === false) {
           toast.error("Error in getting the products");

@@ -12,7 +12,7 @@ export const register = createAsyncThunk(
   async (formData, { rejectWithValue }) => {
     try {
       console.log(formData);
-      const response = await axios.post("/api/v1/auth/register", formData, {
+      const response = await axios.post("https://iitgn-campus-cart-backend.vercel.app/api/v1/auth/register", formData, {
         withCredentials: true,
         headers: {
           "Content-Type": "multipart/form-data",
@@ -31,7 +31,7 @@ export const checkAuth = createAsyncThunk(
   "/auth/check-auth",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get("/api/v1/auth/check-auth", {
+      const response = await axios.get("https://iitgn-campus-cart-backend.vercel.app/api/v1/auth/check-auth", {
         withCredentials: true,
       });
       return response.data;
@@ -47,7 +47,7 @@ export const login = createAsyncThunk(
   "/auth/login",
   async (formData, { rejectWithValue }) => {
     try {
-      const response = await axios.post("/api/v1/auth/login", formData, {
+      const response = await axios.post("https://iitgn-campus-cart-backend.vercel.app/api/v1/auth/login", formData, {
         withCredentials: true,
       });
       return response.data;
@@ -64,7 +64,7 @@ export const logout = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.post(
-        "/api/v1/auth/logout",
+        "https://iitgn-campus-cart-backend.vercel.app/api/v1/auth/logout",
         {},
         {
           withCredentials: true,
