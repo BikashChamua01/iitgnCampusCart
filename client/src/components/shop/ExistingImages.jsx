@@ -3,7 +3,7 @@ import DeleteImageButton from "./DeleteImageButton";
 const ExistingImages = ({ images, handleImageDelete }) => {
   return (
     <div className="flex gap-1 sm:gap-3 shadow-lg shadow-fuchsia-200 items-center justify-evenly max-w-3xl flex-wrap object-center m-2 p-2 sm:m-4 sm:p-4 rounded-2xl">
-      {images.map((image) => (
+      {images?.map((image) => (
         <div key={image._id} className="relative">
           <img
             src={image.url}

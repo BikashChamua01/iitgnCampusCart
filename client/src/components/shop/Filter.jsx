@@ -18,7 +18,7 @@ const Filter = ({ categories, filter, setFilter }) => {
         Categories
       </div>
       <div className="flex flex-col gap-1">
-        {categories.map((category, idx) => (
+        {categories?.map((category, idx) => (
           <Label
             htmlFor={category}
             key={idx}
@@ -84,7 +84,7 @@ const SortDropDown = ({ sortOption, setSortOption }) => {
             { value: "newest", label: "Newest" },
             { value: "oldest", label: "Oldest" },
             { value: "rating", label: "Rating" },
-          ].map((option) => (
+          ]?.map((option) => (
             <DropdownMenu.Item
               key={option.value}
               onSelect={() => handleSelect(option.value)}

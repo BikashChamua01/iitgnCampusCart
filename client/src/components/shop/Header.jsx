@@ -42,7 +42,7 @@ const ShopHeader = () => {
 
       {/* Center: Menu */}
       <div className="hidden md:flex justify-center items-center md:gap-6 lg:gap-8 w-1/2 md:text-xs lg:text-2xl">
-        {menuItems.map(({ to, label, icon }) => {
+        {menuItems?.map(({ to, label, icon }) => {
           const isActive = pathname === to;
           return (
             <Link

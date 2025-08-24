@@ -60,7 +60,7 @@ const AdminUserListing = () => {
     <div className=" w-full p-2 lg:px-10 min-h-screen pb-5">
       <h1 className="w-full text-violet-700 text-center text-2xl lg:text-3xl font-bold mb-2 md:mb-8 underline text-shadow-fuchsia-300" >{user?.userName.split(" ")?.[0]}'s Uploads</h1>
       <div className="w-full grid sm:grid-cols-3 lg:grid-cols-4 gap:1 lg:gap-6  items-center">
-        {listings.map((product) => (
+        {listings?.map((product) => (
           <MyListingCard
             isAdmin={admin}
             product={product}

@@ -13,7 +13,7 @@ const RecentProductCard = ({ product, wishlist = false }) => {
 
   const dispatch = useDispatch();
   const { wishlist: wishlistItems } = useSelector((state) => state.wishlist);
-  const wishlistSet = new Set(wishlistItems.map((item) => item._id));
+  const wishlistSet = new Set(wishlistItems?.map((item) => item._id));
   const isWishlisted = wishlistSet.has(_id.toString());
 
   const handleWishlistToggle = (event) => {
@@ -85,7 +85,7 @@ const RecentProductCard = ({ product, wishlist = false }) => {
                 </button>
               )}
 
-              {images.map((imgObj, idx) => (
+              {images?.map((imgObj, idx) => (
                 <img
                   key={idx}
                   src={imgObj?.url}

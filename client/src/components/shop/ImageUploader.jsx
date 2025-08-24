@@ -15,18 +15,16 @@ const ImageUploader = ({ images, setImages }) => {
   };
 
   const handleRemove = (index) => {
-      document.getElementById("uploadInput").onclick = false;
     const updated = images.filter((_, i) => i !== index);
     setImages(updated);
   };
-  
 
   return (
-    <div
+    <label
+      htmlFor="uploadInput"
       onDrop={handleDrop}
       onDragOver={(e) => e.preventDefault()}
-      className="border-2 border-dashed border-[#7635b6] rounded-xl p-4 text-center cursor-pointer bg-white hover:bg-purple-50 transition h-full"
-      onClick={() => document.getElementById("uploadInput").click()}
+      className="border-2 border-dashed border-[#7635b6] rounded-xl p-4 text-center cursor-pointer bg-white hover:bg-purple-50 transition h-full block"
     >
       <input
         id="uploadInput"
@@ -37,13 +35,14 @@ const ImageUploader = ({ images, setImages }) => {
         className="hidden"
         disabled={images.length >= 5}
       />
+
       <p className="text-sm text-[#5b0d92]">
-        Drag & drop images or click to upload (max 5)
+        Drag & drop images or tap to upload (max 5)
       </p>
 
       {images.length > 0 && (
         <div className="mt-4 grid grid-cols-3 gap-3">
-          {images.map((img, i) => (
+          {images?.map((img, i) => (
             <div key={i} className="relative">
               <img
                 src={URL.createObjectURL(img)}
@@ -52,7 +51,10 @@ const ImageUploader = ({ images, setImages }) => {
               />
               <button
                 type="button"
-                onClick={() => handleRemove(i)}
+                onClick={(e) => {
+                  e.stopPropagation(); // prevent triggering file picker
+                  handleRemove(i);
+                }}
                 className="absolute top-1 right-1 bg-[#6a0dad] text-white rounded-full text-xs px-1 hover:bg-red-600"
               >
                 ✕
@@ -61,7 +63,7 @@ const ImageUploader = ({ images, setImages }) => {
           ))}
         </div>
       )}
-    </div>
+    </label>
   );
 };
 

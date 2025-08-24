@@ -40,9 +40,9 @@ const ShopProducts = () => {
   const [buyRequests, setBuyRequests] = useState(new Set([]));
 
   // conver the wishlist array to set
-  const wishlistSet = new Set(wishlist.map((product) => product._id));
+  const wishlistSet = new Set(wishlist?.map((product) => product._id));
 
-  const categories = [...Array.from(new Set(products.map((p) => p.category)))];
+  const categories = [...Array.from(new Set(products?.map((p) => p.category)))];
   categories.sort();
 
   // Get the wishlist
@@ -327,7 +327,7 @@ const ShopProducts = () => {
                 <p>No products found. Try adjusting your search or filters!</p>
               </div>
             ) : (
-              sortedProducts.map((product) => (
+              sortedProducts?.map((product) => (
                 <motion.div
                   key={product._id}
                   whileHover={{ scale: 1.01 }}

@@ -71,7 +71,7 @@ const ShopListing = () => {
 "
       >
         {!user.isAdmin
-          ? myListing.map((product) => (
+          ? myListing?.map((product) => (
               <MylistingCard
                 isAdmin={user.isAdmin}
                 product={product}
@@ -82,7 +82,7 @@ const ShopListing = () => {
                 setLoading={setLoading}
               />
             ))
-          : products.map((product) => (
+          : products?.map((product) => (
               <MylistingCard
                 isAdmin={user.isAdmin}
                 product={product}

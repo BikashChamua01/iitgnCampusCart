@@ -33,7 +33,7 @@ const AdminSidebar = () => {
       {/* Top content */}
       <div className="flex flex-col items-center w-full mt-4">
         <nav className="flex flex-col gap-6 items-center w-full">
-          {menuItems.map(({ to, label, icon }) => {
+          {menuItems?.map(({ to, label, icon }) => {
             const isActive = pathname === to;
             return (
               <Link

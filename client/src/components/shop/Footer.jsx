@@ -22,7 +22,7 @@ export default function ShopFooter() {
       py-2 flex justify-around items-center
       lg:hidden"
     >
-      {menu.map(({ to, icon, label }) => {
+      {menu?.map(({ to, icon, label }) => {
         const isActive = pathname === to;
         return (
           <Link

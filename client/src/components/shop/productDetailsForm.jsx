@@ -79,7 +79,7 @@ const ProductDetailsForm = ({ form, setForm }) => {
             className="w-full mt-1 px-4 py-2 border border-[#7635b6] rounded-lg bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#6a0dad]"
           >
             <option value="">Select category</option>
-            {categories.map((cat) => (
+            {categories?.map((cat) => (
               <option key={cat} value={cat}>
                 {cat}
               </option>
@@ -96,7 +96,7 @@ const ProductDetailsForm = ({ form, setForm }) => {
             onChange={handleChange}
             className="w-full mt-1 px-4 py-2 border border-[#7635b6] rounded-lg bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#6a0dad]"
           >
-            {conditions.map((c) => (
+            {conditions?.map((c) => (
               <option key={c} value={c}>
                 {c}
               </option>

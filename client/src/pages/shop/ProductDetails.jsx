@@ -34,7 +34,7 @@ const ProductDetail = () => {
   const { user } = useSelector((state) => state.auth);
 
   // convet the wishlist to set
-  const wishlistSet = new Set(wishlist.map((p) => p._id));
+  const wishlistSet = new Set(wishlist?.map((p) => p._id));
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -72,7 +72,6 @@ const ProductDetail = () => {
     category,
     condition,
     images = [],
-    soldOut,
     seller,
   } = product;
 
@@ -144,7 +143,7 @@ const ProductDetail = () => {
             {/* Thumbnail gallery (scrollable on mobile) */}
             {images.length > 1 && (
               <div className="flex gap-2 mt-4 flex-nowrap overflow-x-auto max-w-full scrollbar-thin scrollbar-thumb-purple-300 scrollbar-track-transparent">
-                {images.map((img, i) => (
+                {images?.map((img, i) => (
                   <img
                     key={i}
                     src={img.url}
@@ -285,7 +284,7 @@ const ProductDetail = () => {
             <div className="text-gray-500">No similar products found.</div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
-              {similarProducts.map((sp) => (
+              {similarProducts?.map((sp) => (
                 <ProductCard
                   key={sp._id}
                   product={sp}

@@ -112,7 +112,7 @@ const ProductCard = ({ product, isWishlisted }) => {
               {title}
             </h3>
             <div className="flex items-center gap-1 text-yellow-500 text-sm">
-              {[...Array(5)].map((_, idx) => (
+              {[...Array(5)]?.map((_, idx) => (
                 <FaStar
                   key={idx}
                   className={idx < rating ? "" : "text-gray-300"}

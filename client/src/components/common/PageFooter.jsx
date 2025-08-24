@@ -58,7 +58,7 @@ const PageFooter = () => (
       <div>
         <h3 className="text-xl font-semibold mb-3">Quick Links</h3>
         <ul className="space-y-2">
-          {["Home", "Products", "My Listings", "Login"].map((label) => (
+          {["Home", "Products", "My Listings", "Login"]?.map((label) => (
             <motion.li
               key={label}
               initial="hidden"
@@ -101,7 +101,7 @@ const PageFooter = () => (
       <div>
         <h3 className="text-xl font-semibold mb-3">Follow Us</h3>
         <div className="flex space-x-5">
-          {[FaFacebook, FaInstagram, FaTwitter, FaLinkedin].map((Icon, i) => (
+          {[FaFacebook, FaInstagram, FaTwitter, FaLinkedin]?.map((Icon, i) => (
             <motion.a
               key={i}
               href="#"

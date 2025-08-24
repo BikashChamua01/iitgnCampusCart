@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React from "react";
 import { motion } from "framer-motion";
 import { FaWhatsapp, FaEnvelope, FaInfoCircle } from "react-icons/fa";
@@ -59,7 +60,7 @@ function AnimatedProcessFlow() {
         visible: { transition: { staggerChildren: 0.15 } },
       }}
     >
-      {steps.map((step, i) => (
+      {steps?.map((step, i) => (
         <motion.div
           key={i}
           variants={{
@@ -245,7 +246,7 @@ export default function AboutPage() {
               visible: { transition: { staggerChildren: 0.15 } },
             }}
           >
-            {platformHighlights.map((item, idx) => (
+            {platformHighlights?.map((item, idx) => (
               <motion.div
                 key={idx}
                 variants={{

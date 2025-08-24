@@ -285,7 +285,7 @@ const RegistrationForm = () => {
           <div className="mb-4 text-center">
             <p className="text-gray-600 mb-2">Enter the 6-digit OTP</p>
             <div className="flex justify-center space-x-2 mb-2">
-              {otp.map((digit, idx) => (
+              {otp?.map((digit, idx) => (
                 <input
                   key={idx}
                   id={`otp-${idx}`}
@@ -335,7 +335,7 @@ const RegistrationForm = () => {
                 onChange={handleChange}
                 className="w-full px-4 py-2 border border-[#7635b6] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6a0dad]"
               >
-                {genders.map((c) => (
+                {genders?.map((c) => (
                   <option key={c} value={c}>
                     {c}
                   </option>
