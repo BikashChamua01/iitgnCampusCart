@@ -116,7 +116,7 @@ const Home = () => {
           whileInView="visible"
           viewport={{ once: true, amount: 0.25 }}
         >
-          {categories.map((cat) => (
+          {categories?.map((cat) => (
             <motion.div key={cat} variants={cardVariants}>
               <div
                 onClick={() => handleCategoryClick(cat)}
@@ -168,7 +168,7 @@ const Home = () => {
               No recent products found.
             </p>
           ) : (
-            recentlyAddedProducts.map((product) => (
+            recentlyAddedProducts?.map((product) => (
               <motion.div
                 key={product._id}
                 variants={recentCardVariants}

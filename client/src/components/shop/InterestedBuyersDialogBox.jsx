@@ -151,7 +151,7 @@ const InterestedBuyersDialogBox = ({ productId }) => {
                   No interested buyers yet.
                 </p>
               ) : (
-                buyers.map((buyer, index) => (
+                buyers?.map((buyer, index) => (
                   <div
                     key={index}
                     className="border  border-gray-300 rounded-lg p-3 bg-gray-50 text-sm shadow-sm"

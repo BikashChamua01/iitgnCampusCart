@@ -97,7 +97,7 @@ const ImageCarousel = () => {
           ref={sliderRef}
           className="keen-slider rounded-xl overflow-hidden shadow-xl"
         >
-          {banners.map((banner, idx) => (
+          {banners?.map((banner, idx) => (
             <div
               key={banner.id}
               className="keen-slider__slide relative h-[250px] sm:h-[400px] md:h-[450px]"
@@ -132,7 +132,7 @@ const ImageCarousel = () => {
 
         {/* Thumbnails */}
         <div className="flex justify-center mt-4 gap-2">
-          {banners.map((banner, idx) => (
+          {banners?.map((banner, idx) => (
             <img
               key={banner.id}
               src={banner.imageUrl}

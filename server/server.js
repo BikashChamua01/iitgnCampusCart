@@ -14,7 +14,7 @@ app.use(express.json());
 app.use(
   cors({
     origin: process.env.FRONTEND_URL, // ✅ Vite dev server
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // ✅ Add OPTIONS (needed for preflight)
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"], // ✅ Add OPTIONS (needed for preflight)
     credentials: true, // ✅ Required for cookies to be sent
     allowedHeaders: [
       "Content-Type",

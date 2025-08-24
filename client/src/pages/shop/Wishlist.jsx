@@ -5,6 +5,7 @@ import RecentProductCard from "@/components/shop/RecentProductCard";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchWishlist } from "@/store/wishlist-slice";
 import { toast } from "sonner";
+// eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from "framer-motion";
 // import Skeleton from "react-loading-skeleton"; // optional
 // import "react-loading-skeleton/dist/skeleton.css";
@@ -40,7 +41,7 @@ const Wishlist = ({ user }) => {
         <CardContent className="space-y-4">
           {loading && (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {Array.from({ length: 6 }).map((_, index) => (
+              {Array.from({ length: 6 })?.map((_, index) => (
                 <Skeleton key={index} height={250} borderRadius={12} />
               ))}
             </div>
@@ -53,7 +54,7 @@ const Wishlist = ({ user }) => {
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
             <AnimatePresence>
               {!loading &&
-                wishlist.map((product, index) => (
+                wishlist?.map((product, index) => (
                   <motion.div
                     key={product._id}
                     custom={index}
