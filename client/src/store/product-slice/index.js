@@ -13,7 +13,7 @@ export const fetchAllProducts = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get(
-        "https://iitgn-campus-cart-backend.vercel.app/api/v1/products",
+        "/api/v1/products",
         {
           withCredentials: true,
         }
@@ -31,7 +31,7 @@ export const fetchMyListing = createAsyncThunk(
   async (userId, { rejectWithValue }) => {
     try {
       const response = await axios.get(
-        `https://iitgn-campus-cart-backend.vercel.app/api/v1/products/my-listings/${userId}`,
+        `/api/v1/products/my-listings/${userId}`,
         {
           withCredentials: true,
         }

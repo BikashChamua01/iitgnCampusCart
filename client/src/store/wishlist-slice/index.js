@@ -12,7 +12,7 @@ export const fetchWishlist = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get(
-        `https://iitgn-campus-cart-backend.vercel.app/api/v1/wishlist/get-wishlist`,
+        `/api/v1/wishlist/get-wishlist`,
         {
           withCredentials: true,
         }
@@ -30,7 +30,7 @@ export const addToWishlist = createAsyncThunk(
   async (productId, { dispatch, rejectWithValue }) => {
     try {
       const res = await axios.post(
-        `https://iitgn-campus-cart-backend.vercel.app/api/v1/wishlist/add/${productId}`,
+        `/api/v1/wishlist/add/${productId}`,
         {},
         { withCredentials: true }
       );

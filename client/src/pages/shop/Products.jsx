@@ -86,7 +86,7 @@ const ShopProducts = () => {
     const fetchBuyRequests = async () => {
       try {
         const response = await axios.get(
-          `https://iitgn-campus-cart-backend.vercel.app/api/v1/wishlist/get-buy-requests/${user.userId}`,
+          `/api/v1/wishlist/get-buy-requests/${user.userId}`,
           {
             withCredentials: true,
           }
