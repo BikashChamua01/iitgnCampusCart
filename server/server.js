@@ -2,9 +2,10 @@
 require("dotenv").config();
 const connectDb = require("./db/connect");
 const app = require("./app");
-
+const express = require("express");
+const cookieParser = require("cookie-parser");
+const cors = require("cors");
 const PORT = process.env.PORT || 5000;
-
 
 // Built in middlewares
 app.use(cookieParser());
@@ -54,5 +55,5 @@ async function start() {
 
 // Only start when run directly
 //if (require.main === module) {
-  start();
+start();
 //}
