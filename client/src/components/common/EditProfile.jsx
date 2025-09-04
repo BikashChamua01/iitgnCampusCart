@@ -91,7 +91,7 @@ const EditProfile = ({ user }) => {
       console.log("Form Data to Edit Profile:", form);
 
       await axios.patch(
-        `/api/v1/users/editProfile/${userDetails.userId}`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/v1/users/editProfile/${userDetails.userId}`,
         {
           ...form,
         },

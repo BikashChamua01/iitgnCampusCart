@@ -73,7 +73,7 @@ const RegistrationForm = () => {
 
     try {
       setLoading(true);
-      const response = await axios.post("/api/v1/auth/send-code", {
+      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/v1/auth/send-code`, {
         email: formData.email,
       });
       if (response?.data?.alreadyVerified) {
@@ -108,7 +108,7 @@ const RegistrationForm = () => {
 
     try {
       setLoading(true);
-      const res = await axios.post("/api/v1/auth/verify-code", {
+      const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/v1/auth/verify-code`, {
         email: formData.email,
         code: fullOtp,
       });

@@ -48,7 +48,7 @@ const BuyRequestDialogBox = ({ imageUrl, product }) => {
     setSending(true);
     try {
       const response = await axios.post(
-        "/api/v1/interested/mark-interested",
+        `${import.meta.env.VITE_BACKEND_URL}/api/v1/interested/mark-interested`,
         {
           productId: product._id,
           buyerMessage: message,

@@ -43,7 +43,7 @@ const Sell = () => {
   // Get the product details for edit mode
   const getProductDetails = useCallback(async () => {
     try {
-      const response = await axios.get(`/api/v1/products/${productId}`);
+      const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/v1/products/${productId}`);
       if (response.data.success) {
         const {
           title,
@@ -105,7 +105,7 @@ const Sell = () => {
       images.forEach((img) => formData.append("images", img));
 
       const response = await axios.patch(
-        `/api/v1/products/edit/${productId}`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/v1/products/edit/${productId}`,
         formData,
         {
           headers: {
@@ -160,7 +160,7 @@ const Sell = () => {
       formData.append("condition", form.condition);
       images.forEach((img) => formData.append("images", img));
 
-      await axios.post("/api/v1/products/createProduct", formData, {
+      await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/v1/products/createProduct`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

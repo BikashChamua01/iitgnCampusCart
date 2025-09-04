@@ -12,7 +12,7 @@ export const fetchAllProducts = createAsyncThunk(
   "/shop/products",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get("/api/v1/products", {
+      const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/v1/products`, {
         withCredentials: true,
       });
       return response.data;
@@ -28,7 +28,7 @@ export const fetchMyListing = createAsyncThunk(
   async (userId, { rejectWithValue }) => {
     try {
       const response = await axios.get(
-        `/api/v1/products/my-listings/${userId}`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/v1/products/my-listings/${userId}`,
         {
           withCredentials: true,
         }

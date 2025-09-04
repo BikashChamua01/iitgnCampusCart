@@ -40,7 +40,7 @@ const ProductDetail = () => {
     const fetchProduct = async () => {
       // console.log(product);
       try {
-        const res = await axios.get(`/api/v1/products/${id}`);
+        const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/v1/products/${id}`);
         setProduct(res.data.product);
         setLoading(false);
       } catch (error) {
