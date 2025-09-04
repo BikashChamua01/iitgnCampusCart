@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+// eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
 import { FaWhatsapp, FaPhone } from "react-icons/fa";
 
@@ -15,14 +16,16 @@ const UserProfile = () => {
       try {
         setLoading(true);
         console.log("Fetching user with ID:", id);
-        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/v1/users/userProfile/${id}`);
+        const response = await axios.get(
+          `${import.meta.env.VITE_BACKEND_URL}/api/v1/users/userProfile/${id}`
+        );
         if (response.data.succcess) {
           setUser(response.data.user);
         } else {
           setError("User not found");
         }
       } catch (err) {
-        setError("Failed to fetch user");
+        setError("Failed to fetch user", err);
       } finally {
         setLoading(false);
       }
@@ -79,19 +82,32 @@ const UserProfile = () => {
           </p>
 
           <div className="text-gray-700 flex items-center justify-center md:justify-start gap-2 text-sm mt-1">
-                                <FaPhone />{" "}
-                                {user.phoneNumber
-                                  ? <a className="font-medium"  href={`tel:+91${user.phoneNumber}`}>{user.phoneNumber}</a>
-          
-                                  : "Not Available"}
-                              </div>
-         <div className="text-gray-700 flex items-center justify-center md:justify-start gap-2 text-sm mt-1">
-                               
-                               {user.phoneNumber
-                                 ? <a  href={`https://wa.me/91${user.phoneNumber}`} target="_blank" className="flex items-center font-medium"><FaWhatsapp className="mr-1" /> WhatsApp</a>
-                                 :<div className="flex  items-center"><FaWhatsapp className="mr-1" /><p> Not Available</p></div>}
-                             </div>
-          
+            <FaPhone />{" "}
+            {user.phoneNumber ? (
+              <a className="font-medium" href={`tel:+91${user.phoneNumber}`}>
+                {user.phoneNumber}
+              </a>
+            ) : (
+              "Not Available"
+            )}
+          </div>
+          <div className="text-gray-700 flex items-center justify-center md:justify-start gap-2 text-sm mt-1">
+            {user.phoneNumber ? (
+              <a
+                href={`https://wa.me/91${user.phoneNumber}`}
+                target="_blank"
+                className="flex items-center font-medium"
+              >
+                <FaWhatsapp className="mr-1" /> WhatsApp
+              </a>
+            ) : (
+              <div className="flex  items-center">
+                <FaWhatsapp className="mr-1" />
+                <p> Not Available</p>
+              </div>
+            )}
+          </div>
+
           <p className="text-lg text-gray-700">
             ⚥{" "}
             <span className="font-medium">
