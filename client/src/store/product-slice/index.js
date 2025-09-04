@@ -15,6 +15,7 @@ export const fetchAllProducts = createAsyncThunk(
       const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/v1/products`, {
         withCredentials: true,
       });
+
       return response.data;
     } catch (error) {
       console.log("Error in fetching the products", error);

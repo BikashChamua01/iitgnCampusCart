@@ -49,7 +49,7 @@ const RegistrationForm = () => {
       [name]: value,
     }));
 
-    const allErrors = validateForm({ ...formData, [name]: value },"register");
+    const allErrors = validateForm({ ...formData, [name]: value }, "register");
 
     if (
       (name === "password" && formData.confirmPassword) ||
@@ -172,7 +172,7 @@ const RegistrationForm = () => {
   const handleRegister = async (e) => {
     e.preventDefault();
 
-    const formErrors = validateForm(formData,"register");
+    const formErrors = validateForm(formData, "register");
     if (formData.password !== formData.confirmPassword) {
       formErrors.confirmPassword = "Passwords must match";
     }

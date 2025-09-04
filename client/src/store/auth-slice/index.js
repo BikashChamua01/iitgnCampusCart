@@ -54,6 +54,7 @@ export const login = createAsyncThunk(
   "/auth/login",
   async (formData, { rejectWithValue }) => {
     try {
+
       const response = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/api/v1/auth/login`,
         formData,
@@ -61,6 +62,7 @@ export const login = createAsyncThunk(
           withCredentials: true,
         }
       );
+
       return response.data;
     } catch (error) {
       console.log("Error in login", error);

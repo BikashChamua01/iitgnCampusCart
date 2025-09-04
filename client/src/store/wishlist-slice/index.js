@@ -12,7 +12,9 @@ export const fetchWishlist = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get(
+
         `${import.meta.env.VITE_BACKEND_URL}/api/v1/wishlist/get-wishlist`,
+
         {
           withCredentials: true,
         }

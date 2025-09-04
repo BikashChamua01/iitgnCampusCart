@@ -26,8 +26,6 @@ export const fetchAllUsers = createAsyncThunk(
   }
 );
 
-
-
 export const deleteUserAccount = createAsyncThunk(
   `${import.meta.env.VITE_BACKEND_URL}/delete-account`,
   async (userId, { rejectWithValue }) => {

@@ -1,10 +1,13 @@
-// server.js (local dev)
+const express = require("express");
+const app = express();
 require("dotenv").config();
 const connectDb = require("./db/connect");
+
 const app = require("./app");
 const express = require("express");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
+
 const PORT = process.env.PORT || 5000;
 
 // Built in middlewares
@@ -43,13 +46,13 @@ app.use("/api/v1/wishlist", wishlistRouter);
 app.use("/api/v1/interested", interestedBuyerRouter);
 
 // Connection to the database and start the server
-
 async function start() {
   try {
+    // First connect to the db
     await connectDb(process.env.MONGO_URI);
-    app.listen(PORT, () => console.log("App running on port " + PORT));
+    app.listen(PORT, console.log("App is running in " + PORT));
   } catch (err) {
-    console.error(err);
+    console.log(err);
   }
 }
 
@@ -57,3 +60,4 @@ async function start() {
 //if (require.main === module) {
 start();
 //}
+
