@@ -12,7 +12,9 @@ export const fetchWishlist = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get(
-        `/api/v1/wishlist/get-wishlist`,
+
+        `${import.meta.env.VITE_BACKEND_URL}/api/v1/wishlist/get-wishlist`,
+
         {
           withCredentials: true,
         }
@@ -30,7 +32,7 @@ export const addToWishlist = createAsyncThunk(
   async (productId, { dispatch, rejectWithValue }) => {
     try {
       const res = await axios.post(
-        `/api/v1/wishlist/add/${productId}`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/v1/wishlist/add/${productId}`,
         {},
         { withCredentials: true }
       );
@@ -54,7 +56,9 @@ export const deleteFromWishlist = createAsyncThunk(
   async (productId, { dispatch, rejectWithValue }) => {
     try {
       const response = await axios.delete(
-        `/api/v1/wishlist/delete/${productId}`,
+        `${
+          import.meta.env.VITE_BACKEND_URL
+        }/api/v1/wishlist/delete/${productId}`,
         {
           withCredentials: true,
         }

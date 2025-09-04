@@ -2,8 +2,11 @@ const express = require("express");
 const app = express();
 require("dotenv").config();
 const connectDb = require("./db/connect");
-const cors = require("cors");
+
+const app = require("./app");
+const express = require("express");
 const cookieParser = require("cookie-parser");
+const cors = require("cors");
 
 const PORT = process.env.PORT || 5000;
 
@@ -53,4 +56,8 @@ async function start() {
   }
 }
 
+// Only start when run directly
+//if (require.main === module) {
 start();
+//}
+

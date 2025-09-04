@@ -46,7 +46,7 @@ const ChangePassword = () => {
       setIsSubmitting(true);
 
       await axios.patch(
-        `/api/v1/users/changePassword/${userDetails.userId}`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/v1/users/changePassword/${userDetails.userId}`,
         {
           oldPassword: form.currentPassword,
           password: form.newPassword,

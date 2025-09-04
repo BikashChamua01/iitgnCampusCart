@@ -15,7 +15,7 @@ const UserProfile = () => {
       try {
         setLoading(true);
         console.log("Fetching user with ID:", id);
-        const response = await axios.get(`/api/v1/users/userProfile/${id}`);
+        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/v1/users/userProfile/${id}`);
         if (response.data.succcess) {
           setUser(response.data.user);
         } else {

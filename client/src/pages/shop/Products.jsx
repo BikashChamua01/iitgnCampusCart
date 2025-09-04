@@ -86,10 +86,12 @@ const ShopProducts = () => {
     const fetchBuyRequests = async () => {
       try {
         const response = await axios.get(
-          `/api/v1/wishlist/get-buy-requests/${user.userId}`,
+          `${import.meta.env.VITE_BACKEND_URL}/api/v1/wishlist/get-buy-requests/${user.userId}`,
+         
           {
             withCredentials: true,
           }
+
         );
         if (response.data.success === false) {
           toast.error("Error in getting the products");

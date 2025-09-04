@@ -18,7 +18,7 @@ const UserAccount = () => {
 
   useEffect(() => {
     axios
-      .get(`/api/v1/users/userProfile/${userDetails.userId}`)
+      .get(`${import.meta.env.VITE_BACKEND_URL}/api/v1/users/userProfile/${userDetails.userId}`)
       .then((res) => setUser(res.data.user))
       .catch((err) => console.error("Failed to fetch user:", err));
   }, [userDetails.userId]);

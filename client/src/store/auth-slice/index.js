@@ -12,12 +12,16 @@ export const register = createAsyncThunk(
   async (formData, { rejectWithValue }) => {
     try {
       console.log(formData);
-      const response = await axios.post("/api/v1/auth/register", formData, {
-        withCredentials: true,
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      const response = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/api/v1/auth/register`,
+        formData,
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
       return response.data;
     } catch (error) {
       console.log("Error in registration", error);
@@ -31,9 +35,12 @@ export const checkAuth = createAsyncThunk(
   "/auth/check-auth",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get("/api/v1/auth/check-auth", {
-        withCredentials: true,
-      });
+      const response = await axios.get(
+        `${import.meta.env.VITE_BACKEND_URL}/api/v1/auth/check-auth`,
+        {
+          withCredentials: true,
+        }
+      );
       return response.data;
     } catch (error) {
       console.log("Check auth failed", error);
@@ -47,9 +54,15 @@ export const login = createAsyncThunk(
   "/auth/login",
   async (formData, { rejectWithValue }) => {
     try {
-      const response = await axios.post(" /api/v1/auth/login", formData, {
-        withCredentials: true,
-      });
+
+      const response = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/api/v1/auth/login`,
+        formData,
+        {
+          withCredentials: true,
+        }
+      );
+
       return response.data;
     } catch (error) {
       console.log("Error in login", error);
@@ -64,7 +77,7 @@ export const logout = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.post(
-        "/api/v1/auth/logout",
+        `${import.meta.env.VITE_BACKEND_URL}/api/v1/auth/logout`,
         {},
         {
           withCredentials: true,

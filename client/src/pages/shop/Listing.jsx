@@ -38,7 +38,7 @@ const ShopListing = () => {
     setLoading(true);
     try {
       const response = await axios.delete(
-        `/api/v1/products/delete/${productId}`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/v1/products/delete/${productId}`,
         {
           withCredentials: true,
         }

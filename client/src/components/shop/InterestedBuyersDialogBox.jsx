@@ -28,7 +28,7 @@ const InterestedBuyersDialogBox = ({ productId }) => {
     setLoading(true);
     try {
       console.log(user.userId);
-      const res = await axios.get(`/api/v1/interested/get-buy-requests`, {
+      const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/v1/interested/get-buy-requests`, {
         params: { productId, sellerId: user.userId },
         withCredentials: true,
       });
@@ -58,7 +58,7 @@ const InterestedBuyersDialogBox = ({ productId }) => {
     try {
       setLoading(true);
       const response = await axios.post(
-        `/api/v1/products/sold-out`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/v1/products/sold-out`,
         { buyerId, productId, sellerId },
         {
           withCredentials: true,
@@ -86,7 +86,7 @@ const InterestedBuyersDialogBox = ({ productId }) => {
     setLoading(true);
     try {
       const response = await axios.post(
-        `/api/v1/interested/reject-buy-request`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/v1/interested/reject-buy-request`,
         { buyerId, productId, sellerId },
         {
           withCredentials: true,
