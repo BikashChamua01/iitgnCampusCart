@@ -91,10 +91,34 @@ const ProductCard = ({
               alt={title}
               className="w-full h-[180px] object-cover transition-transform duration-300 group-hover:scale-101 rounded-xl"
             />
+
             {/* wishlist button or spinner */}
             <div className="group absolute top-3 right-4 z-10">
               {loadingWishlist ? (
-                <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                // Heart Glow Loader
+                <div className="flex items-center justify-center w-6 h-6 relative">
+                  <FaHeart className="w-6 h-6 text-pink-400 relative z-10" />
+                  <span
+                    className="absolute w-6 h-6 rounded-full bg-pink-400 opacity-40 blur-sm"
+                    style={{
+                      animation: "pulseGlow 1.5s ease-in-out infinite",
+                    }}
+                  ></span>
+
+                  <style jsx>{`
+                    @keyframes pulseGlow {
+                      0%,
+                      100% {
+                        transform: scale(1);
+                        opacity: 0.3;
+                      }
+                      50% {
+                        transform: scale(1.6);
+                        opacity: 0.6;
+                      }
+                    }
+                  `}</style>
+                </div>
               ) : (
                 <button
                   onClick={handleWishlist}
@@ -102,12 +126,11 @@ const ProductCard = ({
                   aria-label="Toggle wishlist"
                 >
                   <FaHeart
-                    className={`heart-icon w-6 h-6 transition-all duration-300
-                  ${
-                    isWishlisted
-                      ? "text-red-600 fancy-pop"
-                      : "text-white not-wishlisted hover:text-red-100 heart-outline"
-                  }`}
+                    className={`heart-icon w-6 h-6 transition-all duration-300 ${
+                      isWishlisted
+                        ? "text-red-600 fancy-pop"
+                        : "text-white not-wishlisted hover:text-red-100 heart-outline"
+                    }`}
                   />
                 </button>
               )}
