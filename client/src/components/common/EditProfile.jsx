@@ -103,7 +103,7 @@ const EditProfile = ({ user }) => {
       toast.success("Profile updated successfully!");
     } catch (error) {
       console.error(error);
-      toast.error("Failed to update profile.");
+      toast.error(error?.response?.data?.msg || "Failed to update profile.");
     } finally {
       setIsSubmitting(false);
     }

@@ -18,7 +18,7 @@ const Wishlist = ({ user }) => {
     if (user?._id) {
       dispatch(fetchWishlist())
         .unwrap()
-        .catch((err) => toast.error(err));
+        .catch((err) => toast.error(err?.response?.data?.msg || err));
     }
   }, [user, dispatch]);
 

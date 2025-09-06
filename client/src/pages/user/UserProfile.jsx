@@ -24,8 +24,8 @@ const UserProfile = () => {
         } else {
           setError("User not found");
         }
-      } catch (err) {
-        setError("Failed to fetch user", err);
+      } catch (error) {
+        setError(error?.response?.data?.msg || "Failed to fetch user" );
       } finally {
         setLoading(false);
       }

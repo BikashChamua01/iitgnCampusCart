@@ -28,10 +28,15 @@ const InterestedBuyersDialogBox = ({ productId }) => {
     setLoading(true);
     try {
       console.log(user.userId);
-      const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/v1/interested/get-buy-requests`, {
-        params: { productId, sellerId: user.userId },
-        withCredentials: true,
-      });
+      const res = await axios.get(
+        `${
+          import.meta.env.VITE_BACKEND_URL
+        }/api/v1/interested/get-buy-requests`,
+        {
+          params: { productId, sellerId: user.userId },
+          withCredentials: true,
+        }
+      );
       const data = res.data;
       if (data?.success) {
         setBuyers(data.buyRequests || []);
@@ -39,7 +44,9 @@ const InterestedBuyersDialogBox = ({ productId }) => {
         toast.error(data.msg || "Failed to load interested buyers.");
       }
     } catch (error) {
-      toast.error(error?.msg || error?.message || "Error fetching buyers.");
+
+      toast.error(`Error fetching buyers!\n${error?.response?.data?.msg || ""}`);
+
     } finally {
       setLoading(false);
     }
@@ -74,7 +81,8 @@ const InterestedBuyersDialogBox = ({ productId }) => {
       }
     } catch (error) {
       console.error("Error selling product:", error);
-      toast.error("Failed to sell");
+      toast.error(`Failed to upload!\n${error?.response?.data?.msg || ""}`);
+
     } finally {
       setOpen(false);
       setLoading(false);
@@ -86,7 +94,9 @@ const InterestedBuyersDialogBox = ({ productId }) => {
     setLoading(true);
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/api/v1/interested/reject-buy-request`,
+        `${
+          import.meta.env.VITE_BACKEND_URL
+        }/api/v1/interested/reject-buy-request`,
         { buyerId, productId, sellerId },
         {
           withCredentials: true,
@@ -102,7 +112,7 @@ const InterestedBuyersDialogBox = ({ productId }) => {
       }
     } catch (error) {
       console.error("Error Rejecting Request:", error);
-      toast.error("Failed to reject request!!");
+      toast.error(`Failed to reject request!\n${error?.response?.data?.msg || ""}`);
     } finally {
       setLoading(false);
     }

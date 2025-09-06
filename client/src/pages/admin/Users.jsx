@@ -22,17 +22,48 @@ const AdminUsers = () => {
     dispatch(fetchAllUsers({ pageNumber, limit }));
   }, [dispatch, user?.userId, user?.isAdmin, pageNumber, limit]);
 
+  // Mask phone number
+  function maskPhone(phone) {
+    if (!phone) return "Not provided";
+    const firstTwo = phone?.substring(0, 2);
+    const lastTwo = phone?.substring(phone.length - 2);
+    return firstTwo + "*".repeat(6) + lastTwo;
+  }
+
+  function maskEmail(email) {
+    if (!email || !email.includes("@")) return "Not provided";
+
+    const [local, domain] = email.split("@");
+    if (local.length <= 4) {
+      // if very short local part, just show first & last char
+      return (
+        local[0] +
+        "*".repeat(local.length - 2) +
+        local[local.length - 1] +
+        "@" +
+        domain
+      );
+    }
+
+    const firstTwo = local.substring(0, 2);
+    const lastTwo = local.substring(local.length - 2);
+    const masked = "*".repeat(local.length - 4);
+
+    return firstTwo + masked + lastTwo + "@" + domain;
+  }
+
   // Delete User
   const handleDelete = async (deleteId) => {
     try {
       const response = await axios.post(
-        `/api/v1/users/delete-account/${deleteId}`,
+        `${
+          import.meta.env.VITE_BACKEND_URL
+        }/api/v1/users/delete-account/${deleteId}`,
         {},
         {
           withCredentials: true,
         }
       );
-      console.log(response.data);
       if (response.data.success) {
         toast.success("User deleted Successfully");
         dispatch(fetchAllUsers({ pageNumber, limit }));
@@ -62,17 +93,19 @@ const AdminUsers = () => {
         <div>
           <div
             className="font-semibold text-lg text-violet-700 cursor-pointer"
-            onClick={() => navigate(`/admin/user/listings/${user._id}`, { state: { user } })}
+            onClick={() =>
+              navigate(`/admin/user/listings/${user._id}`, { state: { user } })
+            }
           >
             {user.userName}
           </div>
-          <div className="text-xs text-gray-500">{user.email}</div>
+          <div className="text-xs text-gray-500">{maskEmail(user.email)}</div>
         </div>
       </div>
       <div className="flex flex-wrap gap-4 mt-0 text-[15px] sm:text-base">
         <span>
           <span className="font-bold text-violet-500">Phone:</span>{" "}
-          {user.phoneNumber}
+          {maskPhone(user.phoneNumber)}
         </span>
         <span>
           <span className="font-bold text-violet-500">Gender:</span>{" "}
@@ -107,8 +140,8 @@ const AdminUsers = () => {
       >
         {user.userName}
       </td>
-      <td>{user.email}</td>
-      <td>{user.phoneNumber}</td>
+      <td>{maskEmail(user.email)}</td>
+      <td>{maskPhone(user.phoneNumber)}</td>
       <td>{user.gender}</td>
       <td>
         <DeleteUserButton onDelete={onDelete} user={user} />

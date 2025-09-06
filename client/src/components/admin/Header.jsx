@@ -1,6 +1,8 @@
 import { FaSearch, FaUserCircle, FaCartPlus } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import UserAccount from "@/pages/user/UserAccount";
+import { Link } from "react-router-dom";
 
 const AdminHeader = () => {
   const { user } = useSelector((state) => state.auth);
@@ -40,7 +42,8 @@ const AdminHeader = () => {
         </div>
 
         {/* Sell Button */}
-        <div
+        {/* We dont want the sell butto for the admin */}
+        {/* <div
           className="flex items-center gap-1 cursor-pointer hover:text-white"
           style={{ color: "#f4f4f4" }}
           onClick={() => navigate("/shop/sell")}
@@ -52,10 +55,10 @@ const AdminHeader = () => {
           >
             Sell
           </span>
-        </div>
+        </div> */}
 
         {/* User Dropdown */}
-        <div className="relative">
+        {/* <div className="relative">
           <button className="group focus:outline-none">
             {profilePicture ? (
               <img
@@ -90,6 +93,17 @@ const AdminHeader = () => {
               </ul>
             </div>
           </button>
+        </div> */}
+
+        {/* User acount */}
+        <div className="flex justify-end items-center w-1/3 ">
+          <Link to="/user/userAccount" className="ml-auto">
+            <img
+              src={profilePicture || "/images/user-avatar.png"}
+              alt="Profile"
+              className="w-10 h-10 rounded-full object-cover border border-violet-200 hover:ring-2 hover:ring-violet-300 transition-all duration-200"
+            />
+          </Link>
         </div>
       </div>
     </nav>

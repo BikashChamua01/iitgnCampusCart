@@ -43,7 +43,9 @@ const Sell = () => {
   // Get the product details for edit mode
   const getProductDetails = useCallback(async () => {
     try {
-      const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/v1/products/${productId}`);
+      const response = await axios.get(
+        `${import.meta.env.VITE_BACKEND_URL}/api/v1/products/${productId}`
+      );
       if (response.data.success) {
         const {
           title,
@@ -84,6 +86,7 @@ const Sell = () => {
       setExistingImages(newExistingImages);
     } catch (error) {
       console.log("Error in deleting the image ", error);
+      toast.error(error?.response?.data?.msg || "Error in deleting the image ");
     }
   };
 
@@ -122,8 +125,10 @@ const Sell = () => {
       }
     } catch (error) {
       toast.error(
-        "Error Occured in modifying the product",
-        error.message || error.msg
+        error?.response?.data?.msg ||
+          error.message ||
+          error.msg ||
+          "Error Occured in modifying the product"
       );
     } finally {
       setLoading(false);
@@ -160,12 +165,16 @@ const Sell = () => {
       formData.append("condition", form.condition);
       images.forEach((img) => formData.append("images", img));
 
-      await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/v1/products/createProduct`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-        withCredentials: true,
-      });
+      await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/api/v1/products/createProduct`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+          withCredentials: true,
+        }
+      );
 
       toast.success("Product added successfully!");
       setForm({
@@ -179,7 +188,7 @@ const Sell = () => {
       setImages([]);
     } catch (err) {
       console.error(err);
-      toast.error("Failed to upload product");
+      toast.error(err?.response?.data?.msg || "Failed to upload product");
     } finally {
       setLoading(false);
       navigate("/shop/listings");

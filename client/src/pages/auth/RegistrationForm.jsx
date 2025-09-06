@@ -73,9 +73,12 @@ const RegistrationForm = () => {
 
     try {
       setLoading(true);
-      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/v1/auth/send-code`, {
-        email: formData.email,
-      });
+      const response = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/api/v1/auth/send-code`,
+        {
+          email: formData.email,
+        }
+      );
       if (response?.data?.alreadyVerified) {
         setLoading(false);
         setOtpVerified(true);
@@ -86,7 +89,7 @@ const RegistrationForm = () => {
       alert("OTP sent to your email.");
     } catch (err) {
       console.log("Error During registration", err);
-      alert("Failed to send OTP. Try again.");
+      toast.error(err?.response?.data?.msg || "Failed to send OTP. Try again.");
     } finally {
       setLoading(false);
     }
@@ -108,10 +111,13 @@ const RegistrationForm = () => {
 
     try {
       setLoading(true);
-      const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/v1/auth/verify-code`, {
-        email: formData.email,
-        code: fullOtp,
-      });
+      const res = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/api/v1/auth/verify-code`,
+        {
+          email: formData.email,
+          code: fullOtp,
+        }
+      );
 
       if (res.data?.success) {
         setOtpVerified(true);
@@ -123,6 +129,7 @@ const RegistrationForm = () => {
     } catch (err) {
       console.log("Error during otp validation ", err);
       alert("Verification failed.");
+      toast.error(err?.response?.data?.msg || "Verification failed" );
     } finally {
       setLoading(false);
     }
@@ -165,6 +172,7 @@ const RegistrationForm = () => {
     } catch (e) {
       console.error(e);
       alert("Failed to crop image.");
+      toast.error(e?.response?.data?.msg || "Failed to crop immage" );
     }
   }, [imageSrc, croppedAreaPixels]);
 
@@ -206,7 +214,8 @@ const RegistrationForm = () => {
       })
       .catch((error) => {
         setLoading(false);
-        const errMsg = error?.msg || error?.message || "Registration failed";
+        const errMsg =
+          error?.response?.data?.msg || error?.message || "Registration failed";
         toast.error(errMsg);
       });
   };
