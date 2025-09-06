@@ -7,9 +7,9 @@ export function validateForm(
   const errors = {};
 
   if (mode === "register" || mode === "updateProfile") {
-    if (!userName?.trim()) {
-      errors.userName = "User name is required";
-    }
+    // if (!userName?.trim()) {
+    //   errors.userName = "User name is required";
+    // }
 
     if (!email?.trim()) {
       errors.email = "Email is required";
@@ -20,7 +20,7 @@ export function validateForm(
     }
 
     if (!phoneNumber?.trim()) {
-      errors.phoneNumber = "";
+      // errors.phoneNumber = ""; //phone number not necessary
     } else if (
       !/^(\+91[\-\s]?|91[\-\s]?|0)?[6-9]\d{9}$/.test(phoneNumber.trim())
     ) {

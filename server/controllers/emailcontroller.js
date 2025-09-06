@@ -2,6 +2,7 @@ const TEMPMAIL = require("../models/tempemail");
 const nodemailer = require("nodemailer");
 require("dotenv").config();
 const { StatusCodes } = require("http-status-codes");
+const User = require("../models/user");
 
 const transport = nodemailer.createTransport({
   service: "Gmail",
@@ -13,6 +14,16 @@ const transport = nodemailer.createTransport({
 
 const sendVerificationCode = async (req, res) => {
   const { email } = req.body;
+  // 2. Check if user already exists
+      const existingUser = await User.findOne({ email });
+      if (existingUser) {
+        return res.status(200).json({
+      success: true,
+      msg: "User Already Exists with this email please Login",
+      userExists: true,
+    });
+      }
+  
   // check if already verified
   const record = await TEMPMAIL.findOne({ email });
   if (record?.verified) {

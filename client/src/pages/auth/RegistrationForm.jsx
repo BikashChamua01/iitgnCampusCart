@@ -4,10 +4,10 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import { register } from "../../store/auth-slice";
 import { useDispatch } from "react-redux";
-import { toast } from "sonner";
+import { toast, Toaster } from "sonner";
 import { validateForm } from "../../utils/validateForm";
 import getCroppedImg from "@/components/shop/cropImage";
-
+import PasswordInput from "@/components/common/PasswordInput";
 // Import react-easy-crop for cropping UI
 import Cropper from "react-easy-crop";
 import { Images } from "lucide-react";
@@ -73,20 +73,28 @@ const RegistrationForm = () => {
 
     try {
       setLoading(true);
-      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/v1/auth/send-code`, {
-        email: formData.email,
-      });
+      const response = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/api/v1/auth/send-code`,
+        {
+          email: formData.email,
+        }
+      );
       if (response?.data?.alreadyVerified) {
         setLoading(false);
         setOtpVerified(true);
         setShowOtpInput(false);
         return alert("Email already verified");
       }
+      if (response?.data?.userExists) {
+        setLoading(false);
+        toast.error(response?.data?.msg|| "User Already Exists");
+        return ;
+      }
       setShowOtpInput(true);
       alert("OTP sent to your email.");
     } catch (err) {
       console.log("Error During registration", err);
-      alert("Failed to send OTP. Try again.");
+      alert("Failed to send OTP. Try again.",response?.data?.msg);
     } finally {
       setLoading(false);
     }
@@ -108,10 +116,13 @@ const RegistrationForm = () => {
 
     try {
       setLoading(true);
-      const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/v1/auth/verify-code`, {
-        email: formData.email,
-        code: fullOtp,
-      });
+      const res = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/api/v1/auth/verify-code`,
+        {
+          email: formData.email,
+          code: fullOtp,
+        }
+      );
 
       if (res.data?.success) {
         setOtpVerified(true);
@@ -173,11 +184,12 @@ const RegistrationForm = () => {
     e.preventDefault();
 
     const formErrors = validateForm(formData, "register");
-    if (formData.password !== formData.confirmPassword) {
-      formErrors.confirmPassword = "Passwords must match";
-    }
+    // if (formData.password !== formData.confirmPassword) {
+    //   formErrors.confirmPassword = "Passwords must match";
+    // }
     if (Object.keys(formErrors).length) {
       setErrors(formErrors);
+      console.log(formErrors);
       return;
     }
 
@@ -185,18 +197,20 @@ const RegistrationForm = () => {
     setLoading(true);
 
     // Prepare form data including cropped profile photo if available
+    const email = formData.email || "";
+    const userName = email.includes("@") ? email.split("@")[0] : email; 
     const submissionData = new FormData();
-    submissionData.append("userName", formData.userName);
+    submissionData.append("userName", userName);
     submissionData.append("email", formData.email);
     submissionData.append("password", formData.password);
-    submissionData.append("confirmPassword", formData.confirmPassword);
+    // submissionData.append("confirmPassword", formData.confirmPassword);
     submissionData.append("phoneNumber", formData.phoneNumber);
-    submissionData.append("gender", formData.gender);
+    // submissionData.append("gender", formData.gender);
     if (croppedFile) {
       submissionData.append("images", croppedFile);
     }
 
-    //  console.log(submissionData);
+     console.log(submissionData);
 
     dispatch(register(submissionData))
       .unwrap()
@@ -234,7 +248,7 @@ const RegistrationForm = () => {
         </h2>
 
         {/* User Name */}
-        <div className="mb-4">
+        {/* <div className="mb-4">
           <label className="block font-medium mb-1 text-[#2b2b2b]">
             User Name
           </label>
@@ -249,10 +263,10 @@ const RegistrationForm = () => {
           {errors.userName && (
             <p className="text-red-600 mt-1">{errors.userName}</p>
           )}
-        </div>
+        </div> */}
 
         {/* Email + Verify */}
-        <div className="mb-4">
+        <div className="mb-4 mt-10">
           <label className="font-medium mb-1 text-[#2b2b2b] flex justify-between">
             <span>Email</span>
             {!otpVerified && (
@@ -305,10 +319,10 @@ const RegistrationForm = () => {
             </button>
           </div>
         )}
-        {/* Phone Number  + Gender*/}
-        <div className="flex flex-col md:flex-row mb-4 justify-between">
+        {/* Phone Number  - Gender*/}
+        {/* <div className="flex flex-col md:flex-row mb-4 justify-between"> */}
           {/* Phone Number */}
-          <div className="mb-4 md:mb-0">
+          <div className="mb-4">
             <label className="block font-medium  text-[#2b2b2b]">
               Phone Number
             </label>
@@ -326,7 +340,7 @@ const RegistrationForm = () => {
           </div>
 
           {/* Gender */}
-          <div className="mb-4 md:mb-0">
+          {/* <div className="mb-4 md:mb-0">
             <label className="block font-medium  text-[#2b2b2b]">
               <span className="text-[#2b2b2b] font-medium">Gender</span>
               <select
@@ -342,8 +356,8 @@ const RegistrationForm = () => {
                 ))}
               </select>
             </label>
-          </div>
-        </div>
+          </div> */}
+        {/* </div> */}
 
         {/* Profile Photo Upload */}
         <div className="mb-4">
@@ -411,43 +425,21 @@ const RegistrationForm = () => {
           )}
         </div>
         {/* Password +confirm password */}
-        <div className="flex mb-4 flex-col md:flex-row justify-between">
+        
           {/* Password */}
-          <div className="mb-4 md:mb-0">
-            <label className="block font-medium mb-1 text-[#2b2b2b]">
-              Password
-            </label>
-            <input
-              type="password"
+          
+            
+
+            <PasswordInput
+              label="Password"
               name="password"
               value={formData.password}
               onChange={handleChange}
-              className="w-full px-4 py-2 border border-[#7635b6] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6a0dad]"
-              placeholder="Enter your password"
-            />
-            {errors.password && (
-              <p className="text-red-600 mt-1">{errors.password}</p>
-            )}
-          </div>
-
-          {/* Confirm Password */}
-          <div className="mb-4  md:mb-0 md:ml-1">
-            <label className="block font-medium mb-1 text-[#2b2b2b]">
-              Confirm Password
-            </label>
-            <input
-              type="password"
-              name="confirmPassword"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              className="w-full px-1 py-2  border border-[#7635b6] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6a0dad]"
-              placeholder="Confirm your password"
-            />
-            {errors.confirmPassword && (
-              <p className="text-red-600 mt-1">{errors.confirmPassword}</p>
-            )}
-          </div>
-        </div>
+              error={errors.password}
+              />
+              
+         
+        
 
         {/* Submit */}
         <button
