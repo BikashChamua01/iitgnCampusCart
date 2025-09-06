@@ -94,7 +94,7 @@ const RegistrationForm = () => {
       alert("OTP sent to your email.");
     } catch (err) {
       console.log("Error During registration", err);
-      alert("Failed to send OTP. Try again.",response?.data?.msg);
+      toast.error(err?.response?.data?.msg || "Failed to send OTP. Try again.");
     } finally {
       setLoading(false);
     }
@@ -134,6 +134,7 @@ const RegistrationForm = () => {
     } catch (err) {
       console.log("Error during otp validation ", err);
       alert("Verification failed.");
+      toast.error(err?.response?.data?.msg || "Verification failed" );
     } finally {
       setLoading(false);
     }
@@ -176,6 +177,7 @@ const RegistrationForm = () => {
     } catch (e) {
       console.error(e);
       alert("Failed to crop image.");
+      toast.error(e?.response?.data?.msg || "Failed to crop immage" );
     }
   }, [imageSrc, croppedAreaPixels]);
 
@@ -220,7 +222,8 @@ const RegistrationForm = () => {
       })
       .catch((error) => {
         setLoading(false);
-        const errMsg = error?.msg || error?.message || "Registration failed";
+        const errMsg =
+          error?.response?.data?.msg || error?.message || "Registration failed";
         toast.error(errMsg);
       });
   };

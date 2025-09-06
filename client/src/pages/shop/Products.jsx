@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchWishlist } from "@/store/wishlist-slice";
 import ProductCard from "../../components/shop/ProductCard";
@@ -39,8 +39,30 @@ const ShopProducts = () => {
   const [showBuyRequests, setShowBuyRequests] = useState(false);
   const [buyRequests, setBuyRequests] = useState(new Set([]));
 
-  // conver the wishlist array to set
-  const wishlistSet = new Set(wishlist?.map((product) => product._id));
+  // loading set to track wishlist requests in-flight
+  const [loadingWishlistSet, setLoadingWishlistSet] = useState(new Set());
+
+  // helper functions to manage loading set
+  const startWishlistLoading = (id) => {
+    setLoadingWishlistSet((prev) => {
+      const s = new Set(Array.from(prev));
+      s.add(id.toString());
+      return s;
+    });
+  };
+  const stopWishlistLoading = (id) => {
+    setLoadingWishlistSet((prev) => {
+      const s = new Set(Array.from(prev));
+      s.delete(id.toString());
+      return s;
+    });
+  };
+
+  // conver the wishlist array to set of strings
+  const wishlistSet = useMemo(
+    () => new Set(wishlist?.map((product) => product._id.toString())),
+    [wishlist]
+  );
 
   const categories = [...Array.from(new Set(products?.map((p) => p.category)))];
   categories.sort();
@@ -87,11 +109,9 @@ const ShopProducts = () => {
       try {
         const response = await axios.get(
           `${import.meta.env.VITE_BACKEND_URL}/api/v1/wishlist/get-buy-requests/${user.userId}`,
-         
           {
             withCredentials: true,
           }
-
         );
         if (response.data.success === false) {
           toast.error("Error in getting the products");
@@ -100,6 +120,7 @@ const ShopProducts = () => {
         setBuyRequests(new Set(response.data.buyRequests));
       } catch (error) {
         console.log(error);
+        toast.error(error?.response?.data?.msg || error.message);
       }
     };
     fetchBuyRequests();
@@ -228,19 +249,27 @@ const ShopProducts = () => {
               <div className="space-y-3 md:space-y-8 flex-1">
                 {/* My Buy Requests */}
                 <div>
-                  <Label
-                    htmlFor="buy-requests"
-                    className="flex items-center gap-3 rounded-md transition cursor-pointer group w-fit"
+                  <label
+                    className="flex items-center gap-3 rounded-md cursor-pointer group w-fit"
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        handleShowBuyRequests();
+                      }
+                    }}
+                    tabIndex={0}
                   >
-                    <span className="mb-2 text-md font-medium text-violet-700">
+                    <span className="text-md font-medium text-violet-700 leading-none">
                       Show Buy Requests
                     </span>
                     <Checkbox
                       checked={showBuyRequests}
-                      onCheckedChange={handleShowBuyRequests}
-                      className="accent-violet-600 w-5 h-5 min-w-[20px] min-h-[20px] rounded-md border-gray-300 group-hover:border-violet-500 shadow-sm focus:ring-2 focus:ring-violet-200 transition cursor-pointer"
+                      onCheckedChange={(v) => setShowBuyRequests(Boolean(v))}
+                      className="accent-violet-600 w-5 h-5 min-w-[20px] min-h-[20px] rounded-md 
+               border-gray-300 group-hover:border-violet-500 shadow-sm 
+               focus:ring-2 focus:ring-violet-200 transition cursor-pointer"
                     />
-                  </Label>
+                  </label>
                 </div>
 
                 {/* Search */}
@@ -344,6 +373,11 @@ const ShopProducts = () => {
                   <ProductCard
                     product={product}
                     isWishlisted={wishlistSet.has(product._id.toString())}
+                    loadingWishlist={loadingWishlistSet.has(
+                      product._id.toString()
+                    )}
+                    startWishlistLoading={startWishlistLoading}
+                    stopWishlistLoading={stopWishlistLoading}
                   />
                 </motion.div>
               ))

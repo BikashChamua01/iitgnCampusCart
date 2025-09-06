@@ -140,11 +140,13 @@ const changePassword = async (req, res) => {
     const token = updatedUser.createJWT();
 
     // 9. Set JWT cookie
+    const isLocalhost =
+      req.hostname === "localhost" || req.hostname === "127.0.0.1";
     res.cookie("token", token, {
       httpOnly: true,
-      secure: false, // set to true in production
-      sameSite: "None",
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      secure: !isLocalhost,
+      sameSite: isLocalhost ? "Lax" : "None",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
     // 10. Respond to client
@@ -172,7 +174,7 @@ const userProfile = async (req, res) => {
     const { id } = req.params;
     console.log(id);
     const user = await User.findById(id);
-    
+
     if (!user) {
       console.log("no profile found");
       return res.status(StatusCodes.NOT_FOUND).json({
@@ -180,14 +182,14 @@ const userProfile = async (req, res) => {
         msg: "User not found",
       });
     }
-    console.log("checking profile of " ,user);
+    console.log("checking profile of ", user);
     return res.status(StatusCodes.OK).json({
       succcess: true,
       msg: "User found",
       user,
     });
   } catch (error) {
-     console.log("error checking profile of ");
+    console.log("error checking profile of ");
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
       success: false,
       msg: "failed to get the user",
@@ -257,11 +259,13 @@ const editProfile = async (req, res) => {
     const token = updated.createJWT();
 
     // 8. Set cookie
+    const isLocalhost =
+      req.hostname === "localhost" || req.hostname === "127.0.0.1";
     res.cookie("token", token, {
       httpOnly: true,
-      secure: false, // true in production (HTTPS)
-      sameSite: "None", // "Lax" if frontend/backend same origin
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      secure: !isLocalhost,
+      sameSite: isLocalhost ? "Lax" : "None",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
     // 9. Send updated user response

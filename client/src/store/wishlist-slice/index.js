@@ -12,7 +12,6 @@ export const fetchWishlist = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get(
-
         `${import.meta.env.VITE_BACKEND_URL}/api/v1/wishlist/get-wishlist`,
 
         {
@@ -44,9 +43,9 @@ export const addToWishlist = createAsyncThunk(
         toast.error(res.data?.msg || "Failed");
         return rejectWithValue(res.data);
       }
-    } catch (err) {
+    } catch (error) {
       toast.error("Server error");
-      return rejectWithValue(err);
+      return rejectWithValue(error?.response?.data?.msg);
     }
   }
 );
@@ -73,8 +72,8 @@ export const deleteFromWishlist = createAsyncThunk(
         return rejectWithValue(response.data);
       }
     } catch (error) {
-      toast.error(error?.message || "Error removing from wishlist");
-      return rejectWithValue(error?.response?.data || error.message);
+      toast.error(error?.response?.data?.msg || "Error removing from wishlist");
+      return rejectWithValue(error?.response?.data?.msg || error.message);
     }
   }
 );

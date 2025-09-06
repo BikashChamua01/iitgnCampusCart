@@ -30,7 +30,7 @@ const ShopListing = () => {
       });
     } catch (error) {
       console.log(error);
-      toast.error("Failed to edit product", error);
+      toast.error(error?.response?.data?.msg || "Failed to edit product" );
     }
   };
 
@@ -38,7 +38,9 @@ const ShopListing = () => {
     setLoading(true);
     try {
       const response = await axios.delete(
-        `${import.meta.env.VITE_BACKEND_URL}/api/v1/products/delete/${productId}`,
+        `${
+          import.meta.env.VITE_BACKEND_URL
+        }/api/v1/products/delete/${productId}`,
         {
           withCredentials: true,
         }
@@ -50,7 +52,7 @@ const ShopListing = () => {
       }
     } catch (error) {
       console.log(error);
-      toast.error("Failed to delete product", error);
+      toast.error(error?.response?.data?.msg || "Failed to delete product\n");
     } finally {
       setLoading(false);
     }

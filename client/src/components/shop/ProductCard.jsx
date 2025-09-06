@@ -4,7 +4,13 @@ import { useDispatch } from "react-redux";
 import { addToWishlist, deleteFromWishlist } from "@/store/wishlist-slice";
 import BuyRequestDialogBox from "./BuyRequestDialogBox";
 
-const ProductCard = ({ product, isWishlisted }) => {
+const ProductCard = ({
+  product,
+  isWishlisted,
+  loadingWishlist = false,
+  startWishlistLoading = () => {},
+  stopWishlistLoading = () => {},
+}) => {
   const {
     _id,
     title,
@@ -18,7 +24,6 @@ const ProductCard = ({ product, isWishlisted }) => {
     soldOut,
     buyer,
   } = product;
-  // console.log(buyer);
 
   const dispatch = useDispatch();
   const imageUrl = images[0]?.url || "/placeholder.png";
@@ -45,14 +50,22 @@ const ProductCard = ({ product, isWishlisted }) => {
     }
   };
 
-  const handleWishlist = (event) => {
+  const handleWishlist = async (event) => {
     event.preventDefault();
     event.stopPropagation();
 
-    if (isWishlisted) {
-      dispatch(deleteFromWishlist(product._id));
-    } else {
-      dispatch(addToWishlist(product._id));
+    startWishlistLoading(_id);
+    try {
+      if (isWishlisted) {
+        await dispatch(deleteFromWishlist(_id));
+      } else {
+        await dispatch(addToWishlist(_id));
+      }
+    } catch (err) {
+      // optional: handle error (toast)
+      console.error(err);
+    } finally {
+      stopWishlistLoading(_id);
     }
   };
 
@@ -65,10 +78,6 @@ const ProductCard = ({ product, isWishlisted }) => {
             SOLD OUT
             <FaBan className="mt-2 -mb-1" />
           </span>
-          {/* <div> */}
-          {/* {buyer && <p className="transform -rotate-45  w-full  font-extrabold text-red-900 opacity-50 flex justify-center items-center ">bought by {buyer.userName}</p>}
-          {buyer && <p className="transform -rotate-45  w-full  font-extrabold text-red-900 opacity-50 flex justify-center items-center  "> {buyer.email}</p>} */}
-          {/* </div> */}
         </div>
       )}
 
@@ -82,21 +91,27 @@ const ProductCard = ({ product, isWishlisted }) => {
               alt={title}
               className="w-full h-[180px] object-cover transition-transform duration-300 group-hover:scale-101 rounded-xl"
             />
-            {/* wishlist button */}
-            <button
-              onClick={handleWishlist}
-              className="group absolute top-3 right-4 outline-none cursor-pointer z-10 bg-transparent border-none w-fit"
-              aria-label="Toggle wishlist"
-            >
-              <FaHeart
-                className={`heart-icon w-6 h-6 transition-all duration-300
+            {/* wishlist button or spinner */}
+            <div className="group absolute top-3 right-4 z-10">
+              {loadingWishlist ? (
+                <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+              ) : (
+                <button
+                  onClick={handleWishlist}
+                  className="outline-none cursor-pointer bg-transparent border-none w-fit"
+                  aria-label="Toggle wishlist"
+                >
+                  <FaHeart
+                    className={`heart-icon w-6 h-6 transition-all duration-300
                   ${
                     isWishlisted
                       ? "text-red-600 fancy-pop"
                       : "text-white not-wishlisted hover:text-red-100 heart-outline"
                   }`}
-              />
-            </button>
+                  />
+                </button>
+              )}
+            </div>
 
             {/* discount tag */}
             {discount && (
@@ -120,10 +135,7 @@ const ProductCard = ({ product, isWishlisted }) => {
               ))}
               <span className="text-xs text-gray-500 ml-1">({numReviews})</span>
             </div>
-            {/* <div className="flex items-center gap-1 text-yellow-500 text-sm">
-               { buyer && <p>Buyer : <br/>{buyer.userName}<br/>{buyer.email}</p>}
-           
-            </div> */}
+
             <div className="flex flex-wrap gap-2 text-xs font-medium">
               <span className="px-2.5 py-1 bg-purple-100 text-purple-700 rounded-full">
                 {category}

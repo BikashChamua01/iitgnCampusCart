@@ -68,7 +68,8 @@ const BuyRequestDialogBox = ({ imageUrl, product }) => {
         toast.error(data.msg || "Failed to send");
       }
     } catch (error) {
-      toast.error(error?.msg || error?.message || "Failed to send");
+      toast.error(error?.response?.data?.msg || error?.message || "Failed to send");
+
       console.error(error);
     } finally {
       setSending(false);

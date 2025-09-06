@@ -13,7 +13,9 @@ export const fetchAllUsers = createAsyncThunk(
   async ({ pageNumber, limit }, { rejectWithValue }) => {
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_BACKEND_URL}/api/v1/users/fetch-users?page=${pageNumber}&limit=${limit}`,
+        `${
+          import.meta.env.VITE_BACKEND_URL
+        }/api/v1/users/fetch-users?page=${pageNumber}&limit=${limit}`,
         {
           withCredentials: true,
         }
@@ -21,7 +23,7 @@ export const fetchAllUsers = createAsyncThunk(
       return response.data;
     } catch (error) {
       console.log(error);
-      return rejectWithValue(error.message || error.msg);
+      return rejectWithValue(error?.response?.data?.msg || error?.message);
     }
   }
 );
@@ -31,7 +33,9 @@ export const deleteUserAccount = createAsyncThunk(
   async (userId, { rejectWithValue }) => {
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/api/v1/users/delete-account/${userId}`,
+        `${
+          import.meta.env.VITE_BACKEND_URL
+        }/api/v1/users/delete-account/${userId}`,
         {},
         {
           withCredentials: true,
@@ -41,7 +45,7 @@ export const deleteUserAccount = createAsyncThunk(
       return response.data;
     } catch (error) {
       console.log(error);
-      return rejectWithValue(error.message || error.msg);
+      return rejectWithValue(error?.response?.data?.msg || error.msg);
     }
   }
 );

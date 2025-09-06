@@ -65,7 +65,7 @@ const ChangePassword = () => {
     } catch (error) {
       console.error(error);
       toast.error(
-        error?.response?.data?.message || "Failed to update password."
+        error?.response?.data?.msg || "Failed to update password."
       );
     } finally {
       setIsSubmitting(false);

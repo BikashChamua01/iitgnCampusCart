@@ -25,7 +25,7 @@ export const register = createAsyncThunk(
       return response.data;
     } catch (error) {
       console.log("Error in registration", error);
-      return rejectWithValue(error.response?.data || error.message);
+      return rejectWithValue(error?.response?.data?.msg || error.message);
     }
   }
 );
@@ -44,7 +44,7 @@ export const checkAuth = createAsyncThunk(
       return response.data;
     } catch (error) {
       console.log("Check auth failed", error);
-      return rejectWithValue(error.response?.data || error.message);
+      return rejectWithValue(error?.response?.data?.msg || error.message);
     }
   }
 );
@@ -66,7 +66,7 @@ export const login = createAsyncThunk(
       return response.data;
     } catch (error) {
       console.log("Error in login", error);
-      return rejectWithValue(error.response?.data || error.message);
+      return rejectWithValue(error?.response?.data?.msg || error.message);
     }
   }
 );
@@ -86,7 +86,7 @@ export const logout = createAsyncThunk(
       return response.data;
     } catch (error) {
       console.log("Error in logout", error);
-      return rejectWithValue(error.response?.data || error.message);
+      return rejectWithValue(error?.response?.data?.msg || error.message);
     }
   }
 );

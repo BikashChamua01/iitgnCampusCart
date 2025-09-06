@@ -25,26 +25,40 @@ const ProductDetail = () => {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [currentImageUrl, setImage] = useState(null);
-  // const [seller, setSeller] = useState(null);
-  // const [sellerLoading, setSellerLoading] = useState(false);
   const { wishlist } = useSelector((state) => state.wishlist);
   const { products } = useSelector((state) => state.shopProducts);
   const dispatch = useDispatch();
 
   const { user } = useSelector((state) => state.auth);
 
-  // convet the wishlist to set
-  const wishlistSet = new Set(wishlist?.map((p) => p._id));
+  // convert the wishlist to set of strings
+  const wishlistSet = new Set(wishlist?.map((p) => p._id.toString()));
+
+  // local set to track wishlist requests in-flight
+  const [wishlistLoadingSet, setWishlistLoadingSet] = useState(new Set());
+  const startWishlistLoading = (id) =>
+    setWishlistLoadingSet((prev) => {
+      const s = new Set(Array.from(prev));
+      s.add(id.toString());
+      return s;
+    });
+  const stopWishlistLoading = (id) =>
+    setWishlistLoadingSet((prev) => {
+      const s = new Set(Array.from(prev));
+      s.delete(id.toString());
+      return s;
+    });
 
   useEffect(() => {
     const fetchProduct = async () => {
-      // console.log(product);
       try {
-        const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/v1/products/${id}`);
+        const res = await axios.get(
+          `${import.meta.env.VITE_BACKEND_URL}/api/v1/products/${id}`
+        );
         setProduct(res.data.product);
         setLoading(false);
       } catch (error) {
-        console.error("Error fetching product:", error);
+        console.error(error?.response?.data?.msg || "Error fetching product");
         setLoading(false);
       }
     };
@@ -75,26 +89,31 @@ const ProductDetail = () => {
     seller,
   } = product;
 
-  let isWishlisted = false;
-  if (product) {
-    isWishlisted = wishlistSet.has(product?._id.toString());
-  }
+  const isWishlisted = wishlistSet.has(product?._id?.toString());
 
-  const handleWishlist = (event) => {
+  const handleWishlist = async (event) => {
     event.preventDefault();
     event.stopPropagation();
 
-    if (isWishlisted) {
-      dispatch(deleteFromWishlist(product?._id));
-    } else {
-      dispatch(addToWishlist(product?._id));
+    startWishlistLoading(product._id);
+    try {
+      if (isWishlisted) {
+        await dispatch(deleteFromWishlist(product._id));
+      } else {
+        await dispatch(addToWishlist(product._id));
+      }
+    } catch (err) {
+      // optional: show toast
+      console.error(err);
+    } finally {
+      stopWishlistLoading(product._id);
     }
   };
 
   const similarProducts = products.filter(
     (p) => p.category === category && p._id !== product?._id
   );
-  // console.log("ids are",product?.seller?._id,user.userId);
+
   return (
     <div className="min-h-screen  py-6 px-3 sm:px-4">
       <div className="max-w-7xl mx-auto space-y-12">
@@ -112,11 +131,15 @@ const ProductDetail = () => {
               {seller?._id !== user.userId && (
                 <button
                   onClick={handleWishlist}
+                  disabled={wishlistLoadingSet.has(product._id?.toString())}
                   className="group absolute top-3 right-4 outline-none cursor-pointer z-10 bg-transparent border-none w-fit"
                   aria-label="Toggle wishlist"
                 >
-                  <FaHeart
-                    className={`
+                  {wishlistLoadingSet.has(product._id?.toString()) ? (
+                    <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                  ) : (
+                    <FaHeart
+                      className={`
                         heart-icon w-6 h-6 transition-all duration-300
                         ${
                           isWishlisted
@@ -124,7 +147,8 @@ const ProductDetail = () => {
                             : "text-white not-wishlisted hover:text-red-100 heart-outline"
                         }
                       `}
-                  />
+                    />
+                  )}
                 </button>
               )}
               <img
@@ -191,9 +215,9 @@ const ProductDetail = () => {
                   </span>
                   <span
                     className={`flex items-center bg-green-100 text-green-700 px-3 py-1 rounded-full font-medium
-                    ${condition == "Poor" ? "text-red-600 bg-red-300" : ""}
+                    ${condition === "Poor" ? "text-red-600 bg-red-300" : ""}
                     ${
-                      condition == "Fair" ? "text-yellow-700 bg-yellow-100" : ""
+                      condition === "Fair" ? "text-yellow-700 bg-yellow-100" : ""
                     }
                     `}
                   >
@@ -204,9 +228,7 @@ const ProductDetail = () => {
 
               {/* Seller Info */}
               {product?.seller && (
-                <div
-                  className={`flex items-center gap-4 bg-white rounded-lg p-4 shadow-inner`}
-                >
+                <div className={`flex items-center gap-4 bg-white rounded-lg p-4 shadow-inner`}>
                   <img
                     src={
                       (product?.seller?.profilePicture &&
@@ -241,6 +263,7 @@ const ProductDetail = () => {
                         {product?.seller?.phoneNumber ? (
                           <a
                             target="_blank"
+                            rel="noreferrer"
                             href={`https://wa.me/91${product?.seller?.phoneNumber}?text=Hi%2C%20I%20hope%20you%27re%20doing%20well.%20I%20am%20interested%20in%20buying%20your%20*${product.title}*%20From%20*IITgn*%20*CampusCart*%20.%20Could%20you%20please%20share%20more%20details%3F`}
                             className="flex items-center"
                           >
@@ -289,6 +312,9 @@ const ProductDetail = () => {
                   key={sp._id}
                   product={sp}
                   isWishlisted={wishlistSet.has(sp._id.toString())}
+                  loadingWishlist={wishlistLoadingSet.has(sp._id.toString())}
+                  startWishlistLoading={startWishlistLoading}
+                  stopWishlistLoading={stopWishlistLoading}
                 />
               ))}
             </div>

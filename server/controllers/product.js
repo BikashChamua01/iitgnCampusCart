@@ -26,7 +26,7 @@ const createProduct = async (req, res) => {
     // find the number of products uploaded by the seller
     const products = await Product.find({ seller });
     console.log(products);
-    if (products.length >= 10)
+    if (products.length >= 50)
       return res.status(StatusCodes.BAD_REQUEST).json({
         success: false,
         msg: "You can upload max 10 products",

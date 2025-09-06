@@ -19,7 +19,7 @@ export const fetchAllProducts = createAsyncThunk(
       return response.data;
     } catch (error) {
       console.log("Error in fetching the products", error);
-      return rejectWithValue(error.message || error.msg);
+      return rejectWithValue(error?.response?.data?.msg || error.msg);
     }
   }
 );
@@ -37,7 +37,7 @@ export const fetchMyListing = createAsyncThunk(
       return response.data;
     } catch (error) {
       console.log(error, "Error in myListing store");
-      return rejectWithValue(error.message || error.msg);
+      return rejectWithValue(error?.response?.data?.msg || error.msg);
     }
   }
 );
