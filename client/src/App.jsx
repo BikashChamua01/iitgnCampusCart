@@ -21,6 +21,7 @@ import AboutPage from "./pages/shop/About";
 import Sell from "./pages/common/Sell";
 import UnauthPage from "./pages/common/Unauth-page";
 import Loader from "./components/common/Loader";
+import ScrollToTop from "./components/common/ScrollToTop";
 
 // Import the auth pages and layout
 import AuthLayout from "./components/auth/Layout";
@@ -62,6 +63,7 @@ const App = () => {
     <>
       <Toaster position="bottom-right" className="p-100" richColors />
       <BrowserRouter>
+      <ScrollToTop/>
         <Routes>
           {/* Define default path */}
           <Route
