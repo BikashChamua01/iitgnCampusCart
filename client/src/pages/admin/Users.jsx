@@ -14,7 +14,7 @@ const AdminUsers = () => {
   const { isUsersLoading, users, totalPages } = useSelector(
     (state) => state.adminUsers
   );
-  const [limit] = useState(15);
+  const [limit] = useState(10);
   const [pageNumber, setPageNumber] = useState(1);
   const navigate = useNavigate();
 
@@ -153,8 +153,8 @@ const AdminUsers = () => {
     <Loader />
   ) : (
     <div className="bg-gradient-to-br from-violet-50 via-white to-violet-100 min-h-screen pt-2 pb-14 px-1 sm:px-4">
-      <div className="max-w-3xl md:max-w-7xl mx-auto pt-7">
-        <h2 className=" m-auto text-[2rem] sm:text-[2.4rem] font-extrabold mb-7 text-violet-700 tracking-tight text-center">
+      <div className="max-w-3xl md:max-w-7xl mx-auto pt-1">
+        <h2 className=" m-auto text-[2rem] sm:text-[2.4rem] font-extrabold mb-3 text-violet-700 tracking-tight text-center">
           User Management
         </h2>
         {/* Mobile Cards */}

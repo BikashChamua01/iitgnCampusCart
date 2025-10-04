@@ -7,7 +7,10 @@ import { toast } from "sonner";
 
 const LoginForm = () => {
   const dispatch = useDispatch();
-  const [formData, setFormData] = useState({ email: "", password: "" });
+  const [formData, setFormData] = useState({
+    email: "guestcampuscart@gmail.com",
+    password: "Guest@1234",
+  });
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e) =>

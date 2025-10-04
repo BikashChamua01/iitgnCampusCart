@@ -9,6 +9,7 @@ const productRouter = require("./routers/product");
 const usersRouter = require("./routers/users-routes");
 const wishlistRouter = require("./routers/wishlist-router");
 const interestedBuyerRouter = require("./routers/interestedBuyers-routes");
+const adminStatsRouter = require("./routers/adminStatsRoutes");
 
 const app = express();
 
@@ -39,5 +40,6 @@ app.use("/api/v1/products", productRouter);
 app.use("/api/v1/users", usersRouter);
 app.use("/api/v1/wishlist", wishlistRouter);
 app.use("/api/v1/interested", interestedBuyerRouter);
+app.use("api/v1/admin-stats", adminStatsRouter)
 
 module.exports = app;
