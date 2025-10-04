@@ -41,62 +41,8 @@ const AdminHeader = () => {
           />
         </div>
 
-        {/* Sell Button */}
-        {/* We dont want the sell butto for the admin */}
-        {/* <div
-          className="flex items-center gap-1 cursor-pointer hover:text-white"
-          style={{ color: "#f4f4f4" }}
-          onClick={() => navigate("/shop/sell")}
-        >
-          <FaCartPlus className="w-4 h-4" />
-          <span
-            className="text-sm font-medium"
-            // onClick={() => navigate("/shop/sell")}
-          >
-            Sell
-          </span>
-        </div> */}
-
-        {/* User Dropdown */}
-        {/* <div className="relative">
-          <button className="group focus:outline-none">
-            {profilePicture ? (
-              <img
-                src={profilePicture}
-                alt="Profile"
-                className="w-10 h-10 rounded-full object-cover border-2 border-white cursor-pointer"
-              />
-            ) : gender === "male" ? (
-              <img
-                src="/images/male_avatar.jpeg"
-                alt="Profile"
-                className="w-10 h-10 rounded-full object-cover border-2 border-white cursor-pointer"
-              />
-            ) : (
-              <img
-                src="/images/female_avatar.jpeg"
-                alt="Profile"
-                className="w-10 h-10 rounded-full object-cover border-2 border-white cursor-pointer"
-              />
-            )}
-            <div className="z-10 hidden group-hover:block absolute right-0 mt-0 w-36 bg-white text-[#2b2b2b] rounded-lg shadow-md">
-              <ul className="py-2 text-sm">
-                <li className="hover:bg-[#ede4f7] px-4 py-2 rounded">
-                  <a href="#">Profile</a>
-                </li>
-                <li className="hover:bg-[#ede4f7] px-4 py-2 rounded">
-                  <a href="#">Setting</a>
-                </li>
-                <li className="hover:bg-[#ede4f7] px-4 py-2 rounded">
-                  <a href="#">Logout</a>
-                </li>
-              </ul>
-            </div>
-          </button>
-        </div> */}
-
         {/* User acount */}
-        <div className="flex justify-end items-center w-1/3 ">
+        <div className="flex justify-end items-center w-10 h-10 ">
           <Link to="/user/userAccount" className="ml-auto">
             <img
               src={profilePicture || "/images/user-avatar.png"}
