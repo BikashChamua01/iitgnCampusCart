@@ -87,8 +87,8 @@ const RegistrationForm = () => {
       }
       if (response?.data?.userExists) {
         setLoading(false);
-        toast.error(response?.data?.msg|| "User Already Exists");
-        return ;
+        toast.error(response?.data?.msg || "User Already Exists");
+        return;
       }
       setShowOtpInput(true);
       alert("OTP sent to your email.");
@@ -134,7 +134,7 @@ const RegistrationForm = () => {
     } catch (err) {
       console.log("Error during otp validation ", err);
       alert("Verification failed.");
-      toast.error(err?.response?.data?.msg || "Verification failed" );
+      toast.error(err?.response?.data?.msg || "Verification failed");
     } finally {
       setLoading(false);
     }
@@ -177,7 +177,7 @@ const RegistrationForm = () => {
     } catch (e) {
       console.error(e);
       alert("Failed to crop image.");
-      toast.error(e?.response?.data?.msg || "Failed to crop immage" );
+      toast.error(e?.response?.data?.msg || "Failed to crop immage");
     }
   }, [imageSrc, croppedAreaPixels]);
 
@@ -200,7 +200,7 @@ const RegistrationForm = () => {
 
     // Prepare form data including cropped profile photo if available
     const email = formData.email || "";
-    const userName = email.includes("@") ? email.split("@")[0] : email; 
+    const userName = email.includes("@") ? email.split("@")[0] : email;
     const submissionData = new FormData();
     submissionData.append("userName", userName);
     submissionData.append("email", formData.email);
@@ -212,7 +212,7 @@ const RegistrationForm = () => {
       submissionData.append("images", croppedFile);
     }
 
-     console.log(submissionData);
+    console.log(submissionData);
 
     dispatch(register(submissionData))
       .unwrap()
@@ -243,7 +243,7 @@ const RegistrationForm = () => {
             Already have an account ?{" "}
             <Link
               to="/auth/login"
-              className="underline hover:text-[#6a0dad] font-medium"
+              className="underline hover:text-[#6a0dad] font-extrabold"
             >
               login
             </Link>
@@ -271,7 +271,7 @@ const RegistrationForm = () => {
         {/* Email + Verify */}
         <div className="mb-4 mt-10">
           <label className="font-medium mb-1 text-[#2b2b2b] flex justify-between">
-            <span>Email</span>
+            <span>Email*</span>
             {!otpVerified && (
               <button
                 type="button"
@@ -324,26 +324,26 @@ const RegistrationForm = () => {
         )}
         {/* Phone Number  - Gender*/}
         {/* <div className="flex flex-col md:flex-row mb-4 justify-between"> */}
-          {/* Phone Number */}
-          <div className="mb-4">
-            <label className="block font-medium  text-[#2b2b2b]">
-              Phone Number
-            </label>
-            <input
-              type="text"
-              name="phoneNumber"
-              value={formData.phoneNumber}
-              onChange={handleChange}
-              className="w-full px-4 py-2 border border-[#7635b6] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6a0dad]"
-              placeholder="Enter Phone Number"
-            />
-            {errors.phoneNumber && (
-              <p className="text-red-600 mt-1">{errors.phoneNumber}</p>
-            )}
-          </div>
+        {/* Phone Number */}
+        <div className="mb-4">
+          <label className="block font-medium  text-[#2b2b2b]">
+            Phone Number
+          </label>
+          <input
+            type="text"
+            name="phoneNumber"
+            value={formData.phoneNumber}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border border-[#7635b6] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6a0dad]"
+            placeholder="Enter Phone Number"
+          />
+          {errors.phoneNumber && (
+            <p className="text-red-600 mt-1">{errors.phoneNumber}</p>
+          )}
+        </div>
 
-          {/* Gender */}
-          {/* <div className="mb-4 md:mb-0">
+        {/* Gender */}
+        {/* <div className="mb-4 md:mb-0">
             <label className="block font-medium  text-[#2b2b2b]">
               <span className="text-[#2b2b2b] font-medium">Gender</span>
               <select
@@ -428,21 +428,16 @@ const RegistrationForm = () => {
           )}
         </div>
         {/* Password +confirm password */}
-        
-          {/* Password */}
-          
-            
 
-            <PasswordInput
-              label="Password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              error={errors.password}
-              />
-              
-         
-        
+        {/* Password */}
+
+        <PasswordInput
+          label="Password*"
+          name="password"
+          value={formData.password}
+          onChange={handleChange}
+          error={errors.password}
+        />
 
         {/* Submit */}
         <button

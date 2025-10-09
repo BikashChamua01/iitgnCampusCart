@@ -7,10 +7,7 @@ import { toast } from "sonner";
 
 const LoginForm = () => {
   const dispatch = useDispatch();
-  const [formData, setFormData] = useState({
-    email: "guestcampuscart@gmail.com",
-    password: "Guest@1234",
-  });
+  const [formData, setFormData] = useState({});
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e) =>
@@ -52,7 +49,7 @@ const LoginForm = () => {
             Don't have an account ?{" "}
             <Link
               to="/auth/register"
-              className="underline hover:text-[#6a0dad] font-medium"
+              className="underline hover:text-[#6a0dad] font-extrabold"
             >
               Register
             </Link>
