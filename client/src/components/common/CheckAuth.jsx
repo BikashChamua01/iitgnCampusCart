@@ -6,7 +6,7 @@ const CheckAuth = ({ isAuthenticated, user, children }) => {
 
   // Related to authentication
   if (!isAuthenticated && location.pathname === "/") {
-    return <Navigate to="/auth/register" />;
+    return <Navigate to="/auth/login" />;
   }
 
   if (!isAuthenticated && !location.pathname.includes("/auth")) {

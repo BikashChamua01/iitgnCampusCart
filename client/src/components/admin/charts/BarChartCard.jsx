@@ -8,7 +8,7 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
-  Cell, // <-- add this
+  Cell, 
 } from "recharts";
 import { motion } from "framer-motion";
 
